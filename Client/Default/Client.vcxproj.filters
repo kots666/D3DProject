@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="00. MainApp">
+      <UniqueIdentifier>{855b6227-9b3e-4121-b05e-cdbd84a8f313}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99. ETC">
+      <UniqueIdentifier>{5b33e514-5d42-489a-ae63-a33b5dc4c713}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. Header">
+      <UniqueIdentifier>{1efac9d2-e54d-4ce8-9897-ba5ec1bc9a87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Scene">
+      <UniqueIdentifier>{f02c1d0c-48cf-4150-8c65-b10d678dcb9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject">
+      <UniqueIdentifier>{eba480c4-4ce5-415b-8b4a-539cd903b850}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Scene\00. Logo">
+      <UniqueIdentifier>{f57f6b3c-a548-4b1c-af36-45999a22d5c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Scene\01. Stage">
+      <UniqueIdentifier>{e7f6fcae-0ecb-4bb8-96b2-95ce6a2f12fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\00. Logo">
+      <UniqueIdentifier>{7e117947-4894-40f6-b9d8-488a889898d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage">
+      <UniqueIdentifier>{b9d2c5d0-982b-4edf-8d46-7d565a47c7ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\00. Logo\00. BackGround">
+      <UniqueIdentifier>{8208a16d-1990-4739-8bd1-2c0367edd2db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\00. Logo\97. TestPlayer">
+      <UniqueIdentifier>{0e43a39c-eb08-4323-a535-f2e3de713048}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\00. Logo\96. TestMonster">
+      <UniqueIdentifier>{bf3b553f-bcc2-47b1-8260-6828a353d8da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Scene\02. Public">
+      <UniqueIdentifier>{d03625b1-65f4-46e3-a9e2-7221664150be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\00. Terrain">
+      <UniqueIdentifier>{e0be82bd-91c5-4516-8986-006672fa1c03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\01. Player">
+      <UniqueIdentifier>{f20b0fbe-73a6-4ff7-be30-9ef8b50c3805}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\99. SkyBox">
+      <UniqueIdentifier>{60bc3fba-af4d-4264-a1bb-71e25ca6d926}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\98. Public">
+      <UniqueIdentifier>{71596602-4d4f-4ecc-882f-1d080a776fdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\98. Public\00. DynamicCamera">
+      <UniqueIdentifier>{29708611-e550-4cd9-8292-bb0e5f32d6f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\98. Public\01. StaticCamera">
+      <UniqueIdentifier>{45328ed9-3eab-440f-bc20-85d12681da38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\02. Enemy">
+      <UniqueIdentifier>{4ff09da5-0fc8-43bd-a228-e036a1d57eb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\03. Stone">
+      <UniqueIdentifier>{3ff3a233-0afb-43cc-adae-146b81be418e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Client.h">
+      <Filter>99. ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>99. ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>99. ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>99. ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Define.h">
+      <Filter>98. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Typedef.h">
+      <Filter>98. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Function.h">
+      <Filter>98. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Macro.h">
+      <Filter>98. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\MainApp.h">
+      <Filter>00. MainApp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Struct.h">
+      <Filter>98. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Logo.h">
+      <Filter>01. Scene\00. Logo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\BackGround.h">
+      <Filter>02. GameObject\00. Logo\00. BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\TestPlayer.h">
+      <Filter>02. GameObject\00. Logo\97. TestPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\TestMonster.h">
+      <Filter>02. GameObject\00. Logo\96. TestMonster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Stage.h">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Loading.h">
+      <Filter>01. Scene\02. Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Terrain.h">
+      <Filter>02. GameObject\01. Stage\00. Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Player.h">
+      <Filter>02. GameObject\01. Stage\01. Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\DynamicCamera.h">
+      <Filter>02. GameObject\01. Stage\98. Public\00. DynamicCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\StaticCamera.h">
+      <Filter>02. GameObject\01. Stage\98. Public\01. StaticCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\SkyBox.h">
+      <Filter>02. GameObject\01. Stage\99. SkyBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Enemy.h">
+      <Filter>02. GameObject\01. Stage\02. Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Stone.h">
+      <Filter>02. GameObject\01. Stage\03. Stone</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Client.cpp">
+      <Filter>99. ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>99. ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MainApp.cpp">
+      <Filter>00. MainApp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Logo.cpp">
+      <Filter>01. Scene\00. Logo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\BackGround.cpp">
+      <Filter>02. GameObject\00. Logo\00. BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TestPlayer.cpp">
+      <Filter>02. GameObject\00. Logo\97. TestPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TestMonster.cpp">
+      <Filter>02. GameObject\00. Logo\96. TestMonster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Stage.cpp">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Loading.cpp">
+      <Filter>01. Scene\02. Public</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Terrain.cpp">
+      <Filter>02. GameObject\01. Stage\00. Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Player.cpp">
+      <Filter>02. GameObject\01. Stage\01. Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\DynamicCamera.cpp">
+      <Filter>02. GameObject\01. Stage\98. Public\00. DynamicCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\StaticCamera.cpp">
+      <Filter>02. GameObject\01. Stage\98. Public\01. StaticCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SkyBox.cpp">
+      <Filter>02. GameObject\01. Stage\99. SkyBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Enemy.cpp">
+      <Filter>02. GameObject\01. Stage\02. Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Stone.cpp">
+      <Filter>02. GameObject\01. Stage\03. Stone</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Client.ico">
+      <Filter>99. ETC</Filter>
+    </Image>
+    <Image Include="small.ico">
+      <Filter>99. ETC</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt">
+      <Filter>99. ETC</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Client.rc">
+      <Filter>99. ETC</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
