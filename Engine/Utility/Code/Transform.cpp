@@ -17,7 +17,7 @@ CTransform::CTransform(const CTransform& rhs) :
 	for (_int i = 0; i < INFO_END; ++i)
 		m_info[i] = rhs.m_info[i];
 	
-	m_matWorld = rhs.m_matWorld;	
+	m_matWorld = rhs.m_matWorld;
 }
 
 CTransform::~CTransform()
@@ -38,6 +38,7 @@ HRESULT CTransform::Ready()
 _int CTransform::Update(const _float & deltaTime)
 {
 	D3DXMatrixIdentity(&m_matWorld);
+	D3DXMatrixIdentity(&m_matNRotWorld);
 
 	// 위치 벡터를 제외하고 나머지 벡터의 초기화 값을 세팅한 상황
 	for (_uint i = 0; i < INFO_POS; ++i)
@@ -50,6 +51,8 @@ _int CTransform::Update(const _float & deltaTime)
 		D3DXVec3Normalize(&m_info[i], &m_info[i]);
 		m_info[i] *= *(((_float*)&m_scale + i));
 	}
+	for (_uint i = 0; i < INFO_END; ++i)
+		memcpy(&m_matNRotWorld.m[i][0], m_info[i], sizeof(_vec3));
 
 	_matrix matRot[ROT_END];
 	D3DXMatrixRotationX(&matRot[ROT_X], m_angle.x);
@@ -131,6 +134,14 @@ void CTransform::GetInfo(INFO type, _vec3 * dir)
 void CTransform::GetWorldMatrix(_matrix * outer) const
 {
 	*outer = m_matWorld;
+}
+
+const _matrix * CTransform::GetNRotWorldMatrix(_matrix * outer) const
+{
+	if (nullptr != outer)
+		*outer = m_matNRotWorld;
+
+	return &m_matNRotWorld;
 }
 
 void CTransform::SetPos(const _float& x, const _float& y, const _float& z)

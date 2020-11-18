@@ -45,7 +45,8 @@ void Client::CStone::Render()
 	m_meshCom->Render();
 
 	_matrix matWorld;
-	m_transCom->GetWorldMatrix(&matWorld);
+	//m_transCom->GetWorldMatrix(&matWorld);
+	m_transCom->GetNRotWorldMatrix(&matWorld);
 
 	m_device->SetRenderState(D3DRS_LIGHTING, FALSE);
 	m_colliderCom->Render(Engine::COLLTYPE(m_isColl), &matWorld);
@@ -124,4 +125,12 @@ _bool CStone::CollideToObject(const _tchar * layerTag, const _tchar * objTag)
 		m_colliderCom->GetMinPos(),
 		m_colliderCom->GetMaxPos(),
 		m_colliderCom->GetCollMatrix());
+
+	/*return m_calcCom->CollisionOBB(
+		playerColliderCom->GetMinPos(),
+		playerColliderCom->GetMaxPos(),
+		playerColliderCom->GetCollMatrix(),
+		m_colliderCom->GetMinPos(),
+		m_colliderCom->GetMaxPos(),
+		m_colliderCom->GetCollMatrix());*/
 }

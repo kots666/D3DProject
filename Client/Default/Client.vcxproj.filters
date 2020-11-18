@@ -40,29 +40,29 @@
     <Filter Include="01. Scene\02. Public">
       <UniqueIdentifier>{d03625b1-65f4-46e3-a9e2-7221664150be}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. Stage\00. Terrain">
-      <UniqueIdentifier>{e0be82bd-91c5-4516-8986-006672fa1c03}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. Stage\01. Player">
-      <UniqueIdentifier>{f20b0fbe-73a6-4ff7-be30-9ef8b50c3805}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. Stage\99. SkyBox">
-      <UniqueIdentifier>{60bc3fba-af4d-4264-a1bb-71e25ca6d926}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\01. Stage\98. Public">
+    <Filter Include="02. GameObject\02. Public">
       <UniqueIdentifier>{71596602-4d4f-4ecc-882f-1d080a776fdd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. Stage\98. Public\00. DynamicCamera">
+    <Filter Include="02. GameObject\02. Public\00. DynamicCamera">
       <UniqueIdentifier>{29708611-e550-4cd9-8292-bb0e5f32d6f8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. Stage\98. Public\01. StaticCamera">
+    <Filter Include="02. GameObject\02. Public\01. StaticCamera">
       <UniqueIdentifier>{45328ed9-3eab-440f-bc20-85d12681da38}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. Stage\02. Enemy">
+    <Filter Include="02. GameObject\01. Stage\01. Terrain">
+      <UniqueIdentifier>{e0be82bd-91c5-4516-8986-006672fa1c03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\02. Player">
+      <UniqueIdentifier>{f20b0fbe-73a6-4ff7-be30-9ef8b50c3805}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\03. Enemy">
       <UniqueIdentifier>{4ff09da5-0fc8-43bd-a228-e036a1d57eb9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. Stage\03. Stone">
+    <Filter Include="02. GameObject\01. Stage\04. Stone">
       <UniqueIdentifier>{3ff3a233-0afb-43cc-adae-146b81be418e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\00. SkyBox">
+      <UniqueIdentifier>{60bc3fba-af4d-4264-a1bb-71e25ca6d926}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -115,25 +115,25 @@
       <Filter>01. Scene\02. Public</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\Terrain.h">
-      <Filter>02. GameObject\01. Stage\00. Terrain</Filter>
+      <Filter>02. GameObject\01. Stage\01. Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\Player.h">
-      <Filter>02. GameObject\01. Stage\01. Player</Filter>
+      <Filter>02. GameObject\01. Stage\02. Player</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\DynamicCamera.h">
-      <Filter>02. GameObject\01. Stage\98. Public\00. DynamicCamera</Filter>
+      <Filter>02. GameObject\02. Public\00. DynamicCamera</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\StaticCamera.h">
-      <Filter>02. GameObject\01. Stage\98. Public\01. StaticCamera</Filter>
+      <Filter>02. GameObject\02. Public\01. StaticCamera</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\SkyBox.h">
-      <Filter>02. GameObject\01. Stage\99. SkyBox</Filter>
+      <Filter>02. GameObject\01. Stage\00. SkyBox</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\Enemy.h">
-      <Filter>02. GameObject\01. Stage\02. Enemy</Filter>
+      <Filter>02. GameObject\01. Stage\03. Enemy</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\Stone.h">
-      <Filter>02. GameObject\01. Stage\03. Stone</Filter>
+      <Filter>02. GameObject\01. Stage\04. Stone</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -165,25 +165,25 @@
       <Filter>01. Scene\02. Public</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Terrain.cpp">
-      <Filter>02. GameObject\01. Stage\00. Terrain</Filter>
+      <Filter>02. GameObject\01. Stage\01. Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Player.cpp">
-      <Filter>02. GameObject\01. Stage\01. Player</Filter>
+      <Filter>02. GameObject\01. Stage\02. Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\DynamicCamera.cpp">
-      <Filter>02. GameObject\01. Stage\98. Public\00. DynamicCamera</Filter>
+      <Filter>02. GameObject\02. Public\00. DynamicCamera</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\StaticCamera.cpp">
-      <Filter>02. GameObject\01. Stage\98. Public\01. StaticCamera</Filter>
+      <Filter>02. GameObject\02. Public\01. StaticCamera</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\SkyBox.cpp">
-      <Filter>02. GameObject\01. Stage\99. SkyBox</Filter>
+      <Filter>02. GameObject\01. Stage\00. SkyBox</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Enemy.cpp">
-      <Filter>02. GameObject\01. Stage\02. Enemy</Filter>
+      <Filter>02. GameObject\01. Stage\03. Enemy</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Stone.cpp">
-      <Filter>02. GameObject\01. Stage\03. Stone</Filter>
+      <Filter>02. GameObject\01. Stage\04. Stone</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

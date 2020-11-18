@@ -31,8 +31,11 @@
     <Filter Include="00. Resources\02. Mesh">
       <UniqueIdentifier>{a1c71857-46c8-4ddb-94f0-c6596e82d041}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00. Resources\02. Mesh\00. StaticMesh">
+    <Filter Include="00. Resources\02. Mesh\01. StaticMesh">
       <UniqueIdentifier>{61e15dfc-ff18-4d2f-9eac-d206fcf31b09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. Resources\02. Mesh\02. DynamicMesh">
+      <UniqueIdentifier>{7e5d635f-b5e9-42e5-b4ae-fa01f068116f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -64,7 +67,7 @@
       <Filter>00. Resources\02. Mesh</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\StaticMesh.cpp">
-      <Filter>00. Resources\02. Mesh\00. StaticMesh</Filter>
+      <Filter>00. Resources\02. Mesh\01. StaticMesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -99,7 +102,7 @@
       <Filter>00. Resources\02. Mesh</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\StaticMesh.h">
-      <Filter>00. Resources\02. Mesh\00. StaticMesh</Filter>
+      <Filter>00. Resources\02. Mesh\01. StaticMesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -216,6 +216,82 @@ _bool CCalculator::CollisionAABB(const _vec3 * localDstMin, const _vec3 * localD
 	return true;
 }
 
+_bool CCalculator::CollisionOBB(const _vec3 * localDstMin, const _vec3 * localDstMax, const _matrix * dstWorldMat, const _vec3 * localSrcMin, const _vec3 * localSrcMax, const _matrix * srcWorldMat)
+{
+	OBB obb[2];
+	ZeroMemory(obb, sizeof(OBB) * 2);
+
+	SetPoint(&obb[0], localDstMin, localDstMax);
+	SetPoint(&obb[1], localSrcMin, localSrcMax);
+
+	for (_uint i = 0; i < 8; ++i)
+	{
+		D3DXVec3TransformCoord(&obb[0].point[i], &obb[0].point[i], dstWorldMat);
+		D3DXVec3TransformCoord(&obb[1].point[i], &obb[1].point[i], srcWorldMat);
+	}
+
+	D3DXVec3TransformCoord(&obb[0].center, &obb[0].center, dstWorldMat);
+	D3DXVec3TransformCoord(&obb[1].center, &obb[1].center, srcWorldMat);
+
+	for (_uint i = 0; i < 2; ++i)
+		SetAxis(&obb[i]);
+
+	_float distance[3];		// 1. 첫 번째 obb에서 임의의 축으로 투영한 길이의 합
+								// 2. 두 번째 obb에서 임의의 축으로 투영한 길이의 합
+								// 3. 두 obb의 중점을 이은 벡터를 각 축에 투영한 길이의 합
+
+	for (_uint i = 0; i < 2; ++i)
+	{
+		for (_uint j = 0; j < 3; ++j)
+		{
+			distance[0] = fabs(D3DXVec3Dot(&obb[0].projAxis[0], &obb[i].axis[j])) +
+				fabs(D3DXVec3Dot(&obb[0].projAxis[1], &obb[i].axis[j])) +
+				fabs(D3DXVec3Dot(&obb[0].projAxis[2], &obb[i].axis[j]));
+
+
+			distance[1] = fabs(D3DXVec3Dot(&obb[1].projAxis[0], &obb[i].axis[j])) +
+				fabs(D3DXVec3Dot(&obb[1].projAxis[1], &obb[i].axis[j])) +
+				fabs(D3DXVec3Dot(&obb[1].projAxis[2], &obb[i].axis[j]));
+
+			distance[2] = fabs(D3DXVec3Dot(&(obb[1].center - obb[0].center), &obb[i].axis[j]));
+
+			if (distance[0] + distance[1] < distance[2])
+				return false;
+		}
+	}
+
+	return true;
+}
+
+void CCalculator::SetPoint(OBB * obb, const _vec3 * min, const _vec3 * max)
+{
+	obb->point[0] = _vec3(min->x, max->y, min->z);
+	obb->point[1] = _vec3(max->x, max->y, min->z);
+	obb->point[2] = _vec3(max->x, min->y, min->z);
+	obb->point[3] = _vec3(min->x, min->y, min->z);
+
+	obb->point[4] = _vec3(min->x, max->y, max->z);
+	obb->point[5] = _vec3(max->x, max->y, max->z);
+	obb->point[6] = _vec3(max->x, min->y, max->z);
+	obb->point[7] = _vec3(min->x, min->y, max->z);
+
+	obb->center = (*min + *max) * 0.5f;
+}
+
+void CCalculator::SetAxis(OBB * obb)
+{
+	obb->projAxis[0] = (obb->point[2] + obb->point[5]) * 0.5f - obb->center;
+	obb->projAxis[1] = (obb->point[0] + obb->point[5]) * 0.5f - obb->center;
+	obb->projAxis[2] = (obb->point[7] + obb->point[5]) * 0.5f - obb->center;
+
+	obb->axis[0] = obb->point[2] - obb->point[3];
+	obb->axis[1] = obb->point[0] - obb->point[3];
+	obb->axis[2] = obb->point[7] - obb->point[3];
+
+	for (_uint i = 0; i < 3; ++i)
+		D3DXVec3Normalize(&obb->axis[i], &obb->axis[i]);
+}
+
 CCalculator* CCalculator::Create(LPDIRECT3DDEVICE9 device)
 {
 	CCalculator* instance = new CCalculator(device);

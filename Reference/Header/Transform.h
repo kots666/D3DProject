@@ -29,6 +29,7 @@ public:
 	// Getter
 	void GetInfo(INFO type, _vec3* dir);
 	void GetWorldMatrix(_matrix* outer) const;
+	const _matrix* GetNRotWorldMatrix(_matrix* outer) const;
 
 public:
 	void SetPos(const _float& x, const _float& y, const _float& z);
@@ -40,6 +41,7 @@ public:
 	_vec3 m_scale;
 	_vec3 m_angle;
 	_matrix	m_matWorld;
+	_matrix m_matNRotWorld;
 
 public:
 	static CTransform* Create();
