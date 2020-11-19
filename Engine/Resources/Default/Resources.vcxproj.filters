@@ -37,6 +37,12 @@
     <Filter Include="00. Resources\02. Mesh\02. DynamicMesh">
       <UniqueIdentifier>{7e5d635f-b5e9-42e5-b4ae-fa01f068116f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00. Resources\02. Mesh\02. DynamicMesh\01. HierarchyLoader">
+      <UniqueIdentifier>{8be80009-55d9-478d-963d-3e96889155f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. Resources\02. Mesh\02. DynamicMesh\02. AnimController">
+      <UniqueIdentifier>{4b0ee866-1512-4f5c-858b-c1901bd28b41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Resources.cpp">
@@ -68,6 +74,15 @@
     </ClCompile>
     <ClCompile Include="..\Code\StaticMesh.cpp">
       <Filter>00. Resources\02. Mesh\01. StaticMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\DynamicMesh.cpp">
+      <Filter>00. Resources\02. Mesh\02. DynamicMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\HierarchyLoader.cpp">
+      <Filter>00. Resources\02. Mesh\02. DynamicMesh\01. HierarchyLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\AnimCtrl.cpp">
+      <Filter>00. Resources\02. Mesh\02. DynamicMesh\02. AnimController</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +118,15 @@
     </ClInclude>
     <ClInclude Include="..\Code\StaticMesh.h">
       <Filter>00. Resources\02. Mesh\01. StaticMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\DynamicMesh.h">
+      <Filter>00. Resources\02. Mesh\02. DynamicMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\HierarchyLoader.h">
+      <Filter>00. Resources\02. Mesh\02. DynamicMesh\01. HierarchyLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\AnimCtrl.h">
+      <Filter>00. Resources\02. Mesh\02. DynamicMesh\02. AnimController</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
