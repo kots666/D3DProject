@@ -3,6 +3,7 @@
 
 #include "Mesh.h"
 #include "HierarchyLoader.h"
+#include "AnimCtrl.h"
 
 BEGIN(Engine)
 
@@ -24,6 +25,7 @@ private:
 private:
 	D3DXFRAME* m_rootFrame;
 	CHierarchyLoader* m_loader;
+	CAnimCtrl* m_animCtrl;
 	list<D3DXMESHCONTAINER_EX*> m_meshContainerList;
 
 public:
