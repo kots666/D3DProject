@@ -23,7 +23,7 @@ HRESULT CLightMgr::ReadyLight(LPDIRECT3DDEVICE9 device, const D3DLIGHT9* lightIn
 	return S_OK;
 }
 
-void Engine::CLightMgr::Free()
+void CLightMgr::Free()
 {
 	for_each(m_lightList.begin(), m_lightList.end(), CDeleteObj());
 	m_lightList.clear();

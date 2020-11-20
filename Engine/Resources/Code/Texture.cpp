@@ -2,13 +2,14 @@
 
 USING(Engine)
 
-Engine::CTexture::CTexture(LPDIRECT3DDEVICE9 device)
-	: CResources(device)
+CTexture::CTexture(LPDIRECT3DDEVICE9 device) :
+	CResources(device)
 {
 
 }
 
-Engine::CTexture::CTexture(const CTexture& rhs) : CResources(rhs)
+CTexture::CTexture(const CTexture& rhs) :
+	CResources(rhs)
 {
 	_uint size = rhs.m_texVec.size();
 	m_texVec.reserve(size);
@@ -19,12 +20,12 @@ Engine::CTexture::CTexture(const CTexture& rhs) : CResources(rhs)
 		SafeAddRef(m_texVec[i]);
 }
 
-Engine::CTexture::~CTexture()
+CTexture::~CTexture()
 {
 
 }
 
-HRESULT Engine::CTexture::ReadyTexture(const _tchar* path, TEXTURETYPE type, const _uint& cnt)
+HRESULT CTexture::ReadyTexture(const _tchar* path, TEXTURETYPE type, const _uint& cnt)
 {
 	m_texVec.reserve(cnt);
 
@@ -55,7 +56,7 @@ HRESULT Engine::CTexture::ReadyTexture(const _tchar* path, TEXTURETYPE type, con
 	return S_OK;
 }
 
-void Engine::CTexture::RenderTexture(const _uint& index /*= 0*/)
+void CTexture::RenderTexture(const _uint& index /*= 0*/)
 {
 	if (m_texVec.size() < index)
 		return;
@@ -63,7 +64,7 @@ void Engine::CTexture::RenderTexture(const _uint& index /*= 0*/)
 	m_device->SetTexture(0, m_texVec[index]);
 }
 
-Engine::CTexture* Engine::CTexture::Create(LPDIRECT3DDEVICE9 device, const _tchar* path, TEXTURETYPE type, const _uint& cnt)
+CTexture* CTexture::Create(LPDIRECT3DDEVICE9 device, const _tchar* path, TEXTURETYPE type, const _uint& cnt)
 {
 	CTexture* instance = new CTexture(device);
 
@@ -78,7 +79,7 @@ CComponent * CTexture::Clone()
 	return new CTexture(*this);
 }
 
-void Engine::CTexture::Free()
+void CTexture::Free()
 {
 	CResources::Free();
 

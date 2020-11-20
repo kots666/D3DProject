@@ -36,7 +36,7 @@ CLight* CLight::Create(LPDIRECT3DDEVICE9 device, const D3DLIGHT9* lightInfo, con
 	return instance;
 }
 
-void Engine::CLight::Free()
+void CLight::Free()
 {
 	m_device->LightEnable(m_index, FALSE);
 	SafeRelease(m_device);

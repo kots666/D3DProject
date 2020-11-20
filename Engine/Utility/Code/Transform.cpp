@@ -176,7 +176,7 @@ CComponent* CTransform::Clone()
 	return new CTransform(*this);
 }
 
-void Engine::CTransform::Free()
+void CTransform::Free()
 {
 
 }

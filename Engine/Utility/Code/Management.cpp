@@ -1,9 +1,12 @@
-#include "Export_Utility.h"
+#include "Management.h"
+#include "Scene.h"
+#include "Renderer.h"
 
 USING(Engine)
 IMPLEMENT_SINGLETON(CManagement)
 
-CManagement::CManagement() : m_scene(nullptr)
+CManagement::CManagement() :
+	m_scene(nullptr)
 {
 }
 
@@ -32,7 +35,7 @@ _int CManagement::UpdateScene(const _float & deltaTime)
 
 void CManagement::RenderScene()
 {
-	GetRenderer()->Render();
+	CRenderer::GetInstance()->Render();
 
 	if (nullptr == m_scene) return;
 

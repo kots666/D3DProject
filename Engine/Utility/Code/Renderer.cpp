@@ -3,17 +3,17 @@
 USING(Engine)
 IMPLEMENT_SINGLETON(CRenderer)
 
-Engine::CRenderer::CRenderer()
+CRenderer::CRenderer()
 {
 
 }
 
-Engine::CRenderer::~CRenderer()
+CRenderer::~CRenderer()
 {
 	Free();
 }
 
-void Engine::CRenderer::AddObject(RENDERID group, CGameObject* gameObject)
+void CRenderer::AddObject(RENDERID group, CGameObject* gameObject)
 {
 	if (RENDER_END <= group)
 		return;
@@ -22,7 +22,7 @@ void Engine::CRenderer::AddObject(RENDERID group, CGameObject* gameObject)
 	SafeAddRef(gameObject);
 }
 
-void Engine::CRenderer::Render()
+void CRenderer::Render()
 {
 	for (_int i = 0; i < RENDER_END; ++i)
 	{
@@ -35,7 +35,7 @@ void Engine::CRenderer::Render()
 	}	
 }
 
-void Engine::CRenderer::Clear()
+void CRenderer::Clear()
 {
 	for (_int i = 0; i < RENDER_END; ++i)
 	{
@@ -44,7 +44,7 @@ void Engine::CRenderer::Clear()
 	}
 }
 
-void Engine::CRenderer::Free()
+void CRenderer::Free()
 {
 	Clear();
 }

@@ -2,7 +2,7 @@
 
 USING(Engine)
 
-Engine::CFont::CFont(LPDIRECT3DDEVICE9 device) :
+CFont::CFont(LPDIRECT3DDEVICE9 device) :
 	m_device(device),
 	m_font(nullptr),
 	m_sprite(nullptr)
@@ -10,12 +10,12 @@ Engine::CFont::CFont(LPDIRECT3DDEVICE9 device) :
 	m_device->AddRef();
 }
 
-Engine::CFont::~CFont()
+CFont::~CFont()
 {
 
 }
 
-HRESULT Engine::CFont::Ready(const _tchar* fontType, const _uint& width, const _uint& height, const _uint& weight)
+HRESULT CFont::Ready(const _tchar* fontType, const _uint& width, const _uint& height, const _uint& weight)
 {
 	D3DXFONT_DESC Font_Desc;
 	ZeroMemory(&Font_Desc, sizeof(D3DXFONT_DESC));
@@ -41,7 +41,7 @@ HRESULT Engine::CFont::Ready(const _tchar* fontType, const _uint& width, const _
 	return S_OK;
 }
 
-void Engine::CFont::Render(const _tchar* string, const _vec2* pos, D3DXCOLOR color)
+void CFont::Render(const _tchar* string, const _vec2* pos, D3DXCOLOR color)
 {
 	RECT rc{ _long(pos->x), _long(pos->y) };
 
@@ -52,23 +52,23 @@ void Engine::CFont::Render(const _tchar* string, const _vec2* pos, D3DXCOLOR col
 	m_sprite->End();
 }
 
-CFont* Engine::CFont::Create(LPDIRECT3DDEVICE9 device, const _tchar* fontType, const _uint& width, const _uint& height, const _uint& weight)
+CFont* CFont::Create(LPDIRECT3DDEVICE9 device, const _tchar* fontType, const _uint& width, const _uint& height, const _uint& weight)
 {
 	CFont* instance = new CFont(device);
 
 	if (FAILED(instance->Ready(fontType, width, height, weight)))
 	{
 		MSG_BOX("Font Create Failed");
-		Engine::SafeRelease(instance);
+		SafeRelease(instance);
 	}
 
 	return instance;
 }
 
-void Engine::CFont::Free()
+void CFont::Free()
 {
-	Engine::SafeRelease(m_font);
-	Engine::SafeRelease(m_sprite);
-	Engine::SafeRelease(m_device);
+	SafeRelease(m_font);
+	SafeRelease(m_sprite);
+	SafeRelease(m_device);
 }
 

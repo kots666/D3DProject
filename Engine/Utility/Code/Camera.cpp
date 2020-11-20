@@ -2,8 +2,8 @@
 
 USING(Engine)
 
-CCamera::CCamera(LPDIRECT3DDEVICE9 device)
-	: CGameObject(device)
+CCamera::CCamera(LPDIRECT3DDEVICE9 device) :
+	CGameObject(device)
 {
 	
 }

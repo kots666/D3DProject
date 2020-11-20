@@ -9,8 +9,8 @@
 USING(Engine)
 IMPLEMENT_SINGLETON(CResourcesMgr)
 
-CResourcesMgr::CResourcesMgr()
-	: m_resourceMap(nullptr)
+CResourcesMgr::CResourcesMgr() :
+	m_resourceMap(nullptr)
 {
 
 }

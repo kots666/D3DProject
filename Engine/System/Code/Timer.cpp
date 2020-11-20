@@ -2,7 +2,8 @@
 
 USING(Engine)
 
-CTimer::CTimer() : m_deltaTime(0.f)
+CTimer::CTimer() :
+	m_deltaTime(0.f)
 {
 
 }
@@ -47,7 +48,7 @@ CTimer* CTimer::Create()
 	return instance;
 }
 
-void Engine::CTimer::Free()
+void CTimer::Free()
 {
 
 }

@@ -3,17 +3,17 @@
 USING(Engine)
 IMPLEMENT_SINGLETON(CDirectInput)
 
-Engine::CDirectInput::CDirectInput()
+CDirectInput::CDirectInput()
 {
 
 }
 
-Engine::CDirectInput::~CDirectInput()
+CDirectInput::~CDirectInput()
 {
 	Free();
 }
 
-HRESULT Engine::CDirectInput::Ready(HINSTANCE hInst, HWND hWnd)
+HRESULT CDirectInput::Ready(HINSTANCE hInst, HWND hWnd)
 {
 
 	// DInput 컴객체를 생성하는 함수
@@ -52,16 +52,16 @@ HRESULT Engine::CDirectInput::Ready(HINSTANCE hInst, HWND hWnd)
 	return S_OK;
 }
 
-void Engine::CDirectInput::Update()
+void CDirectInput::Update()
 {
 	m_keyBoard->GetDeviceState(256, m_keyState);
 	m_mouse->GetDeviceState(sizeof(m_mouseState), &m_mouseState);
 }
 
-void Engine::CDirectInput::Free()
+void CDirectInput::Free()
 {
-	Engine::SafeRelease(m_mouse);
-	Engine::SafeRelease(m_keyBoard);
-	Engine::SafeRelease(m_inputSDK);
+	SafeRelease(m_mouse);
+	SafeRelease(m_keyBoard);
+	SafeRelease(m_inputSDK);
 }
 

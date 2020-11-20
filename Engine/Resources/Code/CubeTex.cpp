@@ -1,24 +1,24 @@
 #include "CubeTex.h"
 
 USING(Engine)
-Engine::CCubeTex::CCubeTex(LPDIRECT3DDEVICE9 device)
+CCubeTex::CCubeTex(LPDIRECT3DDEVICE9 device)
 	: CVIBuffer(device)
 {
 
 }
 
-Engine::CCubeTex::CCubeTex(const CCubeTex& rhs)
+CCubeTex::CCubeTex(const CCubeTex& rhs)
 	: CVIBuffer(rhs)
 {
 
 }
 
-Engine::CCubeTex::~CCubeTex()
+CCubeTex::~CCubeTex()
 {
 
 }
 
-HRESULT Engine::CCubeTex::Ready()
+HRESULT CCubeTex::Ready()
 {
 	m_FVF = FVF_CUBE;
 	m_triCnt = 12;
@@ -126,7 +126,7 @@ HRESULT Engine::CCubeTex::Ready()
 }
 
 
-Engine::CCubeTex* Engine::CCubeTex::Create(LPDIRECT3DDEVICE9 device)
+CCubeTex* CCubeTex::Create(LPDIRECT3DDEVICE9 device)
 {
 	CCubeTex* instance = new CCubeTex(device);
 
@@ -141,7 +141,7 @@ CComponent * CCubeTex::Clone()
 	return new CCubeTex(*this);
 }
 
-void Engine::CCubeTex::Free()
+void CCubeTex::Free()
 {
 	CVIBuffer::Free();
 }
