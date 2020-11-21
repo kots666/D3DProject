@@ -5,6 +5,7 @@
 #include "TerrainTex.h"
 #include "CubeTex.h"
 #include "StaticMesh.h"
+#include "DynamicMesh.h"
 
 USING(Engine)
 IMPLEMENT_SINGLETON(CResourcesMgr)
@@ -108,6 +109,7 @@ HRESULT CResourcesMgr::ReadyMesh(LPDIRECT3DDEVICE9 device, const _ushort & conta
 		break;
 
 	case TYPE_DYNAMIC:
+		resources = CDynamicMesh::Create(device, filePath, fileName);
 		break;
 
 	case TYPE_NAVI:

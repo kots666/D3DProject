@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Player.h"
-#include "StaticMesh.h"
+#include "DynamicMesh.h"
 #include "Transform.h"
 #include "Calculator.h"
 #include "Collider.h"
@@ -22,6 +22,9 @@ HRESULT Client::CPlayer::Ready()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
+	m_transCom->SetScale(0.01f, 0.01f, 0.01f);
+	m_meshCom->SetAnimationSet(57);
+
 	return S_OK;
 }
 
@@ -32,6 +35,7 @@ Client::_int Client::CPlayer::Update(const _float& deltaTime)
 
 	Engine::CGameObject::Update(deltaTime);
 
+	m_meshCom->PlayAnimation(deltaTime);
 	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
 
 	return 0;
@@ -42,10 +46,12 @@ void Client::CPlayer::Render()
 	m_transCom->SetTransform(m_device);
 	m_meshCom->Render();
 
+	/*
 	_matrix matWorld;
 	m_transCom->GetWorldMatrix(&matWorld);
 
 	m_colliderCom->Render(Engine::COLLTYPE::COL_TRUE, &matWorld);
+	*/
 }
 
 HRESULT Client::CPlayer::AddComponent()
@@ -53,7 +59,7 @@ HRESULT Client::CPlayer::AddComponent()
 	Engine::CComponent* component = nullptr;
 
 	// Mesh
-	component = m_meshCom = dynamic_cast<Engine::CStaticMesh*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Mesh_Stone"));
+	component = m_meshCom = dynamic_cast<Engine::CDynamicMesh*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Mesh_Player"));
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Mesh", component);
 
@@ -74,9 +80,9 @@ HRESULT Client::CPlayer::AddComponent()
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Calculator", component);
 
 	// Collider
-	component = m_colliderCom = Engine::CCollider::Create(m_device, m_meshCom->GetVtxPos(), m_meshCom->GetNumVtx(), m_meshCom->GetStride());
-	NULL_CHECK_RETURN(component, E_FAIL);
-	m_compMap[Engine::ID_STATIC].emplace(L"Com_Collider", component);
+	//component = m_colliderCom = Engine::CCollider::Create(m_device, m_meshCom->GetVtxPos(), m_meshCom->GetNumVtx(), m_meshCom->GetStride());
+	//NULL_CHECK_RETURN(component, E_FAIL);
+	//m_compMap[Engine::ID_STATIC].emplace(L"Com_Collider", component);
 
 	return S_OK;
 }
@@ -87,8 +93,13 @@ void Client::CPlayer::KeyInput(const _float& deltaTime)
 
 	if (GetAsyncKeyState(VK_UP) & 0x8000)
 	{
-		D3DXVec3Normalize(&m_dir, &m_dir);
-		m_transCom->MovePos(&(m_dir * m_speed * deltaTime));
+		/*D3DXVec3Normalize(&m_dir, &m_dir);
+		m_transCom->MovePos(&(m_dir * m_speed * deltaTime));*/
+		m_meshCom->SetAnimationSet(54);
+	}
+	else
+	{
+		m_meshCom->SetAnimationSet(57);
 	}
 
 	if (GetAsyncKeyState(VK_DOWN) & 0x8000)

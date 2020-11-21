@@ -13,9 +13,24 @@ private:
 	explicit CAnimCtrl(const CAnimCtrl& rhs);
 	virtual ~CAnimCtrl();
 
+public:
+	HRESULT Ready();
+	void SetAnimationSet(const _uint& index);
+	void PlayAnimation(const _float& deltaTime);
+
+public:
+	LPD3DXANIMATIONCONTROLLER GetAnimCtrl() { return m_animCtrl; }
+	_bool IsAnimationSetEnd();
+
 private:
 	LPD3DXANIMATIONCONTROLLER m_animCtrl;
 	_uint m_currentTrack;
+	_uint m_newTrack;
+
+	_float m_accTime;
+	_uint m_oldAnimIdx;
+
+	_double m_period;
 
 public:
 	static CAnimCtrl* Create(LPD3DXANIMATIONCONTROLLER animCtrl);

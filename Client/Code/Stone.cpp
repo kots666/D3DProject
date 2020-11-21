@@ -31,7 +31,7 @@ Client::_int Client::CStone::Update(const _float& deltaTime)
 
 	Engine::CGameObject::Update(deltaTime);
 
-	m_isColl = CollideToObject(L"GameLogic", L"Player");
+	//m_isColl = CollideToObject(L"GameLogic", L"Player");
 
 	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
 
@@ -46,10 +46,10 @@ void Client::CStone::Render()
 
 	_matrix matWorld;
 	//m_transCom->GetWorldMatrix(&matWorld);
-	m_transCom->GetNRotWorldMatrix(&matWorld);
+	//m_transCom->GetNRotWorldMatrix(&matWorld);
 
 	m_device->SetRenderState(D3DRS_LIGHTING, FALSE);
-	m_colliderCom->Render(Engine::COLLTYPE(m_isColl), &matWorld);
+	//m_colliderCom->Render(Engine::COLLTYPE(m_isColl), &matWorld);
 }
 
 HRESULT Client::CStone::AddComponent()

@@ -3,6 +3,7 @@
 
 #include "Mesh.h"
 #include "HierarchyLoader.h"
+#include "AnimCtrl.h"
 
 BEGIN(Engine)
 
@@ -16,6 +17,12 @@ private:
 public:
 	HRESULT Ready(const _tchar* filePath, const _tchar* fileName);
 	void Render();
+	const D3DXFRAME_EX* GetFrameByName(const char* frameName);
+	_bool IsAnimationSetEnd();
+
+public:
+	void SetAnimationSet(const _uint& index);
+	void PlayAnimation(const _float& deltaTime);
 
 private:
 	void UpdateFrameMatrices(D3DXFRAME_EX* frame, const _matrix* parentMatrix);
@@ -24,6 +31,7 @@ private:
 private:
 	D3DXFRAME* m_rootFrame;
 	CHierarchyLoader* m_loader;
+	CAnimCtrl* m_animCtrl;
 	list<D3DXMESHCONTAINER_EX*> m_meshContainerList;
 
 public:

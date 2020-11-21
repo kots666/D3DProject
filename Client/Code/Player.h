@@ -6,7 +6,7 @@
 
 BEGIN(Engine)
 
-class CStaticMesh;
+class CDynamicMesh;
 class CTransform;
 class CRenderer;
 class CCalculator;
@@ -36,7 +36,7 @@ private:
 	_vec3 PickUpOnTerrain();
 
 private:
-	Engine::CStaticMesh* m_meshCom = nullptr;
+	Engine::CDynamicMesh* m_meshCom = nullptr;
 	Engine::CTransform* m_transCom = nullptr;
 	Engine::CCalculator* m_calcCom = nullptr;
 	Engine::CRenderer* m_rendererCom = nullptr;

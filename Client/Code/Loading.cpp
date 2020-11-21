@@ -101,13 +101,13 @@ _uint CLoading::LoadingForStage()
 										  L"TombStone.X"),
 										  E_FAIL);
 
-	//FAILED_CHECK_RETURN(Engine::Ready_Meshes(m_pGraphicDev,
-	//	RESOURCE_STAGE,
-	//	L"Mesh_Player",
-	//	Engine::TYPE_DYNAMIC,
-	//	L"../Bin/Resource/Mesh/DynamicMesh/PlayerXfile/",
-	//	L"Player.X"),
-	//	E_FAIL);
+	FAILED_CHECK_RETURN(Engine::ReadyMesh(m_device,
+		Engine::RESOURCE_STAGE,
+		L"Mesh_Player",
+		Engine::TYPE_DYNAMIC,
+		L"../Bin/Resource/Mesh/DynamicMesh/PlayerXfile/",
+		L"Player.X"),
+		E_FAIL);
 
 	//FAILED_CHECK_RETURN(Engine::Ready_Meshes(m_pGraphicDev,
 	//	RESOURCE_STAGE,
