@@ -80,10 +80,10 @@ void CGraphicDevice::RenderBegin(D3DXCOLOR color)
 	m_device->BeginScene();
 }
 
-void CGraphicDevice::RenderEnd()
+void CGraphicDevice::RenderEnd(HWND hWnd)
 {
 	m_device->EndScene();
-	m_device->Present(nullptr, nullptr, NULL, nullptr);
+	m_device->Present(nullptr, nullptr, hWnd, nullptr);
 }
 
 void CGraphicDevice::Free()

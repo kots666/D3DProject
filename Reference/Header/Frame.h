@@ -19,6 +19,7 @@ public:
 	HRESULT Ready(const _float& callLimit);
 
 private:
+	_int m_frame;
 	_float m_callLimit;
 	_float m_accDeltaTime;
 

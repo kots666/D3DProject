@@ -25,6 +25,7 @@
 #include "Engine_Struct.h"
 #include "Engine_Enum.h"
 
+#ifndef _AFX_ALL_WARNINGS
 #ifdef _DEBUG
 
 #define _CRTDBG_MAP_ALLOC
@@ -39,6 +40,7 @@
 #endif
 
 #endif // _DEBUG
+#endif
 
 using namespace std;
 

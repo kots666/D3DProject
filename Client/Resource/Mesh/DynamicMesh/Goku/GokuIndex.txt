@@ -1,0 +1,3 @@
+INDEX	NAME		FRAME
+0	Idle		0 - 120
+1	Attack		121 - 176

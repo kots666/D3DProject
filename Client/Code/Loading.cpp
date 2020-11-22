@@ -83,7 +83,7 @@ _uint CLoading::LoadingForStage()
 												Engine::RESOURCE_STAGE,
 												L"Texture_Terrain",
 												Engine::TEX_NORMAL,
-												L"../Bin/Resource/Texture/Terrain/Grass_%d.tga", 2),
+												L"../Resource/Texture/Terrain/Grass_%d.tga", 2),
 												E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device, Engine::RESOURCE_STAGE, L"Texture_SkyBox", Engine::TEX_CUBE, L"../Resource/Texture/SkyBox/burger%d.dds", 4), E_FAIL);
@@ -97,7 +97,7 @@ _uint CLoading::LoadingForStage()
 										  Engine::RESOURCE_STAGE,
 										  L"Mesh_Stone", 
 										  Engine::TYPE_STATIC, 
-										  L"../Bin/Resource/Mesh/StaticMesh/TombStone/",
+										  L"../Resource/Mesh/StaticMesh/TombStone/",
 										  L"TombStone.X"),
 										  E_FAIL);
 
@@ -105,8 +105,8 @@ _uint CLoading::LoadingForStage()
 		Engine::RESOURCE_STAGE,
 		L"Mesh_Player",
 		Engine::TYPE_DYNAMIC,
-		L"../Bin/Resource/Mesh/DynamicMesh/PlayerXfile/",
-		L"Player.X"),
+		L"../Resource/Mesh/DynamicMesh/Goku/",
+		L"Goku.X"),
 		E_FAIL);
 
 	//FAILED_CHECK_RETURN(Engine::Ready_Meshes(m_pGraphicDev,

@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="99. Default">
+      <UniqueIdentifier>{db08ebae-dfa9-4b23-8029-8a0125c5cfb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. FileInfo">
+      <UniqueIdentifier>{00e5e70a-7077-4956-8be0-385a3f1370ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Doc">
+      <UniqueIdentifier>{84e73e5a-5673-4395-aa4b-991fd67e31b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. MainFrame">
+      <UniqueIdentifier>{052bc743-c2ee-4e6d-9f47-0bf02cdd2735}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. View">
+      <UniqueIdentifier>{3c8f2336-9425-4d56-92d2-2ad0f378bd47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. View\MyFormView">
+      <UniqueIdentifier>{f78fc0dd-9c79-4fd9-93e7-7f972729a22d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. View\MiniView">
+      <UniqueIdentifier>{306657ae-3b87-4e8e-aa6b-5fce55304a8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. View\MapTool">
+      <UniqueIdentifier>{ac1d5ce8-6412-4309-bde9-aefb44f393fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. MainApp">
+      <UniqueIdentifier>{9d84a8ed-f1ea-4844-adc8-8c9e85121133}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Scene">
+      <UniqueIdentifier>{18b16855-1337-4faa-8e28-588a3333419d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. GameObject">
+      <UniqueIdentifier>{385abe2b-b3fd-4efe-b507-524b8d15921e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. GameObject\00. Stage">
+      <UniqueIdentifier>{066731a4-81fe-464b-9802-94026a79a0a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. GameObject\00. Stage\00. Terrain">
+      <UniqueIdentifier>{9d08e150-8ab5-454b-bd84-596beff57385}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. GameObject\01. Camera">
+      <UniqueIdentifier>{9edfeae2-13a1-47fd-a2e6-9ed2b2461d7d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="targetver.h">
+      <Filter>99. Default</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>99. Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>99. Default</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>01. MainFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCToolView.h">
+      <Filter>00. View</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCTool.h">
+      <Filter>99. Default</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCToolDoc.h">
+      <Filter>02. Doc</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniView.h">
+      <Filter>00. View\MiniView</Filter>
+    </ClInclude>
+    <ClInclude Include="MyFormView.h">
+      <Filter>00. View\MyFormView</Filter>
+    </ClInclude>
+    <ClInclude Include="MapTool.h">
+      <Filter>00. View\MapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="FileInfo.h">
+      <Filter>98. FileInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="MainApp.h">
+      <Filter>03. MainApp</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>04. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>05. GameObject\00. Stage\00. Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicCamera.h">
+      <Filter>05. GameObject\01. Camera</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>99. Default</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>01. MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCToolView.cpp">
+      <Filter>00. View</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCTool.cpp">
+      <Filter>99. Default</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCToolDoc.cpp">
+      <Filter>02. Doc</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniView.cpp">
+      <Filter>00. View\MiniView</Filter>
+    </ClCompile>
+    <ClCompile Include="MyFormView.cpp">
+      <Filter>00. View\MyFormView</Filter>
+    </ClCompile>
+    <ClCompile Include="MapTool.cpp">
+      <Filter>00. View\MapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="FileInfo.cpp">
+      <Filter>98. FileInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="MainApp.cpp">
+      <Filter>03. MainApp</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>04. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>05. GameObject\00. Stage\00. Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicCamera.cpp">
+      <Filter>05. GameObject\01. Camera</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\MFCTool.ico">
+      <Filter>99. Default</Filter>
+    </Image>
+    <Image Include="res\MFCToolDoc.ico">
+      <Filter>99. Default</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>99. Default</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MFCTool.rc">
+      <Filter>99. Default</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\MFCTool.rc2">
+      <Filter>99. Default</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt">
+      <Filter>99. Default</Filter>
+    </Text>
+  </ItemGroup>
+</Project>

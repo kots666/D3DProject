@@ -23,7 +23,7 @@ HRESULT Client::CPlayer::Ready()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	m_transCom->SetScale(0.01f, 0.01f, 0.01f);
-	m_meshCom->SetAnimationSet(57);
+	m_meshCom->SetAnimationSet(0);
 
 	return S_OK;
 }
@@ -95,11 +95,11 @@ void Client::CPlayer::KeyInput(const _float& deltaTime)
 	{
 		/*D3DXVec3Normalize(&m_dir, &m_dir);
 		m_transCom->MovePos(&(m_dir * m_speed * deltaTime));*/
-		m_meshCom->SetAnimationSet(54);
+		m_meshCom->SetAnimationSet(1);
 	}
 	else
 	{
-		m_meshCom->SetAnimationSet(57);
+		m_meshCom->SetAnimationSet(0);
 	}
 
 	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
