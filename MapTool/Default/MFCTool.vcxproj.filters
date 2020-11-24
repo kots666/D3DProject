@@ -43,6 +43,9 @@
     <Filter Include="05. GameObject\01. Camera">
       <UniqueIdentifier>{9edfeae2-13a1-47fd-a2e6-9ed2b2461d7d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="97. KeyManager">
+      <UniqueIdentifier>{f14d6d12-807e-4c7c-a538-723b61a19e11}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">

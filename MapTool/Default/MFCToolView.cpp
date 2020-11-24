@@ -162,6 +162,11 @@ void CMFCToolView::OnInitialUpdate()
 	SafeAddRef(m_device);
 	SafeRelease(initDevice);
 
+	if (FAILED(ReadyDirectInput(AfxGetInstanceHandle(), m_hWnd)))
+	{
+		return;
+	}
+
 	/*
 	if (FAILED(CTextureManager::GetInstance()->InsertTexture(CTextureManager::TEX_MULTI, L"../Texture/Line/%d.png", L"Tile", L"Line", LINECOUNT)))
 		return;

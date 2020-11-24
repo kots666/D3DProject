@@ -5,7 +5,7 @@ namespace Engine
 {
 	#define			USING(NAMESPACE)	using namespace NAMESPACE;
 
-	#define			MSG_BOX(_message)			MessageBox(NULL, TEXT(_message), __T("System Message"), MB_OK)
+	#define			MSG_BOX(_message)			MessageBox(NULL, TEXT(_message), L"System Message", MB_OK)
 	#define			TAGMSG_BOX(_tag,_message)	MessageBoxW(NULL, _message, _tag, MB_OK)
 
 	#define			BEGIN(NAMESPACE)		namespace NAMESPACE {

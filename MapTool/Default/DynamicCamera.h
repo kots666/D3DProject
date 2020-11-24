@@ -3,6 +3,9 @@
 
 #include "Camera.h"
 
+class CMainFrame;
+class CMFCToolView;
+
 class CDynamicCamera : public Engine::CCamera
 {
 private:
@@ -35,6 +38,9 @@ public:
 private:
 	_bool m_canClick = false;
 	_bool m_isFix = true;
+	CMainFrame* m_mainFrame;
+	CMFCToolView* m_toolView;
+	HWND m_hWnd;
 
 private:
 	virtual void Free() override;

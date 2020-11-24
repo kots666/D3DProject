@@ -26,6 +26,7 @@ _int CMainApp::Update(const _float & deltaTime)
 {
 	if (nullptr == m_managementClass) return -1;
 
+	UpdateDirectInput();
 	m_managementClass->UpdateScene(deltaTime);
 
 	return 0;
