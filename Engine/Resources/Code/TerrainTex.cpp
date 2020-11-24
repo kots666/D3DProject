@@ -114,7 +114,7 @@ HRESULT CTerrainTex::Ready(const _ulong& xCnt, const _ulong& zCnt, const _ulong&
 
 void CTerrainTex::LoadHeightMap()
 {
-	HANDLE hFile = CreateFile(L"../Resource/Texture/Terrain/Test.bmp", GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(L"../Resource/Texture/Terrain/Height2.bmp", GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	_ulong byte = 0;
 

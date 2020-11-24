@@ -8,6 +8,7 @@
 #include "SkyBox.h"
 #include "Enemy.h"
 #include "Stone.h"
+#include "Sword.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 device) :
 	Engine::CScene(device)
@@ -22,12 +23,6 @@ CStage::~CStage()
 
 HRESULT CStage::Ready()
 {
-	Engine::CComponent* comp = nullptr;
-
-	comp = Engine::CCalculator::Create(m_device);
-	NULL_CHECK_RETURN(comp, E_FAIL);
-	Engine::ReadyProto(L"Proto_Calculator", comp);
-
 	FAILED_CHECK_RETURN(ReadyEnvironmentLayer(L"Environment"), E_FAIL);
 	FAILED_CHECK_RETURN(ReadyGameLogicLayer(L"GameLogic"), E_FAIL);
 	FAILED_CHECK_RETURN(ReadyLightInfo(), E_FAIL);
@@ -75,17 +70,19 @@ HRESULT CStage::ReadyGameLogicLayer(const _tchar * layerTag)
 
 	Engine::CGameObject* gameObject = nullptr;
 
-	gameObject = CPlayer::Create(m_device);
-	NULL_CHECK_RETURN(gameObject, E_FAIL);
-	FAILED_CHECK_RETURN(layer->AddGameObject(L"Player", gameObject), E_FAIL);
-	
-	/*gameObject = CEnemy::Create(m_device);
-	NULL_CHECK_RETURN(gameObject, E_FAIL);
-	FAILED_CHECK_RETURN(layer->AddGameObject(L"Monster", gameObject), E_FAIL);*/
-
 	gameObject = CStone::Create(m_device);
 	NULL_CHECK_RETURN(gameObject, E_FAIL);
 	FAILED_CHECK_RETURN(layer->AddGameObject(L"Stone", gameObject), E_FAIL);
+
+	/*
+	gameObject = CPlayer::Create(m_device);
+	NULL_CHECK_RETURN(gameObject, E_FAIL);
+	FAILED_CHECK_RETURN(layer->AddGameObject(L"Player", gameObject), E_FAIL);
+
+	gameObject = CSword::Create(m_device);
+	NULL_CHECK_RETURN(gameObject, E_FAIL);
+	FAILED_CHECK_RETURN(layer->AddGameObject(L"Sword", gameObject), E_FAIL);
+	*/
 
 	m_layerMap.emplace(layerTag, layer);
 

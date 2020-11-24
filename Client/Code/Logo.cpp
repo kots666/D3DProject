@@ -84,14 +84,6 @@ HRESULT CLogo::InitResource(Engine::RESOURCETYPE type)
 	FAILED_CHECK_RETURN(Engine::ReserveContainerSize(type), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::ReadyBuffer(m_device, Engine::RESOURCE_STATIC, L"Buffer_RCTex", Engine::BUFFER_RCTEX), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device, Engine::RESOURCE_LOGO, L"Texture_Logo", Engine::TEX_NORMAL, L"../Resource/Texture/Logo/Logo.jpg"), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device, Engine::RESOURCE_STAGE, L"Texture_Player", Engine::TEX_NORMAL, L"../Resource/Texture/Player/Ma.jpg"), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device, Engine::RESOURCE_STAGE, L"Texture_Enemy", Engine::TEX_NORMAL, L"../Resource/Texture/Monster0.png"), E_FAIL);
-
-	Engine::CComponent* comp = nullptr;
-
-	comp = Engine::CTransform::Create();
-	NULL_CHECK_RETURN(comp, E_FAIL);
-	Engine::ReadyProto(L"Proto_Transform", comp);
 
 	return S_OK;
 }

@@ -43,6 +43,12 @@
     <Filter Include="07. Light\Manager">
       <UniqueIdentifier>{8164c990-6965-42c1-83a8-ab5de900c9f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Component\03. Optimization">
+      <UniqueIdentifier>{1b13e618-b0ce-4147-9718-77fc00710225}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\03. Optimization\00. Frustum">
+      <UniqueIdentifier>{885d0a26-075c-4b20-b73c-cdaa52bbbb77}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Management.cpp">
@@ -83,6 +89,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\LightMgr.cpp">
       <Filter>07. Light\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Optimization.cpp">
+      <Filter>04. Component\03. Optimization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Frustum.cpp">
+      <Filter>04. Component\03. Optimization\00. Frustum</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +139,12 @@
     </ClInclude>
     <ClInclude Include="..\Code\LightMgr.h">
       <Filter>07. Light\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Optimization.h">
+      <Filter>04. Component\03. Optimization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Frustum.h">
+      <Filter>04. Component\03. Optimization\00. Frustum</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

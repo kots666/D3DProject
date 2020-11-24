@@ -18,17 +18,22 @@ CPlayer::~CPlayer()
 
 }
 
-HRESULT Client::CPlayer::Ready()
+HRESULT CPlayer::Ready()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	m_transCom->SetScale(0.01f, 0.01f, 0.01f);
-	m_meshCom->SetAnimationSet(0);
+
+	// Goku
+	//m_meshCom->SetAnimationSet(0);
+
+	// Player
+	m_meshCom->SetAnimationSet(57);
 
 	return S_OK;
 }
 
-Client::_int Client::CPlayer::Update(const _float& deltaTime)
+_int CPlayer::Update(const _float& deltaTime)
 {
 	SetUpOnTerrain();
 	KeyInput(deltaTime);
@@ -41,7 +46,7 @@ Client::_int Client::CPlayer::Update(const _float& deltaTime)
 	return 0;
 }
 
-void Client::CPlayer::Render()
+void CPlayer::Render()
 {
 	m_transCom->SetTransform(m_device);
 	m_meshCom->Render();
@@ -54,7 +59,7 @@ void Client::CPlayer::Render()
 	*/
 }
 
-HRESULT Client::CPlayer::AddComponent()
+HRESULT CPlayer::AddComponent()
 {
 	Engine::CComponent* component = nullptr;
 
@@ -87,19 +92,17 @@ HRESULT Client::CPlayer::AddComponent()
 	return S_OK;
 }
 
-void Client::CPlayer::KeyInput(const _float& deltaTime)
+void CPlayer::KeyInput(const _float& deltaTime)
 {
 	m_transCom->GetInfo(Engine::INFO_LOOK, &m_dir);
 
 	if (GetAsyncKeyState(VK_UP) & 0x8000)
 	{
-		/*D3DXVec3Normalize(&m_dir, &m_dir);
-		m_transCom->MovePos(&(m_dir * m_speed * deltaTime));*/
-		m_meshCom->SetAnimationSet(1);
-	}
-	else
-	{
-		m_meshCom->SetAnimationSet(0);
+		// Goku Attack
+		//m_meshCom->SetAnimationSet(1);
+
+		// Player
+		m_meshCom->SetAnimationSet(57);
 	}
 
 	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
@@ -109,15 +112,27 @@ void Client::CPlayer::KeyInput(const _float& deltaTime)
 	}
 
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
-		m_transCom->Rotation(Engine::ROT_Y, D3DXToRadian(90.f * deltaTime));
+		m_transCom->SetRotation(Engine::ROT_Y, D3DXToRadian(90.f * deltaTime));
 
 	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
-		m_transCom->Rotation(Engine::ROT_Y, D3DXToRadian(-90.f * deltaTime));
+		m_transCom->SetRotation(Engine::ROT_Y, D3DXToRadian(-90.f * deltaTime));
 
 	if (Engine::GetDIMouseState(Engine::DIM_LB) & 0x80)
 	{
 		_vec3 pickPos = PickUpOnTerrain();
 		m_transCom->MoveToPickPos(&pickPos, m_speed, deltaTime);
+	}
+
+	if (Engine::GetDIMouseState(Engine::DIM_RB) & 0x80)
+	{
+		// Player
+		m_meshCom->SetAnimationSet(30);
+	}
+
+	if (m_meshCom->IsAnimationSetEnd())
+	{
+		// Player
+		m_meshCom->SetAnimationSet(57);
 	}
 }
 

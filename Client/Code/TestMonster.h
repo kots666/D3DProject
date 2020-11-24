@@ -28,13 +28,13 @@ public:
 	virtual void Render(void) override;
 
 private:
-	HRESULT Add_Component(void);
+	HRESULT AddComponent(void);
 	void Chase(const _float& fTimeDelta);
 
 private:
 	Engine::CRCTex*				m_pBufferCom = nullptr;
 	Engine::CTexture*			m_pTextureCom = nullptr;
-	Engine::CTransform*			m_pTransformCom = nullptr;
+	Engine::CTransform*			m_transCom = nullptr;
 	CGameObject* m_player = nullptr;
 	CTestPlayer* player = nullptr;
 

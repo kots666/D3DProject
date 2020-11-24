@@ -190,11 +190,13 @@ call CopyUtility.bat</Command>
     <ClCompile Include="..\Code\Camera.cpp" />
     <ClCompile Include="..\Code\Collider.cpp" />
     <ClCompile Include="..\Code\Component.cpp" />
+    <ClCompile Include="..\Code\Frustum.cpp" />
     <ClCompile Include="..\Code\GameObject.cpp" />
     <ClCompile Include="..\Code\Layer.cpp" />
     <ClCompile Include="..\Code\Light.cpp" />
     <ClCompile Include="..\Code\LightMgr.cpp" />
     <ClCompile Include="..\Code\Management.cpp" />
+    <ClCompile Include="..\Code\Optimization.cpp" />
     <ClCompile Include="..\Code\ProtoMgr.cpp" />
     <ClCompile Include="..\Code\Renderer.cpp" />
     <ClCompile Include="..\Code\Scene.cpp" />
@@ -206,11 +208,13 @@ call CopyUtility.bat</Command>
     <ClInclude Include="..\Code\Camera.h" />
     <ClInclude Include="..\Code\Collider.h" />
     <ClInclude Include="..\Code\Component.h" />
+    <ClInclude Include="..\Code\Frustum.h" />
     <ClInclude Include="..\Code\GameObject.h" />
     <ClInclude Include="..\Code\Layer.h" />
     <ClInclude Include="..\Code\Light.h" />
     <ClInclude Include="..\Code\LightMgr.h" />
     <ClInclude Include="..\Code\Management.h" />
+    <ClInclude Include="..\Code\Optimization.h" />
     <ClInclude Include="..\Code\ProtoMgr.h" />
     <ClInclude Include="..\Code\Renderer.h" />
     <ClInclude Include="..\Code\Scene.h" />

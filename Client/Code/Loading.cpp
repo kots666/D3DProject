@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "Loading.h"
 
-#include "Export_Function.h"
-
 CLoading::CLoading(LPDIRECT3DDEVICE9 device) :
 	m_device(device),
 	m_isFinish(false)
@@ -56,6 +54,20 @@ _uint CLoading::LoadingForStage()
 
 	int i = 0;
 
+	Engine::CComponent* comp = nullptr;
+
+	comp = Engine::CTransform::Create();
+	NULL_CHECK_RETURN(comp, E_FAIL);
+	Engine::ReadyProto(L"Proto_Transform", comp);
+
+	comp = Engine::CCalculator::Create(m_device);
+	NULL_CHECK_RETURN(comp, E_FAIL);
+	Engine::ReadyProto(L"Proto_Calculator", comp);
+
+	comp = Engine::COptimization::Create(m_device);
+	NULL_CHECK_RETURN(comp, E_FAIL);
+	Engine::ReadyProto(L"Proto_Optimization", comp);
+
 	FAILED_CHECK_RETURN(Engine::ReadyBuffer(m_device, Engine::RESOURCE_STAGE, L"Buffer_CubeTex", Engine::BUFFER_CUBETEX, VTXCNTX, VTXCNTZ, VTXITV), E_FAIL);
 
 	// buffer
@@ -79,60 +91,77 @@ _uint CLoading::LoadingForStage()
 	
 	// ÅØ½ºÃÄ
 
-	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
-												Engine::RESOURCE_STAGE,
-												L"Texture_Terrain",
-												Engine::TEX_NORMAL,
-												L"../Resource/Texture/Terrain/Grass_%d.tga", 2),
-												E_FAIL);
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Texture_Terrain",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/Terrain/Grass_%d.tga", 2), E_FAIL);
 
-	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device, Engine::RESOURCE_STAGE, L"Texture_SkyBox", Engine::TEX_CUBE, L"../Resource/Texture/SkyBox/burger%d.dds", 4), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Texture_SkyBox",
+		Engine::TEX_CUBE,
+		L"../Resource/Texture/SkyBox/burger%d.dds", 4), E_FAIL);
 
 	
 	
 	lstrcpy(m_loadingStr, L"Mesh Loading.............................");
 
 	// Stone
-	FAILED_CHECK_RETURN(Engine::ReadyMesh(m_device,
-										  Engine::RESOURCE_STAGE,
-										  L"Mesh_Stone", 
-										  Engine::TYPE_STATIC, 
-										  L"../Resource/Mesh/StaticMesh/TombStone/",
-										  L"TombStone.X"),
-										  E_FAIL);
+	FAILED_CHECK_RETURN(Engine::ReadyMesh(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Mesh_Stone",
+		Engine::TYPE_STATIC,
+		L"../Resource/Mesh/StaticMesh/TombStone/",
+		L"TombStone.X"), E_FAIL);
 
+	/*
+	// Player
 	FAILED_CHECK_RETURN(Engine::ReadyMesh(m_device,
 		Engine::RESOURCE_STAGE,
 		L"Mesh_Player",
 		Engine::TYPE_DYNAMIC,
-		L"../Resource/Mesh/DynamicMesh/Goku/",
-		L"Goku.X"),
-		E_FAIL);
+		L"../Resource/Mesh/DynamicMesh/Player/",
+		L"Player.X"), E_FAIL);
 
-	//FAILED_CHECK_RETURN(Engine::Ready_Meshes(m_pGraphicDev,
-	//	RESOURCE_STAGE,
-	//	L"Mesh_Sword",
-	//	Engine::TYPE_STATIC,
-	//	L"../Bin/Resource/Mesh/StaticMesh/Sword/",
-	//	L"Sword.X"),
-	//	E_FAIL);
+	// Goku
+	//FAILED_CHECK_RETURN(Engine::ReadyMesh(m_device,
+	//	Engine::RESOURCE_STAGE,
+	//	L"Mesh_Player",
+	//	Engine::TYPE_DYNAMIC,
+	//	L"../Resource/Mesh/DynamicMesh/Goku/",
+	//	L"Goku.X"), E_FAIL);
 
-	//FAILED_CHECK_RETURN(Engine::Ready_Meshes(m_pGraphicDev,
-	//	RESOURCE_STAGE,
+	// Sword
+	FAILED_CHECK_RETURN(Engine::ReadyMesh(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Mesh_Sword",
+		Engine::TYPE_STATIC,
+		L"../Resource/Mesh/StaticMesh/Sword/",
+		L"Sword.X"), E_FAIL);
+	*/
+
+	//FAILED_CHECK_RETURN(Engine::ReadyMesh(
+	//	m_device,
+	//	Engine::RESOURCE_STAGE,
 	//	L"Mesh_Tree",
 	//	Engine::TYPE_STATIC,
-	//	L"../Bin/Resource/Mesh/StaticMesh/Tree/",
+	//	L"../Resource/Mesh/StaticMesh/Tree/",
 	//	L"Tree01.X"),
 	//	E_FAIL);
 
-	//FAILED_CHECK_RETURN(Engine::Ready_Meshes(m_pGraphicDev,
-	//	RESOURCE_STAGE,
+	//FAILED_CHECK_RETURN(Engine::ReadyMesh(
+	//	m_device,
+	//	Engine::RESOURCE_STAGE,
 	//	L"Mesh_Navi",
 	//	Engine::TYPE_NAVI,
 	//	NULL,
 	//	NULL),
 	//	E_FAIL);
-
 	
 	lstrcpy(m_loadingStr, L"Loading Complete!!!");
 

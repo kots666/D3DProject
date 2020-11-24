@@ -1,5 +1,5 @@
-#ifndef Stone_h__
-#define Stone_h__
+#ifndef Sword_h__
+#define Sword_h__
 
 #include "GameObject.h"
 #include "Define.h"
@@ -11,16 +11,16 @@ class CTransform;
 class CRenderer;
 class CCalculator;
 class CCollider;
-class COptimization;
 
 END
 
 BEGIN(Client)
-class CStone : public Engine::CGameObject
+
+class CSword : public Engine::CGameObject
 {
 private:
-	explicit CStone(LPDIRECT3DDEVICE9 device);
-	virtual ~CStone();
+	explicit CSword(LPDIRECT3DDEVICE9 device);
+	virtual ~CSword();
 
 public:
 	virtual HRESULT Ready() override;
@@ -29,22 +29,22 @@ public:
 
 private:
 	HRESULT AddComponent();
-	void SetUpOnTerrain();
-	_bool CollideToObject(const _tchar* layerTag, const _tchar* objTag);
+	_bool CollisionToObject(const _tchar* layerTag, const _tchar* objTag);
 
 private:
+
 	Engine::CStaticMesh* m_meshCom = nullptr;
 	Engine::CTransform* m_transCom = nullptr;
 	Engine::CRenderer* m_rendererCom = nullptr;
 	Engine::CCalculator* m_calcCom = nullptr;
 	Engine::CCollider* m_colliderCom = nullptr;
-	Engine::COptimization* m_optimizationCom = nullptr;
-
 	_bool m_isColl = false;
-	_bool m_isDraw = false;
+
+	const _matrix* m_parentBoneMatrix = nullptr;
+	const _matrix* m_parentWorldMatrix = nullptr;
 
 public:
-	static CStone* Create(LPDIRECT3DDEVICE9 device);
+	static CSword* Create(LPDIRECT3DDEVICE9 device);
 
 private:
 	virtual void Free() override;
@@ -52,4 +52,4 @@ private:
 };
 
 END
-#endif // Stone_h__
+#endif // Sword_h__

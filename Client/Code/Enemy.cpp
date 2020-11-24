@@ -16,7 +16,7 @@ CEnemy::~CEnemy()
 
 }
 
-HRESULT Client::CEnemy::Ready()
+HRESULT CEnemy::Ready()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
@@ -25,7 +25,7 @@ HRESULT Client::CEnemy::Ready()
 	return S_OK;
 }
 
-Client::_int Client::CEnemy::Update(const _float& deltaTime)
+_int CEnemy::Update(const _float& deltaTime)
 {
 	Engine::CGameObject::Update(deltaTime);
 
@@ -34,7 +34,7 @@ Client::_int Client::CEnemy::Update(const _float& deltaTime)
 	return 0;
 }
 
-void Client::CEnemy::Render()
+void CEnemy::Render()
 {
 	SetBillboardMatrix();
 
@@ -63,7 +63,7 @@ void CEnemy::SetBillboardMatrix()
 	m_device->SetTransform(D3DTS_WORLD, &view);
 }
 
-HRESULT Client::CEnemy::AddComponent()
+HRESULT CEnemy::AddComponent()
 {
 	Engine::CComponent* component = nullptr;
 

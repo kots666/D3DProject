@@ -50,7 +50,7 @@ void CAnimCtrl::SetAnimationSet(const _uint & index)
 
 	// m_animCtrl->GetAnimationSetByName()
 
-	//m_dPeriod = animSet->GetPeriod(); // 애니메이션 셋의 재생 시간을 반환하는 함수
+	m_period = animSet->GetPeriod(); // 애니메이션 셋의 재생 시간을 반환하는 함수
 
 
 	// new트랙에 애니메이션 셋 세팅
@@ -90,12 +90,12 @@ void CAnimCtrl::PlayAnimation(const _float & deltaTime)
 {
 	m_animCtrl->AdvanceTime(deltaTime, NULL);	// 2인자 : 애니메이션 재생에 따라 사운드나, 이펙트를 구동 가능, 하지만 안씀.
 												// AdvanceTime 호출 시 내부적으로 누적되는 시간 값이 있음
-
 	m_accTime += deltaTime;
 }
 
 _bool CAnimCtrl::IsAnimationSetEnd()
 {
+	// 트랙정보를 가져와서 현재 재생 위치가 끝 지점에서 0.1을 뺀 지점을 지났다면 애니메이션이 끝났음을 알려준다.
 	D3DXTRACK_DESC trackInfo;
 	ZeroMemory(&trackInfo, sizeof(D3DXTRACK_DESC));
 

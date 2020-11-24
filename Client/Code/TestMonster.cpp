@@ -17,7 +17,7 @@ CTestMonster::~CTestMonster(void)
 
 }
 
-HRESULT Client::CTestMonster::Add_Component(void)
+HRESULT Client::CTestMonster::AddComponent(void)
 {
 	Engine::CComponent*		pComponent = nullptr;
 
@@ -32,11 +32,11 @@ HRESULT Client::CTestMonster::Add_Component(void)
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Texture", pComponent);
 
 	// Transform
-	pComponent = m_pTransformCom = dynamic_cast<Engine::CTransform*>(Engine::CloneComp(L"Proto_Transform_Monster"));
+	pComponent = m_transCom = dynamic_cast<Engine::CTransform*>(Engine::CloneComp(L"Proto_Transform_Monster"));
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Transform_Monster", pComponent);
 
-	m_pTransformCom->m_info[Engine::INFO_POS] = { 0.f, -10.f, 0.f };
+	m_transCom->m_info[Engine::INFO_POS] = { 0.f, -10.f, 0.f };
 
 	return S_OK;
 }
@@ -45,13 +45,13 @@ void Client::CTestMonster::Chase(const _float& fTimeDelta)
 {
 	_vec3 up;
 	
-	m_pTransformCom->GetInfo(Engine::INFO_UP, &up);
+	m_transCom->GetInfo(Engine::INFO_UP, &up);
 
-	_vec3 targetPos = player->m_pTransformCom->m_info[Engine::INFO_POS];
-	_vec3 myPos = m_pTransformCom->m_info[Engine::INFO_POS];
+	_vec3 targetPos = player->m_transCom->m_info[Engine::INFO_POS];
+	_vec3 myPos = m_transCom->m_info[Engine::INFO_POS];
 	_vec3 look = _vec3{ 0.f, 1.f, 0.f };
 
-	_vec3 myDir = { m_pTransformCom->m_matWorld.m[1][0],  m_pTransformCom->m_matWorld.m[1][1] , m_pTransformCom->m_matWorld.m[1][2] };
+	_vec3 myDir = { m_transCom->m_matWorld.m[1][0],  m_transCom->m_matWorld.m[1][1] , m_transCom->m_matWorld.m[1][2] };
 	_vec3 targetDir = targetPos - myPos;
 
 	cout << myDir.x << "\t" << myDir.y << "\t" << myDir.z << endl;
@@ -64,16 +64,16 @@ void Client::CTestMonster::Chase(const _float& fTimeDelta)
 
 	if (targetPos.y < myPos.y)
 	{
-		m_pTransformCom->m_angle.z = radianZ + D3DXToRadian(90.f);
-		m_pTransformCom->m_angle.x = radianX;
+		m_transCom->m_angle.z = radianZ + D3DXToRadian(90.f);
+		m_transCom->m_angle.x = radianX;
 	}
 	else
 	{
-		m_pTransformCom->m_angle.z = radianZ + D3DXToRadian(-90.f);
-		m_pTransformCom->m_angle.x = radianX;
+		m_transCom->m_angle.z = radianZ + D3DXToRadian(-90.f);
+		m_transCom->m_angle.x = radianX;
 	}
 
-	m_pTransformCom->m_info[Engine::INFO_POS] += myDir * 3.f * fTimeDelta;
+	m_transCom->m_info[Engine::INFO_POS] += myDir * 3.f * fTimeDelta;
 }
 
 CTestMonster* CTestMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, CGameObject* player)
@@ -94,7 +94,7 @@ void CTestMonster::Free(void)
 
 HRESULT Client::CTestMonster::Ready(void)
 {
-	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
+	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	player = dynamic_cast<CTestPlayer*>(m_player);
 	if (nullptr == player) return E_FAIL;
@@ -111,13 +111,13 @@ Client::_int Client::CTestMonster::Update(const _float& fTimeDelta)
 	_vec3 vPlayerPos;
 	pPlayerTransform->GetInfo(Engine::INFO_POS, &vPlayerPos);
 
-	m_pTransformCom->ChaseTarget(&vPlayerPos, m_fSpeed, fTimeDelta);
+	m_transCom->ChaseTarget(&vPlayerPos, m_fSpeed, fTimeDelta);
 
 	return 0;
 }
 void Client::CTestMonster::Render(void)
 {
-	m_pTransformCom->SetTransform(m_device);
+	m_transCom->SetTransform(m_device);
 	m_pTextureCom->RenderTexture(0);
 	m_pBufferCom->Render();
 

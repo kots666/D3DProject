@@ -42,7 +42,7 @@ _int CSkyBox::Update(const _float& deltaTime)
 
 	return 0;
 }
-void Client::CSkyBox::Render()
+void CSkyBox::Render()
 {
 	m_device->SetRenderState(D3DRS_LIGHTING, FALSE);
 	m_device->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
@@ -58,7 +58,7 @@ void Client::CSkyBox::Render()
 	m_device->SetRenderState(D3DRS_LIGHTING, TRUE);
 }
 
-HRESULT Client::CSkyBox::AddComponent()
+HRESULT CSkyBox::AddComponent()
 {
 	Engine::CComponent* component = nullptr;
 

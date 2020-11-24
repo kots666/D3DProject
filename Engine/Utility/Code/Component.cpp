@@ -2,11 +2,13 @@
 
 USING(Engine)
 
-CComponent::CComponent()
+CComponent::CComponent() :
+	m_isClone(false)
 {
 }
 
-CComponent::CComponent(const CComponent & rhs)
+CComponent::CComponent(const CComponent & rhs) :
+	m_isClone(true)
 {
 }
 

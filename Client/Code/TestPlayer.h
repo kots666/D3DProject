@@ -25,13 +25,13 @@ public:
 	virtual void Render(void) override;
 
 private:
-	HRESULT Add_Component(void);
+	HRESULT AddComponent(void);
 	void Key_Input(const _float& fTimeDelta);
 
 public:
 	Engine::CRCTex*				m_pBufferCom = nullptr;
 	Engine::CTexture*			m_pTextureCom = nullptr;
-	Engine::CTransform*			m_pTransformCom = nullptr;
+	Engine::CTransform*			m_transCom = nullptr;
 
 public:
 	static CTestPlayer*	Create(LPDIRECT3DDEVICE9 pGraphicDev);

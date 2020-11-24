@@ -15,17 +15,17 @@ CStone::~CStone()
 {
 }
 
-HRESULT Client::CStone::Ready()
+HRESULT CStone::Ready()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	m_transCom->SetPos(10.f, 0.f, 5.f);
-	m_transCom->Rotation(Engine::ROT_Y, D3DXToRadian(45.f));
+	m_transCom->SetRotation(Engine::ROT_Y, D3DXToRadian(45.f));
 
 	return S_OK;
 }
 
-Client::_int Client::CStone::Update(const _float& deltaTime)
+_int CStone::Update(const _float& deltaTime)
 {
 	SetUpOnTerrain();
 
@@ -33,13 +33,20 @@ Client::_int Client::CStone::Update(const _float& deltaTime)
 
 	//m_isColl = CollideToObject(L"GameLogic", L"Player");
 
+	_vec3 pos;
+	m_transCom->GetInfo(Engine::INFO_POS, &pos);
+
+	m_isDraw = m_optimizationCom->IsInFrustumForObject(&pos, 0.f);
+
 	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
 
 	return 0;
 }
 
-void Client::CStone::Render()
+void CStone::Render()
 {
+	if (!m_isDraw) return;
+
 	m_transCom->SetTransform(m_device);
 
 	m_meshCom->Render();
@@ -52,7 +59,7 @@ void Client::CStone::Render()
 	//m_colliderCom->Render(Engine::COLLTYPE(m_isColl), &matWorld);
 }
 
-HRESULT Client::CStone::AddComponent()
+HRESULT CStone::AddComponent()
 {
 	Engine::CComponent* component = nullptr;
 	
@@ -82,25 +89,14 @@ HRESULT Client::CStone::AddComponent()
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Collider", component);
 
+	component = m_optimizationCom = dynamic_cast<Engine::COptimization*>(Engine::CloneComp(L"Proto_Optimization"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_Optimization", component);
+
 	return S_OK;
 }
 
-CStone* CStone::Create(LPDIRECT3DDEVICE9 device)
-{
-	CStone*	instance = new CStone(device);
-
-	if (FAILED(instance->Ready()))
-		Client::SafeRelease(instance);
-
-	return instance;
-}
-
-void CStone::Free()
-{
-	Engine::CGameObject::Free();
-}
-
-void Client::CStone::SetUpOnTerrain()
+void CStone::SetUpOnTerrain()
 {
 	_vec3 position;
 	m_transCom->GetInfo(Engine::INFO_POS, &position);
@@ -133,4 +129,19 @@ _bool CStone::CollideToObject(const _tchar * layerTag, const _tchar * objTag)
 		m_colliderCom->GetMinPos(),
 		m_colliderCom->GetMaxPos(),
 		m_colliderCom->GetCollMatrix());*/
+}
+
+CStone* CStone::Create(LPDIRECT3DDEVICE9 device)
+{
+	CStone*	instance = new CStone(device);
+
+	if (FAILED(instance->Ready()))
+		Client::SafeRelease(instance);
+
+	return instance;
+}
+
+void CStone::Free()
+{
+	Engine::CGameObject::Free();
 }

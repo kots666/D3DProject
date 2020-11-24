@@ -136,6 +136,11 @@ void CTransform::GetWorldMatrix(_matrix * outer) const
 	*outer = m_matWorld;
 }
 
+const _matrix * CTransform::GetWorldMatrix() const
+{
+	return &m_matWorld;
+}
+
 const _matrix * CTransform::GetNRotWorldMatrix(_matrix * outer) const
 {
 	if (nullptr != outer)
@@ -156,9 +161,14 @@ void CTransform::SetScale(const _float & xScale, const _float & yScale, const _f
 	m_scale = _vec3(xScale, yScale, zScale);
 }
 
-void CTransform::Rotation(ROTATION rotType, const _float & angle)
+void CTransform::SetRotation(ROTATION rotType, const _float & angle)
 {
 	*(((_float*)&m_angle) + rotType) += angle;
+}
+
+void CTransform::SetParentMatrix(const _matrix * parentMat)
+{
+	m_matWorld *= *parentMat;
 }
 
 CTransform* CTransform::Create()

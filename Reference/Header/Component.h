@@ -13,6 +13,9 @@ protected:
 	explicit CComponent(const CComponent& rhs);
 	virtual ~CComponent(void);
 
+protected:
+	_bool m_isClone;
+
 public:
 	virtual _int Update(const _float& deltaTime);
 

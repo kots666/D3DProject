@@ -14,7 +14,7 @@ CDynamicCamera::~CDynamicCamera()
 
 }
 
-HRESULT Client::CDynamicCamera::Ready(const _vec3* eye, const _vec3* at, const _vec3* up, const _float& fovY, const _float& aspect, const _float& nearZ, const _float& farZ)
+HRESULT CDynamicCamera::Ready(const _vec3* eye, const _vec3* at, const _vec3* up, const _float& fovY, const _float& aspect, const _float& nearZ, const _float& farZ)
 {
 	m_eye = *eye;
 	m_at = *at;
@@ -31,7 +31,7 @@ HRESULT Client::CDynamicCamera::Ready(const _vec3* eye, const _vec3* at, const _
 	return S_OK;
 }
 
-Client::_int Client::CDynamicCamera::Update(const _float& deltaTime)
+_int CDynamicCamera::Update(const _float& deltaTime)
 {
 	KeyInput(deltaTime);
 
@@ -46,7 +46,7 @@ Client::_int Client::CDynamicCamera::Update(const _float& deltaTime)
 	return ret;
 }
 
-void Client::CDynamicCamera::KeyInput(const _float& deltaTime)
+void CDynamicCamera::KeyInput(const _float& deltaTime)
 {
 	_matrix matCamWorld;
 	D3DXMatrixInverse(&matCamWorld, NULL, &m_matView);

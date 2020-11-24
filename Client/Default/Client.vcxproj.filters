@@ -64,6 +64,9 @@
     <Filter Include="02. GameObject\01. Stage\00. SkyBox">
       <UniqueIdentifier>{60bc3fba-af4d-4264-a1bb-71e25ca6d926}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. Stage\05. Sword">
+      <UniqueIdentifier>{a950608b-c151-40cb-a1b7-93ac778e4f8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -135,6 +138,9 @@
     <ClInclude Include="..\Code\Stone.h">
       <Filter>02. GameObject\01. Stage\04. Stone</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\Sword.h">
+      <Filter>02. GameObject\01. Stage\05. Sword</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -184,6 +190,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Stone.cpp">
       <Filter>02. GameObject\01. Stage\04. Stone</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Sword.cpp">
+      <Filter>02. GameObject\01. Stage\05. Sword</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

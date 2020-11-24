@@ -13,7 +13,7 @@ CStaticCamera::~CStaticCamera()
 
 }
 
-HRESULT Client::CStaticCamera::Ready(const _vec3* eye, const _vec3* at, const _vec3* up, const _float& fovY, const _float& aspect, const _float& nearZ, const _float& farZ)
+HRESULT CStaticCamera::Ready(const _vec3* eye, const _vec3* at, const _vec3* up, const _float& fovY, const _float& aspect, const _float& nearZ, const _float& farZ)
 {
 	m_eye = *eye;
 	m_at = *at;
@@ -30,7 +30,7 @@ HRESULT Client::CStaticCamera::Ready(const _vec3* eye, const _vec3* at, const _v
 	return S_OK;
 }
 
-Client::_int Client::CStaticCamera::Update(const _float& deltaTime)
+_int CStaticCamera::Update(const _float& deltaTime)
 {
 	
 	

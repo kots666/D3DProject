@@ -29,12 +29,14 @@ public:
 	// Getter
 	void GetInfo(INFO type, _vec3* dir);
 	void GetWorldMatrix(_matrix* outer) const;
+	const _matrix* GetWorldMatrix() const;
 	const _matrix* GetNRotWorldMatrix(_matrix* outer) const;
 
 public:
 	void SetPos(const _float& x, const _float& y, const _float& z);
 	void SetScale(const _float& xScale, const _float& yScale, const _float& zScale);
-	void Rotation(ROTATION rotType, const _float& angle);
+	void SetRotation(ROTATION rotType, const _float& angle);
+	void SetParentMatrix(const _matrix* parentMat);
 
 public:
 	_vec3 m_info[INFO_END];

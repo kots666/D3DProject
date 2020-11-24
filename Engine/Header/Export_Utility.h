@@ -6,9 +6,11 @@
 #include "ProtoMgr.h"
 #include "Renderer.h"
 #include "Camera.h"
+#include "Transform.h"
 #include "Calculator.h"
 #include "LightMgr.h"
 #include "Collider.h"
+#include "Optimization.h"
 
 BEGIN(Engine)
 

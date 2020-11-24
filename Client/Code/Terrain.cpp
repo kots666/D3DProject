@@ -24,7 +24,7 @@ HRESULT CTerrain::Ready()
 	return S_OK;
 }
 
-_int Client::CTerrain::Update(const _float& deltaTime)
+_int CTerrain::Update(const _float& deltaTime)
 {
 	Engine::CGameObject::Update(deltaTime);
 
@@ -42,7 +42,7 @@ void CTerrain::Render()
 	m_bufferCom->Render();
 }
 
-HRESULT Client::CTerrain::AddComponent()
+HRESULT CTerrain::AddComponent()
 {
 	Engine::CComponent* comp = nullptr;
 
