@@ -46,7 +46,7 @@ _int CPlayer::Update(const _float& deltaTime)
 	_vec3 pos;
 	m_transCom->GetInfo(Engine::INFO_POS, &pos);
 
-	cout << "X : " << pos.x << ", Y : " << pos.y << ", Z : " << pos.z << endl;
+	//cout << "X : " << pos.x << ", Y : " << pos.y << ", Z : " << pos.z << endl;
 
 	return 0;
 }
@@ -157,10 +157,12 @@ void CPlayer::SetUpOnTerrain()
 _vec3 CPlayer::PickUpOnTerrain()
 {
 	Engine::CTerrainTex* terrainBufferCom = dynamic_cast<Engine::CTerrainTex*>(Engine::GetComponent(L"Environment", L"Terrain", L"Com_Buffer", Engine::ID_STATIC));
-	NULL_CHECK_RETURN(terrainBufferCom, _vec3(0.f, 0.f, 0.f));
+	if (nullptr == terrainBufferCom)
+		return _vec3(0.f, 0.f, 0.f);
 
 	Engine::CTransform* terrainTransformCom = dynamic_cast<Engine::CTransform*>(Engine::GetComponent(L"Environment", L"Terrain", L"Com_Transform", Engine::ID_DYNAMIC));
-	NULL_CHECK_RETURN(terrainTransformCom, _vec3(0.f, 0.f, 0.f));
+	if (nullptr == terrainTransformCom)
+		return _vec3(0.f, 0.f, 0.f);
 
 	return m_calcCom->PickingOnTerrain(g_hWnd, terrainBufferCom, terrainTransformCom);
 }

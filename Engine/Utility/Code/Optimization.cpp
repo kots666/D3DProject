@@ -9,7 +9,9 @@ COptimization::COptimization(LPDIRECT3DDEVICE9 device) :
 }
 
 COptimization::COptimization(const COptimization& rhs) :
-	m_device(rhs.m_device), m_frustum(rhs.m_frustum)
+	CComponent(rhs),
+	m_device(rhs.m_device),
+	m_frustum(rhs.m_frustum)
 {
 	SafeAddRef(m_device);
 }

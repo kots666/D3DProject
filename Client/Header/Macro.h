@@ -15,16 +15,16 @@ namespace Client
 #endif
 
 #define NULL_CHECK( _ptr)	\
-{if( _ptr == 0){__asm { int 3 };return;}}
+{if( _ptr == nullptr){__asm { int 3 };return;}}
 
 #define NULL_CHECK_RETURN( _ptr, _return)	\
-{if( _ptr == 0){__asm { int 3 };return _return;}}
+{if( _ptr == nullptr){__asm { int 3 };return _return;}}
 
 #define NULL_CHECK_MSG( _ptr, _message )		\
-{if( _ptr == 0){MessageBox(NULL, _message, L"System Message",MB_OK);__asm { int 3 };}}
+{if( _ptr == nullptr){MessageBox(NULL, _message, L"System Message",MB_OK);__asm { int 3 };}}
 
 #define NULL_CHECK_RETURN_MSG( _ptr, _return, _message )	\
-{if( _ptr == 0){MessageBox(NULL, _message, L"System Message",MB_OK);__asm { int 3 };return _return;}}
+{if( _ptr == nullptr){MessageBox(NULL, _message, L"System Message",MB_OK);__asm { int 3 };return _return;}}
 
 
 #define FAILED_CHECK(_hr)	if( ((HRESULT)(_hr)) < 0 )	\

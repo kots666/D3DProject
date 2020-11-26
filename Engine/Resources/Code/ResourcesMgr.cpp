@@ -147,7 +147,8 @@ CComponent * CResourcesMgr::Clone(const _ushort & containerIndex, const _tchar *
 	if (nullptr == m_resourceMap) return nullptr;
 
 	CResources* comp = Find(containerIndex, resourceTag);
-	NULL_CHECK_RETURN(comp, nullptr);
+	if (nullptr == comp)
+		return nullptr;
 
 	return comp->Clone();
 }

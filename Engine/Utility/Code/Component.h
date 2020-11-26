@@ -9,9 +9,9 @@ BEGIN(Engine)
 class ENGINE_DLL CComponent abstract : public CBase
 {
 protected:
-	explicit CComponent(void);
+	explicit CComponent();
 	explicit CComponent(const CComponent& rhs);
-	virtual ~CComponent(void);
+	virtual ~CComponent();
 
 protected:
 	_bool m_isClone;

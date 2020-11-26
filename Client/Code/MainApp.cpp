@@ -32,7 +32,19 @@ _int CMainApp::Update(const _float & deltaTime)
 {
 	if (nullptr == m_managementClass) return -1;
 
+	m_accTime += deltaTime;
+
 	Engine::UpdateDirectInput();
+
+	++m_frame;
+
+	if (m_accTime >= 1.f)
+	{
+		wsprintf(m_fps, L"FPS : %d", m_frame);
+
+		m_accTime = 0.f;
+		m_frame = 0;
+	}
 
 	m_managementClass->UpdateScene(deltaTime);
 
@@ -49,6 +61,7 @@ void CMainApp::Render()
 	Engine::RenderBegin(D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.f));
 
 	m_managementClass->RenderScene();
+	Engine::RenderFont(L"Font_Jinji", m_fps, &_vec2(500.f, 10.f), D3DXCOLOR(0.f, 0.f, 0.f, 1.f));
 
 	Engine::RenderEnd();
 }

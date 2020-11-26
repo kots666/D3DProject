@@ -25,13 +25,11 @@ private:
 	_vec3 m_minPos, m_maxPos;
 	_matrix m_collMatrix;
 
-#ifdef _DEBUG
+
 	LPDIRECT3DDEVICE9 m_device;
 	LPDIRECT3DVERTEXBUFFER9 m_VB;
 	LPDIRECT3DINDEXBUFFER9 m_IB;
 	LPDIRECT3DTEXTURE9 m_texture[COL_END];
-
-#endif
 
 public:
 	static CCollider* Create(LPDIRECT3DDEVICE9 device, const _vec3* vtxPos, const _ulong& numVtxCnt, const _ulong& stride);

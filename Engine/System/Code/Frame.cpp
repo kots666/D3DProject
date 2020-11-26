@@ -1,5 +1,4 @@
 #include "Frame.h"
-//#include <iostream>
 
 USING(Engine)
 
@@ -15,18 +14,15 @@ CFrame::~CFrame()
 
 _bool CFrame::IsPermitCall(const _float & deltaTime)
 {
-	++m_frame;
 	m_accDeltaTime += deltaTime;
 
 	if (m_accDeltaTime >= m_callLimit)
 	{
-		//std::cout << m_frame << std::endl;
-		m_frame = 0;
 		m_accDeltaTime = 0.f;
-		return false;
+		return true;
 	}
 
-	return true;
+	return false;
 }
 
 HRESULT CFrame::Ready(const _float & callLimit)

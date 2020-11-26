@@ -120,7 +120,7 @@ void CSword::Render()
 _bool CSword::CollisionToObject(const _tchar * layerTag, const _tchar * objTag)
 {
 	Engine::CCollider* playerColliderCom = dynamic_cast<Engine::CCollider*>(Engine::GetComponent(layerTag, objTag, L"Com_Collider", Engine::ID_STATIC));
-	NULL_CHECK_RETURN(playerColliderCom, false);
+	if (nullptr == playerColliderCom) return false;
 	
 	/*return m_calcCom->Collision_AABB(playerColliderCom->Get_Min(),
 											playerColliderCom->Get_Max(),

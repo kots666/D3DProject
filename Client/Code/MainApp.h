@@ -36,6 +36,10 @@ private:
 	Engine::CManagement* m_managementClass;
 	LPDIRECT3DDEVICE9 m_device;
 
+	_float m_accTime = 0.f;
+	_ulong m_frame = 0;
+	_tchar m_fps[256];
+
 // 생성 소멸 함수
 public:
 	static CMainApp* Create();

@@ -31,7 +31,7 @@ _int CStone::Update(const _float& deltaTime)
 
 	Engine::CGameObject::Update(deltaTime);
 
-	//m_isColl = CollideToObject(L"GameLogic", L"Player");
+	m_isColl = CollideToObject(L"GameLogic", L"Player");
 
 	_vec3 pos;
 	m_transCom->GetInfo(Engine::INFO_POS, &pos);
@@ -45,7 +45,7 @@ _int CStone::Update(const _float& deltaTime)
 
 void CStone::Render()
 {
-	if (!m_isDraw) return;
+	//if (!m_isDraw) return;
 
 	m_transCom->SetTransform(m_device);
 
@@ -114,7 +114,7 @@ void CStone::SetUpOnTerrain()
 _bool CStone::CollideToObject(const _tchar * layerTag, const _tchar * objTag)
 {
 	Engine::CCollider* playerColliderCom = dynamic_cast<Engine::CCollider*>(Engine::GetComponent(layerTag, objTag, L"Com_Collider", Engine::ID_STATIC));
-	NULL_CHECK_RETURN(playerColliderCom, false);
+	if (nullptr == playerColliderCom) return false;
 
 	return m_calcCom->CollisionAABB(
 		playerColliderCom->GetMinPos(),
