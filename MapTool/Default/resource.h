@@ -9,6 +9,9 @@
 #define IDD_MYFORMVIEW                  310
 #define IDD_UNITTOOL                    311
 #define IDD_MAPTOOL                     312
+#define IDD_MAPTOOLPAGE                 313
+#define IDD_MAINVIEW                    314
+#define IDD_SHEETVIEW                   315
 #define IDC_BUTTON1                     1000
 #define IDC_EDIT1                       1001
 #define IDC_BUTTON6                     1001
@@ -36,9 +39,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        313
+#define _APS_NEXT_RESOURCE_VALUE        314
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1019
-#define _APS_NEXT_SYMED_VALUE           313
+#define _APS_NEXT_SYMED_VALUE           316
 #endif
 #endif

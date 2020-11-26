@@ -16,6 +16,9 @@ private:
 
 public:
 	LPDIRECT3DDEVICE9 GetDevice() { return m_device; }
+	LPD3DXSPRITE GetSprite() { return m_sprite; }
+	LPD3DXFONT GetFont() { return m_font; }
+	LPD3DXLINE GetLine() { return m_line; }
 
 public:
 	HRESULT Ready(HWND hWnd, WINMODE mode, const _uint& sizeX, const _uint& sizeY, CGraphicDevice** graphicDevice);
@@ -25,6 +28,9 @@ public:
 private:
 	LPDIRECT3D9 m_SDK;
 	LPDIRECT3DDEVICE9 m_device;
+	LPD3DXSPRITE m_sprite;
+	LPD3DXFONT m_font;
+	LPD3DXLINE m_line;
 
 public:
 	virtual void Free();

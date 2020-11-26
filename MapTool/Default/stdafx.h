@@ -61,6 +61,7 @@ constexpr int WINCY = 600;
 
 #ifdef _DEBUG
 #include <iostream>
+#include <afxdlgs.h>
 #ifdef UNICODE
 #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
 #else

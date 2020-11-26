@@ -5,9 +5,9 @@
 CNaviCell::CNaviCell(LPDIRECT3DDEVICE9 device, _vec3 pos1, _vec3 pos2, _vec3 pos3) :
 	CGameObject(device)
 {
-	pos[0] = pos1;
-	pos[1] = pos2;
-	pos[2] = pos3;
+	m_pos[0] = pos1;
+	m_pos[1] = pos2;
+	m_pos[2] = pos3;
 }
 
 CNaviCell::~CNaviCell()
@@ -23,6 +23,14 @@ HRESULT CNaviCell::Ready()
 
 _int CNaviCell::Update(const _float & deltaTime)
 {
+	_vec3 tmpPos = { 0.f, 0.f, 0.f };
+
+	for (int i = 0; i < 3; ++i)
+		tmpPos += m_pos[i];
+
+	tmpPos /= 3.f;
+
+	m_transCom->SetPos(tmpPos.x, tmpPos.y, tmpPos.z);
 	CGameObject::Update(deltaTime);
 
 	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);

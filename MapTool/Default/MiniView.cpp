@@ -4,7 +4,6 @@
 #include "stdafx.h"
 #include "MFCTool.h"
 #include "MiniView.h"
-#include "MFCToolView.h"
 #include "MainFrm.h"
 
 // CMiniView
@@ -72,8 +71,8 @@ void CMiniView::OnInitialUpdate()
 	CMainFrame* mainFrame = dynamic_cast<CMainFrame*>(AfxGetMainWnd());
 	if (nullptr == mainFrame) return;
 
-	CMFCToolView* toolView = dynamic_cast<CMFCToolView*>(mainFrame->m_mainSplitter.GetPane(0, 1));
-	if (nullptr == toolView) return;
+	//CMFCToolView* toolView = dynamic_cast<CMFCToolView*>(mainFrame->m_mainSplitter.GetPane(0, 1));
+	//if (nullptr == toolView) return;
 
 	//m_terrain = toolView->m_terrain;
 	//if (nullptr == m_terrain) return;

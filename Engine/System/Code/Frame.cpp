@@ -23,10 +23,10 @@ _bool CFrame::IsPermitCall(const _float & deltaTime)
 		//std::cout << m_frame << std::endl;
 		m_frame = 0;
 		m_accDeltaTime = 0.f;
-		return true;
+		return false;
 	}
 
-	return false;
+	return true;
 }
 
 HRESULT CFrame::Ready(const _float & callLimit)

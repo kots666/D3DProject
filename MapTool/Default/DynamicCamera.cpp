@@ -2,7 +2,7 @@
 #include "DynamicCamera.h"
 #include "TerrainTex.h"
 #include "MainFrm.h"
-#include "MFCToolView.h"
+#include "MainView.h"
 #include "Terrain.h"
 #include "NaviMesh.h"
 
@@ -34,7 +34,7 @@ HRESULT CDynamicCamera::Ready(const _vec3* eye, const _vec3* at, const _vec3* up
 	m_mainFrame = dynamic_cast<CMainFrame*>(AfxGetMainWnd());
 	if (nullptr == m_mainFrame) return;
 
-	m_toolView = dynamic_cast<CMFCToolView*>(m_mainFrame->m_mainSplitter.GetPane(0, 1));
+	m_toolView = dynamic_cast<CMainView*>(m_mainFrame->m_mainSplitter.GetPane(0, 1));
 	if (nullptr == m_toolView) return;
 
 	m_hWnd = m_toolView->GetSafeHwnd();

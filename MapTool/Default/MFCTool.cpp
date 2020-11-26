@@ -9,7 +9,7 @@
 #include "MainFrm.h"
 
 #include "MFCToolDoc.h"
-#include "MFCToolView.h"
+#include "MainView.h"
 
 #include "MainApp.h"
 
@@ -105,7 +105,7 @@ BOOL CMFCToolApp::InitInstance()
 		IDR_MAINFRAME,
 		RUNTIME_CLASS(CMFCToolDoc),
 		RUNTIME_CLASS(CMainFrame),       // 주 SDI 프레임 창입니다.
-		RUNTIME_CLASS(CMFCToolView));
+		RUNTIME_CLASS(CMainView));
 	if (!pDocTemplate)
 		return FALSE;
 	AddDocTemplate(pDocTemplate);

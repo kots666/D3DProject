@@ -199,7 +199,7 @@ void CMFCToolView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	//int tileID = myFormView->m_mapTool.m_drawID;
 
-	//m_terrain->TileChange(pos, tileID, 0);
+	//m_terrain->TileChange(m_pos, tileID, 0);
 
 	//InvalidateRect(nullptr, false);
 

@@ -24,8 +24,8 @@ HRESULT CRCTex::Ready()
 	m_triCnt = 2;
 	m_vtxSize = sizeof(VTXTEX);
 	m_FVF = FVF_TEX;
-	m_idxSize = sizeof(INDEX16);
-	m_format = D3DFMT_INDEX16;
+	m_idxSize = sizeof(INDEX32);
+	m_format = D3DFMT_INDEX32;
 
 	FAILED_CHECK_RETURN(CVIBuffer::Ready(), E_FAIL);
 
@@ -51,7 +51,7 @@ HRESULT CRCTex::Ready()
 
 	m_VB->Unlock();
 
-	INDEX16* indices = NULL;
+	INDEX32* indices = NULL;
 
 	m_IB->Lock(0, 0, (void**)&indices, NULL);
 

@@ -205,6 +205,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MainView.h" />
+    <ClInclude Include="MapToolPage.h" />
     <ClInclude Include="NaviCell.h" />
     <ClInclude Include="NaviMesh.h" />
     <ClInclude Include="DynamicCamera.h" />
@@ -218,12 +220,16 @@
     <ClInclude Include="MiniView.h" />
     <ClInclude Include="MyFormView.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SelectSheet.h" />
+    <ClInclude Include="SheetView.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Terrain.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="MainView.cpp" />
+    <ClCompile Include="MapToolPage.cpp" />
     <ClCompile Include="NaviCell.cpp" />
     <ClCompile Include="NaviMesh.cpp" />
     <ClCompile Include="DynamicCamera.cpp" />
@@ -236,6 +242,8 @@
     <ClCompile Include="MFCToolView.cpp" />
     <ClCompile Include="MiniView.cpp" />
     <ClCompile Include="MyFormView.cpp" />
+    <ClCompile Include="SelectSheet.cpp" />
+    <ClCompile Include="SheetView.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

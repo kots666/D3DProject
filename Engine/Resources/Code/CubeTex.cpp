@@ -1,6 +1,7 @@
 #include "CubeTex.h"
 
 USING(Engine)
+
 CCubeTex::CCubeTex(LPDIRECT3DDEVICE9 device)
 	: CVIBuffer(device)
 {
@@ -25,8 +26,8 @@ HRESULT CCubeTex::Ready()
 	m_vtxCnt = 8;
 	m_vtxSize = sizeof(VTXCUBE);
 
-	m_idxSize = sizeof(INDEX16);
-	m_format = D3DFMT_INDEX16;
+	m_idxSize = sizeof(INDEX32);
+	m_format = D3DFMT_INDEX32;
 
 	FAILED_CHECK_RETURN(CVIBuffer::Ready(), E_FAIL);
 
@@ -62,7 +63,7 @@ HRESULT CCubeTex::Ready()
 
 	m_VB->Unlock();
 
-	INDEX16* indices = nullptr;
+	INDEX32* indices = nullptr;
 
 	m_IB->Lock(0, 0, (void**)&indices, 0);
 

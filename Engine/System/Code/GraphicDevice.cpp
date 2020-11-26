@@ -69,6 +69,32 @@ HRESULT CGraphicDevice::Ready(HWND hWnd, WINMODE mode, const _uint & sizeX, cons
 		return E_FAIL;
 	}
 
+	if (FAILED(D3DXCreateSprite(m_device, &m_sprite)))
+	{
+		MSG_BOX("Failed to create sprite");
+		return E_FAIL;
+	}
+
+	D3DXFONT_DESCW fontInfo;
+	ZeroMemory(&fontInfo, sizeof(D3DXFONT_DESCW));
+	fontInfo.Height = 20;
+	fontInfo.Width = 20;
+	fontInfo.Weight = FW_HEAVY;
+	fontInfo.CharSet = HANGEUL_CHARSET;
+	lstrcpy(fontInfo.FaceName, L"±¼¸²");
+
+	if (FAILED(D3DXCreateFontIndirect(m_device, &fontInfo, &m_font)))
+	{
+		MSG_BOX("Fail to create font");
+		return E_FAIL;
+	}
+
+	if (FAILED(D3DXCreateLine(m_device, &m_line)))
+	{
+		MSG_BOX("Fail to create Line");
+		return E_FAIL;
+	}
+
 	*graphicDevice = this;
 
 	return S_OK;
@@ -89,6 +115,21 @@ void CGraphicDevice::RenderEnd(HWND hWnd)
 void CGraphicDevice::Free()
 {
 	_ulong refCnt = 0;
+
+	if (refCnt = SafeRelease(m_font))
+	{
+		MSG_BOX("Fail to release font");
+	}
+
+	if (refCnt = SafeRelease(m_line))
+	{
+		MSG_BOX("Fail to release line");
+	}
+
+	if (refCnt = SafeRelease(m_sprite))
+	{
+		MSG_BOX("Fail to release sprite");
+	}
 
 	if (refCnt = SafeRelease(m_device))
 	{

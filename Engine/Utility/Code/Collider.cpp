@@ -39,9 +39,9 @@ HRESULT CCollider::Ready(const _vec3* vtxPos, const _ulong& numVtxCnt, const _ul
 		NULL),
 		E_FAIL);
 
-	FAILED_CHECK_RETURN(m_device->CreateIndexBuffer(sizeof(INDEX16) * 12,
+	FAILED_CHECK_RETURN(m_device->CreateIndexBuffer(sizeof(INDEX32) * 12,
 		0, // 정적버퍼로 할당하겠다는 옵션
-		D3DFMT_INDEX16,
+		D3DFMT_INDEX32,
 		D3DPOOL_MANAGED,
 		&m_IB,
 		NULL),
@@ -79,7 +79,7 @@ HRESULT CCollider::Ready(const _vec3* vtxPos, const _ulong& numVtxCnt, const _ul
 
 	m_VB->Unlock();
 
-	INDEX16* indicies = nullptr;
+	INDEX32* indicies = nullptr;
 
 	m_IB->Lock(0, 0, (void**)&indicies, 0);
 

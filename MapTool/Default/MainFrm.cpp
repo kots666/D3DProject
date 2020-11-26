@@ -6,9 +6,8 @@
 #include "MFCTool.h"
 
 #include "MainFrm.h"
-#include "MFCToolView.h"
-#include "MiniView.h"
-#include "MyFormView.h"
+#include "MainView.h"
+#include "SheetView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -108,8 +107,8 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 {
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 	m_mainSplitter.CreateStatic(this, 1, 2);
-	m_mainSplitter.CreateView(0, 1, RUNTIME_CLASS(CMFCToolView), CSize(800, 600), pContext);
-	m_mainSplitter.CreateView(0, 0, RUNTIME_CLASS(CMyFormView), CSize(300, 600), pContext);
+	m_mainSplitter.CreateView(0, 1, RUNTIME_CLASS(CMainView), CSize(800, 600), pContext);
+	m_mainSplitter.CreateView(0, 0, RUNTIME_CLASS(CSheetView), CSize(500, 600), pContext);
 
 	//m_subSplitter.CreateStatic(&m_mainSplitter, 0, 0, WS_CHILD | WS_VISIBLE, m_mainSplitter.IdFromRowCol(0, 0));
 	//m_subSplitter.CreateView(1, 0, RUNTIME_CLASS(CMyFormView), CSize(400, 300), pContext);

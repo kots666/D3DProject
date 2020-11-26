@@ -28,7 +28,7 @@ private:
 	Engine::CRenderer* m_rendererCom = nullptr;
 	//Engine::CCollider* m_colliderCom = nullptr;
 
-	_vec3 pos[3];
+	_vec3 m_pos[3];
 
 public:
 	static CNaviCell* Create(LPDIRECT3DDEVICE9 device, _vec3 pos1, _vec3 pos2, _vec3 pos3);

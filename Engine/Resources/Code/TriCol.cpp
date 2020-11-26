@@ -24,8 +24,8 @@ HRESULT CTriCol::Ready()
 	m_vtxSize = sizeof(VTXCOL);
 	m_FVF = FVF_COL;
 
-	m_idxSize = sizeof(INDEX16);
-	m_format = D3DFMT_INDEX16;
+	m_idxSize = sizeof(INDEX32);
+	m_format = D3DFMT_INDEX32;
 
 	FAILED_CHECK_RETURN(CVIBuffer::Ready(), E_FAIL);
 
@@ -48,7 +48,7 @@ HRESULT CTriCol::Ready()
 
 	m_VB->Unlock();
 
-	INDEX16* indices = NULL;
+	INDEX32* indices = NULL;
 
 	m_IB->Lock(0, 0, (void**)&indices, NULL);
 

@@ -4,7 +4,7 @@
 #include "Camera.h"
 
 class CMainFrame;
-class CMFCToolView;
+class CMainView;
 
 class CDynamicCamera : public Engine::CCamera
 {
@@ -56,7 +56,7 @@ private:
 	_int m_pickType = 0;
 
 	CMainFrame* m_mainFrame;
-	CMFCToolView* m_toolView;
+	CMainView* m_toolView;
 	HWND m_hWnd;
 
 private:

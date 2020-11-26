@@ -16,15 +16,6 @@
     <Filter Include="00. View">
       <UniqueIdentifier>{3c8f2336-9425-4d56-92d2-2ad0f378bd47}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00. View\MyFormView">
-      <UniqueIdentifier>{f78fc0dd-9c79-4fd9-93e7-7f972729a22d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00. View\MiniView">
-      <UniqueIdentifier>{306657ae-3b87-4e8e-aa6b-5fce55304a8a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00. View\MapTool">
-      <UniqueIdentifier>{ac1d5ce8-6412-4309-bde9-aefb44f393fa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. MainApp">
       <UniqueIdentifier>{9d84a8ed-f1ea-4844-adc8-8c9e85121133}</UniqueIdentifier>
     </Filter>
@@ -52,6 +43,30 @@
     <Filter Include="NaviMesh\00. NaviCell">
       <UniqueIdentifier>{de1ce850-ae96-4851-a9ff-fcf69d2057ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00. View\00. SheetView">
+      <UniqueIdentifier>{b68917ce-459f-4781-bfcf-d56996be4422}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. View\01. MainView">
+      <UniqueIdentifier>{45e88dc3-9b05-49f0-abde-a340f825d904}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. View\02. Old">
+      <UniqueIdentifier>{6eaba255-ed96-4ef3-9813-4c4a47265b62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. View\02. Old\MyFormView">
+      <UniqueIdentifier>{f78fc0dd-9c79-4fd9-93e7-7f972729a22d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. View\02. Old\MiniView">
+      <UniqueIdentifier>{306657ae-3b87-4e8e-aa6b-5fce55304a8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. View\02. Old\MapTool">
+      <UniqueIdentifier>{ac1d5ce8-6412-4309-bde9-aefb44f393fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. View\00. SheetView\SelectSheet">
+      <UniqueIdentifier>{5b95cd28-bc38-4e8f-8572-0eb7888d9912}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. View\00. SheetView\SelectSheet\00. MapToolPage">
+      <UniqueIdentifier>{c31e504a-6437-4d67-bfa0-481ce3a20615}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -66,9 +81,6 @@
     <ClInclude Include="MainFrm.h">
       <Filter>01. MainFrame</Filter>
     </ClInclude>
-    <ClInclude Include="MFCToolView.h">
-      <Filter>00. View</Filter>
-    </ClInclude>
     <ClInclude Include="MFCTool.h">
       <Filter>99. Default</Filter>
     </ClInclude>
@@ -76,13 +88,13 @@
       <Filter>02. Doc</Filter>
     </ClInclude>
     <ClInclude Include="MiniView.h">
-      <Filter>00. View\MiniView</Filter>
+      <Filter>00. View\02. Old\MiniView</Filter>
     </ClInclude>
     <ClInclude Include="MyFormView.h">
-      <Filter>00. View\MyFormView</Filter>
+      <Filter>00. View\02. Old\MyFormView</Filter>
     </ClInclude>
     <ClInclude Include="MapTool.h">
-      <Filter>00. View\MapTool</Filter>
+      <Filter>00. View\02. Old\MapTool</Filter>
     </ClInclude>
     <ClInclude Include="FileInfo.h">
       <Filter>98. FileInfo</Filter>
@@ -105,6 +117,21 @@
     <ClInclude Include="NaviCell.h">
       <Filter>NaviMesh\00. NaviCell</Filter>
     </ClInclude>
+    <ClInclude Include="SelectSheet.h">
+      <Filter>00. View\00. SheetView\SelectSheet</Filter>
+    </ClInclude>
+    <ClInclude Include="MapToolPage.h">
+      <Filter>00. View\00. SheetView\SelectSheet\00. MapToolPage</Filter>
+    </ClInclude>
+    <ClInclude Include="MainView.h">
+      <Filter>00. View\01. MainView</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCToolView.h">
+      <Filter>00. View\02. Old</Filter>
+    </ClInclude>
+    <ClInclude Include="SheetView.h">
+      <Filter>00. View\00. SheetView</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -113,9 +140,6 @@
     <ClCompile Include="MainFrm.cpp">
       <Filter>01. MainFrame</Filter>
     </ClCompile>
-    <ClCompile Include="MFCToolView.cpp">
-      <Filter>00. View</Filter>
-    </ClCompile>
     <ClCompile Include="MFCTool.cpp">
       <Filter>99. Default</Filter>
     </ClCompile>
@@ -123,13 +147,13 @@
       <Filter>02. Doc</Filter>
     </ClCompile>
     <ClCompile Include="MiniView.cpp">
-      <Filter>00. View\MiniView</Filter>
+      <Filter>00. View\02. Old\MiniView</Filter>
     </ClCompile>
     <ClCompile Include="MyFormView.cpp">
-      <Filter>00. View\MyFormView</Filter>
+      <Filter>00. View\02. Old\MyFormView</Filter>
     </ClCompile>
     <ClCompile Include="MapTool.cpp">
-      <Filter>00. View\MapTool</Filter>
+      <Filter>00. View\02. Old\MapTool</Filter>
     </ClCompile>
     <ClCompile Include="FileInfo.cpp">
       <Filter>98. FileInfo</Filter>
@@ -151,6 +175,21 @@
     </ClCompile>
     <ClCompile Include="NaviCell.cpp">
       <Filter>NaviMesh\00. NaviCell</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectSheet.cpp">
+      <Filter>00. View\00. SheetView\SelectSheet</Filter>
+    </ClCompile>
+    <ClCompile Include="MapToolPage.cpp">
+      <Filter>00. View\00. SheetView\SelectSheet\00. MapToolPage</Filter>
+    </ClCompile>
+    <ClCompile Include="MainView.cpp">
+      <Filter>00. View\01. MainView</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCToolView.cpp">
+      <Filter>00. View\02. Old</Filter>
+    </ClCompile>
+    <ClCompile Include="SheetView.cpp">
+      <Filter>00. View\00. SheetView</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
