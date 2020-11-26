@@ -28,7 +28,7 @@ HRESULT CPlayer::Ready()
 	//m_meshCom->SetAnimationSet(0);
 
 	// Player
-	m_meshCom->SetAnimationSet(57);
+	m_meshCom->SetAnimationSet(0);
 
 	return S_OK;
 }
@@ -42,6 +42,11 @@ _int CPlayer::Update(const _float& deltaTime)
 
 	m_meshCom->PlayAnimation(deltaTime);
 	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
+
+	_vec3 pos;
+	m_transCom->GetInfo(Engine::INFO_POS, &pos);
+
+	cout << "X : " << pos.x << ", Y : " << pos.y << ", Z : " << pos.z << endl;
 
 	return 0;
 }
@@ -102,7 +107,7 @@ void CPlayer::KeyInput(const _float& deltaTime)
 		//m_meshCom->SetAnimationSet(1);
 
 		// Player
-		m_meshCom->SetAnimationSet(57);
+		m_meshCom->SetAnimationSet(0);
 	}
 
 	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
@@ -126,13 +131,13 @@ void CPlayer::KeyInput(const _float& deltaTime)
 	if (Engine::GetDIMouseState(Engine::DIM_RB) & 0x80)
 	{
 		// Player
-		m_meshCom->SetAnimationSet(30);
+		m_meshCom->SetAnimationSet(0);
 	}
 
 	if (m_meshCom->IsAnimationSetEnd())
 	{
 		// Player
-		m_meshCom->SetAnimationSet(57);
+		m_meshCom->SetAnimationSet(0);
 	}
 }
 

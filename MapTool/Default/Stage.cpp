@@ -4,16 +4,17 @@
 #include "Transform.h"
 #include "DynamicCamera.h"
 #include "Calculator.h"
+#include "NaviMesh.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 device) :
 	Engine::CScene(device)
 {
-
+	CNaviMesh::GetInstance();
 }
 
 CStage::~CStage()
 {
-
+	CNaviMesh::DestroyInstance();
 }
 
 HRESULT CStage::Ready()
@@ -43,13 +44,15 @@ HRESULT CStage::ReadyEnvironmentLayer(const _tchar * layerTag)
 	Engine::CLayer* layer = Engine::CLayer::Create();
 	NULL_CHECK_RETURN(layer, E_FAIL);
 
-	Engine::CGameObject* gameObject = CDynamicCamera::Create(m_device, &_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
-	NULL_CHECK_RETURN(gameObject, E_FAIL);
-	FAILED_CHECK_RETURN(layer->AddGameObject(L"DynamicCamera", gameObject));
+	Engine::CGameObject* gameObject = nullptr;
 
 	gameObject = CTerrain::Create(m_device);
 	NULL_CHECK_RETURN(gameObject, E_FAIL);
 	FAILED_CHECK_RETURN(layer->AddGameObject(L"Terrain", gameObject), E_FAIL);
+
+	gameObject = CDynamicCamera::Create(m_device, &_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
+	NULL_CHECK_RETURN(gameObject, E_FAIL);
+	FAILED_CHECK_RETURN(layer->AddGameObject(L"DynamicCamera", gameObject));
 
 	m_layerMap.emplace(layerTag, layer);
 
@@ -106,6 +109,8 @@ HRESULT CStage::InitResource(Engine::RESOURCETYPE type)
 		Engine::TEX_NORMAL,
 		L"../Resource/Texture/Terrain/Grass_%d.tga", 2),
 		E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyBuffer(m_device, Engine::RESOURCE_STATIC, L"Buffer_TriCol", Engine::BUFFER_TRICOL), E_FAIL);
 
 	Engine::CComponent* comp = nullptr;
 

@@ -137,6 +137,10 @@ _vec3 CCalculator::PickingOnTerrain(HWND hWnd, CTerrainTex * terrainBufferCom, C
 	_ulong vtxIdx[3];
 	_float uValue, vValue, dist;
 
+	_float minDist = 999999.f;
+
+	_vec3 pos = { 0.f, 0.f, 0.f };
+
 	for (_ulong i = 0; i < vtxCntZ - 1; ++i)
 	{
 		for (_ulong j = 0; j < vtxCntX - 1; ++j)
@@ -153,10 +157,12 @@ _vec3 CCalculator::PickingOnTerrain(HWND hWnd, CTerrainTex * terrainBufferCom, C
 				&terrainVtxPos[vtxIdx[1]],
 				&terrainVtxPos[vtxIdx[2]], &rayPos, &rayDir, &uValue, &vValue, &dist))
 			{
-				_vec3 pos = terrainVtxPos[vtxIdx[0]] + uValue * (terrainVtxPos[vtxIdx[1]] - terrainVtxPos[vtxIdx[0]]) + vValue * (terrainVtxPos[vtxIdx[2]] - terrainVtxPos[vtxIdx[0]]);
-				pos.y = 0.f;
-
-				return pos;
+				if (minDist > dist)
+				{
+					minDist = dist;
+					pos = terrainVtxPos[vtxIdx[0]] + uValue * (terrainVtxPos[vtxIdx[1]] - terrainVtxPos[vtxIdx[0]]) + vValue * (terrainVtxPos[vtxIdx[2]] - terrainVtxPos[vtxIdx[0]]);
+					pos.y = 0.f;
+				}
 			}
 
 			// ¿ÞÂÊ ¾Æ·¡
@@ -169,16 +175,18 @@ _vec3 CCalculator::PickingOnTerrain(HWND hWnd, CTerrainTex * terrainBufferCom, C
 				&terrainVtxPos[vtxIdx[1]],
 				&terrainVtxPos[vtxIdx[2]], &rayPos, &rayDir, &uValue, &vValue, &dist))
 			{
-				_vec3 pos = terrainVtxPos[vtxIdx[0]] + uValue * (terrainVtxPos[vtxIdx[1]] - terrainVtxPos[vtxIdx[0]]) + vValue * (terrainVtxPos[vtxIdx[2]] - terrainVtxPos[vtxIdx[0]]);
-				pos.y = 0.f;
-
-				return pos;
+				if (minDist > dist)
+				{
+					minDist = dist;
+					pos = terrainVtxPos[vtxIdx[0]] + uValue * (terrainVtxPos[vtxIdx[1]] - terrainVtxPos[vtxIdx[0]]) + vValue * (terrainVtxPos[vtxIdx[2]] - terrainVtxPos[vtxIdx[0]]);
+					pos.y = 0.f;
+				}
 			}
 
 		}
 	}
 
-	return _vec3(0.f, 0.f, 0.f);
+	return pos;
 }
 
 _bool CCalculator::CollisionAABB(const _vec3 * localDstMin, const _vec3 * localDstMax, const _matrix * dstWorldMat, const _vec3 * localSrcMin, const _vec3 * localSrcMax, const _matrix * srcWorldMat)

@@ -74,10 +74,10 @@ HRESULT CStage::ReadyGameLogicLayer(const _tchar * layerTag)
 	NULL_CHECK_RETURN(gameObject, E_FAIL);
 	FAILED_CHECK_RETURN(layer->AddGameObject(L"Stone", gameObject), E_FAIL);
 
-	/*
 	gameObject = CPlayer::Create(m_device);
 	NULL_CHECK_RETURN(gameObject, E_FAIL);
 	FAILED_CHECK_RETURN(layer->AddGameObject(L"Player", gameObject), E_FAIL);
+	/*
 
 	gameObject = CSword::Create(m_device);
 	NULL_CHECK_RETURN(gameObject, E_FAIL);

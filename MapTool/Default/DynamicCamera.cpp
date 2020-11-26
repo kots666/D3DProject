@@ -3,6 +3,8 @@
 #include "TerrainTex.h"
 #include "MainFrm.h"
 #include "MFCToolView.h"
+#include "Terrain.h"
+#include "NaviMesh.h"
 
 CDynamicCamera::CDynamicCamera(LPDIRECT3DDEVICE9 device) :
 	Engine::CCamera(device)
@@ -50,6 +52,11 @@ _int CDynamicCamera::Update(const _float& deltaTime)
 	{
 		MoveMouse();
 		FixMouse();
+	}
+	else
+	{
+		if (Engine::GetDIMouseState(Engine::DIM_LB))
+			MousePicking();
 	}
 	
 	_int ret = Engine::CCamera::Update(deltaTime);
@@ -164,6 +171,185 @@ void CDynamicCamera::FixMouse()
 	POINT ptMouse{ WINCX >> 1, WINCY >> 1 };
 	ClientToScreen(m_hWnd, &ptMouse);
 	SetCursorPos(ptMouse.x, ptMouse.y);
+}
+
+void CDynamicCamera::MousePicking()
+{
+	//CalcRay();
+
+	switch (m_pickType)
+	{
+	case 0: TerrainPicking(); break;
+	case 1: NaviColliderPicking(); break;
+	}
+}
+
+void CDynamicCamera::CalcRay()
+{
+	POINT mouse{ 0 };
+
+	GetCursorPos(&mouse);
+	ScreenToClient(m_hWnd, &mouse);
+
+	_vec3 mousePos;
+
+	D3DVIEWPORT9 viewPort;
+	ZeroMemory(&viewPort, sizeof(D3DVIEWPORT9));
+	m_device->GetViewport(&viewPort);
+
+	// 뷰포트 -> 투영
+
+	mousePos.x = (mouse.x / (viewPort.Width * 0.5f)) - 1.f;
+	mousePos.y = (mouse.y / -(viewPort.Height * 0.5f)) + 1.f;
+	mousePos.z = 0.f;
+
+	// L * W * V * P * (P^-1)
+	// L * W * V
+
+	// 투영 -> 뷰 스페이스
+	_matrix	matProj;
+	m_device->GetTransform(D3DTS_PROJECTION, &matProj);
+	D3DXMatrixInverse(&matProj, NULL, &matProj);
+	D3DXVec3TransformCoord(&mousePos, &mousePos, &matProj);
+
+	// 뷰 스페이스 -> 월드
+	_matrix	matView;
+	m_device->GetTransform(D3DTS_VIEW, &matView);
+	D3DXMatrixInverse(&matView, NULL, &matView);
+
+	_vec3 rayPos, rayDir;
+
+	rayPos = _vec3(0.f, 0.f, 0.f);
+	rayDir = mousePos - rayPos;
+
+	D3DXVec3TransformCoord(&rayPos, &rayPos, &matView);
+	D3DXVec3TransformNormal(&rayDir, &rayDir, &matView);
+
+	m_rayDir = rayDir;
+}
+
+void CDynamicCamera::TerrainPicking()
+{
+	POINT mouse{ 0 };
+
+	GetCursorPos(&mouse);
+	ScreenToClient(m_hWnd, &mouse);
+
+	_vec3 mousePos;
+
+	D3DVIEWPORT9 viewPort;
+	ZeroMemory(&viewPort, sizeof(D3DVIEWPORT9));
+	m_device->GetViewport(&viewPort);
+
+	// 뷰포트 -> 투영
+
+	mousePos.x = (mouse.x / (viewPort.Width * 0.5f)) - 1.f;
+	mousePos.y = (mouse.y / -(viewPort.Height * 0.5f)) + 1.f;
+	mousePos.z = 0.f;
+
+	// L * W * V * P * (P^-1)
+	// L * W * V
+
+	// 투영 -> 뷰 스페이스
+	_matrix	matProj;
+	m_device->GetTransform(D3DTS_PROJECTION, &matProj);
+	D3DXMatrixInverse(&matProj, NULL, &matProj);
+	D3DXVec3TransformCoord(&mousePos, &mousePos, &matProj);
+
+	// 뷰 스페이스 -> 월드
+	_matrix	matView;
+	m_device->GetTransform(D3DTS_VIEW, &matView);
+	D3DXMatrixInverse(&matView, NULL, &matView);
+
+	_vec3 rayPos, rayDir;
+
+	rayPos = _vec3(0.f, 0.f, 0.f);
+	rayDir = mousePos - rayPos;
+
+	D3DXVec3TransformCoord(&rayPos, &rayPos, &matView);
+	D3DXVec3TransformNormal(&rayDir, &rayDir, &matView);
+
+	Engine::CTransform* terrainTransCom = dynamic_cast<CTransform*>(Engine::GetComponent(L"Environment", L"Terrain", L"Com_Transform", Engine::ID_DYNAMIC));
+	NULL_CHECK(terrainTransCom);
+
+	Engine::CTerrainTex* terrainBufferCom = dynamic_cast<Engine::CTerrainTex*>(Engine::GetComponent(L"Environment", L"Terrain", L"Com_Buffer", Engine::ID_STATIC));
+	NULL_CHECK(terrainBufferCom);
+
+	//_vec3 rayPos = m_eye;
+	//_vec3 rayDir = m_rayDir;
+
+	// 월드 -> 로컬
+	_matrix	matWorld, invWorld;
+	terrainTransCom->GetWorldMatrix(&matWorld);
+	D3DXMatrixInverse(&invWorld, NULL, &matWorld);
+
+	D3DXVec3TransformCoord(&rayPos, &rayPos, &invWorld);
+	D3DXVec3TransformNormal(&rayDir, &rayDir, &invWorld);
+
+	_ulong vtxCntX = terrainBufferCom->GetVtxCntX();
+	_ulong vtxCntZ = terrainBufferCom->GetVtxCntZ();
+
+	const _vec3* terrainVtxPos = terrainBufferCom->GetVtxPos();
+
+	_ulong vtxIdx[3];
+	_float uValue, vValue, dist;
+	_float minDist = 99999.f;
+
+	_vec3 pickPos = { 0.f, 0.f, 0.f };
+
+	for (_ulong i = 0; i < vtxCntZ - 1; ++i)
+	{
+		for (_ulong j = 0; j < vtxCntX - 1; ++j)
+		{
+			_ulong index = i * vtxCntX + j;
+
+			// 오른쪽 위
+			vtxIdx[0] = index + vtxCntX;
+			vtxIdx[1] = index + vtxCntX + 1;
+			vtxIdx[2] = index + 1;
+
+			// V1 + U(V2 - V1) + V(V3 - V1)
+			if (D3DXIntersectTri(&terrainVtxPos[vtxIdx[0]],
+				&terrainVtxPos[vtxIdx[1]],
+				&terrainVtxPos[vtxIdx[2]], &rayPos, &rayDir, &uValue, &vValue, &dist))
+			{
+				if (minDist > dist)
+				{
+					minDist = dist;
+					pickPos = terrainVtxPos[vtxIdx[0]] + uValue * (terrainVtxPos[vtxIdx[1]] - terrainVtxPos[vtxIdx[0]]) + vValue * (terrainVtxPos[vtxIdx[2]] - terrainVtxPos[vtxIdx[0]]);
+				}
+				//pickPos = rayPos + (rayDir * dist);
+			}
+
+			// 왼쪽 아래
+			vtxIdx[0] = index + vtxCntX;
+			vtxIdx[1] = index + 1;
+			vtxIdx[2] = index;
+
+			// V1 + U(V2 - V1) + V(V3 - V1)
+			if (D3DXIntersectTri(&terrainVtxPos[vtxIdx[0]],
+				&terrainVtxPos[vtxIdx[1]],
+				&terrainVtxPos[vtxIdx[2]], &rayPos, &rayDir, &uValue, &vValue, &dist))
+			{
+				if (minDist > dist)
+				{
+					minDist = dist;
+					pickPos = terrainVtxPos[vtxIdx[0]] + uValue * (terrainVtxPos[vtxIdx[1]] - terrainVtxPos[vtxIdx[0]]) + vValue * (terrainVtxPos[vtxIdx[2]] - terrainVtxPos[vtxIdx[0]]);
+				}
+			}
+
+		}
+	}
+
+	D3DXVec3TransformCoord(&pickPos, &pickPos, &matWorld);
+
+	CNaviMesh::GetInstance()->AddPos(pickPos);
+
+	cout << pickPos.x << ", " << pickPos.y << ", " << pickPos.z << endl;
+}
+
+void CDynamicCamera::NaviColliderPicking()
+{
 }
 
 CDynamicCamera * CDynamicCamera::Create(LPDIRECT3DDEVICE9 device, const _vec3 * eye, const _vec3 * at, const _vec3 * up, const _float & fovY, const _float & aspect, const _float & nearZ, const _float & farZ)

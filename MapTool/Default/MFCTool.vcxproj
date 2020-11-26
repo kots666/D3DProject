@@ -205,6 +205,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="NaviCell.h" />
+    <ClInclude Include="NaviMesh.h" />
     <ClInclude Include="DynamicCamera.h" />
     <ClInclude Include="FileInfo.h" />
     <ClInclude Include="MainApp.h" />
@@ -222,6 +224,8 @@
     <ClInclude Include="Terrain.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="NaviCell.cpp" />
+    <ClCompile Include="NaviMesh.cpp" />
     <ClCompile Include="DynamicCamera.cpp" />
     <ClCompile Include="FileInfo.cpp" />
     <ClCompile Include="MainApp.cpp" />

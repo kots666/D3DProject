@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MainApp.h"
 #include "Stage.h"
+#include "NaviMesh.h"
 
 CMainApp::CMainApp() :
 	m_deviceClass(nullptr), m_device(nullptr), m_managementClass(nullptr)
@@ -27,6 +28,7 @@ _int CMainApp::Update(const _float & deltaTime)
 	if (nullptr == m_managementClass) return -1;
 
 	UpdateDirectInput();
+	CNaviMesh::GetInstance()->Update(deltaTime);
 	m_managementClass->UpdateScene(deltaTime);
 
 	return 0;
@@ -42,6 +44,7 @@ void CMainApp::Render()
 	Engine::RenderBegin(D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.f));
 
 	m_managementClass->RenderScene();
+	CNaviMesh::GetInstance()->Render();
 
 	Engine::RenderEnd();
 }

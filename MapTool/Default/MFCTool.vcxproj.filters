@@ -46,6 +46,12 @@
     <Filter Include="97. KeyManager">
       <UniqueIdentifier>{f14d6d12-807e-4c7c-a538-723b61a19e11}</UniqueIdentifier>
     </Filter>
+    <Filter Include="NaviMesh">
+      <UniqueIdentifier>{1aaf8754-7f92-4e7d-bd60-9054c75f790b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NaviMesh\00. NaviCell">
+      <UniqueIdentifier>{de1ce850-ae96-4851-a9ff-fcf69d2057ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -93,6 +99,12 @@
     <ClInclude Include="DynamicCamera.h">
       <Filter>05. GameObject\01. Camera</Filter>
     </ClInclude>
+    <ClInclude Include="NaviMesh.h">
+      <Filter>NaviMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="NaviCell.h">
+      <Filter>NaviMesh\00. NaviCell</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -133,6 +145,12 @@
     </ClCompile>
     <ClCompile Include="DynamicCamera.cpp">
       <Filter>05. GameObject\01. Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="NaviMesh.cpp">
+      <Filter>NaviMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="NaviCell.cpp">
+      <Filter>NaviMesh\00. NaviCell</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

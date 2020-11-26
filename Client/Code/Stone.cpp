@@ -49,13 +49,15 @@ void CStone::Render()
 
 	m_transCom->SetTransform(m_device);
 
+	m_device->SetRenderState(D3DRS_LIGHTING, FALSE);
 	m_meshCom->Render();
+	m_device->SetRenderState(D3DRS_LIGHTING, TRUE);
 
 	_matrix matWorld;
 	//m_transCom->GetWorldMatrix(&matWorld);
 	//m_transCom->GetNRotWorldMatrix(&matWorld);
 
-	m_device->SetRenderState(D3DRS_LIGHTING, FALSE);
+	
 	//m_colliderCom->Render(Engine::COLLTYPE(m_isColl), &matWorld);
 }
 

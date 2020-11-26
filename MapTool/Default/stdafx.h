@@ -59,6 +59,14 @@ extern HWND g_hWnd;
 constexpr int WINCX = 800;
 constexpr int WINCY = 600;
 
+#ifdef _DEBUG
+#include <iostream>
+#ifdef UNICODE
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
+#else
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#endif
+#endif
 
 
 #ifdef _UNICODE
