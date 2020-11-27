@@ -1,4 +1,7 @@
 #include "DynamicMesh.h"
+#include <iostream>
+
+using namespace std;
 
 USING(Engine)
 
@@ -6,7 +9,6 @@ CDynamicMesh::CDynamicMesh(LPDIRECT3DDEVICE9 device) :
 	CMesh(device), m_loader(nullptr),
 	m_rootFrame(nullptr), m_animCtrl(nullptr)
 {
-
 }
 
 CDynamicMesh::CDynamicMesh(const CDynamicMesh& rhs) :
@@ -112,13 +114,52 @@ void CDynamicMesh::SetAnimationSet(const _uint & index)
 	m_animCtrl->SetAnimationSet(index);
 }
 
+_bool CDynamicMesh::CanCalcBoneMove(const char * name, const _matrix * parentMatrix, _vec3 * out)
+{
+	_matrix initMat;
+	D3DXMatrixIdentity(&initMat);
+
+	if (CanCalcBoneMove((D3DXFRAME_EX*)m_rootFrame, name, parentMatrix, &initMat, out))
+	{
+		return true;
+	}
+
+	out = nullptr;
+
+	return false;
+}
+
+void CDynamicMesh::UpdateFrameMatrices(const _matrix * parentMatrix)
+{
+	UpdateFrameMatrices((D3DXFRAME_EX*)m_rootFrame, parentMatrix);
+}
+
 void CDynamicMesh::PlayAnimation(const _float & deltaTime)
 {
 	m_animCtrl->PlayAnimation(deltaTime);
+}
 
-	_matrix matTmp;
-	//UpdateFrameMatrices((D3DXFRAME_EX*)m_rootFrame, D3DXMatrixRotationY(&matTmp, D3DXToRadian(180.f)));
-	UpdateFrameMatrices((D3DXFRAME_EX*)m_rootFrame, D3DXMatrixIdentity(&matTmp));
+_bool CDynamicMesh::CanCalcBoneMove(const D3DXFRAME_EX * EXframe, const char * name, const _matrix * parentMatrix, _matrix * combineMatrix, _vec3 * out)
+{
+	if (nullptr == EXframe)
+		return false;
+
+	*combineMatrix = EXframe->TransformationMatrix * *(parentMatrix);
+
+	if (nullptr != EXframe->Name)
+	{
+		if (0 == strcmp(EXframe->Name, name))
+		{
+			*out = { 10.f, 10.f, 10.f };
+			return true;
+		}
+	}
+
+	if (nullptr != EXframe->pFrameSibling)
+		CanCalcBoneMove((D3DXFRAME_EX*)EXframe->pFrameSibling, name, parentMatrix, combineMatrix, out);
+
+	if (nullptr != EXframe->pFrameFirstChild)
+		CanCalcBoneMove((D3DXFRAME_EX*)EXframe->pFrameFirstChild, name, combineMatrix, combineMatrix, out);
 }
 
 void CDynamicMesh::UpdateFrameMatrices(D3DXFRAME_EX* EXFrame, const _matrix* parentMatrix)
@@ -127,6 +168,16 @@ void CDynamicMesh::UpdateFrameMatrices(D3DXFRAME_EX* EXFrame, const _matrix* par
 		return;
 
 	EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
+
+	if (nullptr != EXFrame->Name)
+	{
+		if (0 == strcmp(EXFrame->Name, "Bip001"))
+		{
+			_vec3 pos;
+			memcpy(&pos, &(EXFrame->combinedTransformationMatrix.m[3]), sizeof(_vec3));
+			cout << pos.x << ", " << pos.y << ", " << pos.z << endl;
+		}
+	}
 
 	if (nullptr != EXFrame->pFrameSibling)
 		UpdateFrameMatrices((D3DXFRAME_EX*)EXFrame->pFrameSibling, parentMatrix);

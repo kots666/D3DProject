@@ -22,11 +22,14 @@ public:
 
 public:
 	void SetAnimationSet(const _uint& index);
+	_bool CanCalcBoneMove(const char* name, const _matrix* parentMatrix, _vec3* out);
+	void UpdateFrameMatrices(const _matrix* parentMatrix);
 	void PlayAnimation(const _float& deltaTime);
 
 private:
-	void UpdateFrameMatrices(D3DXFRAME_EX* frame, const _matrix* parentMatrix);
-	void SetUpFrameMatricesPointer(D3DXFRAME_EX* frame);
+	_bool CanCalcBoneMove(const D3DXFRAME_EX* EXframe, const char* name, const _matrix* parentMatrix, _matrix* combineMatrix, _vec3* out);
+	void UpdateFrameMatrices(D3DXFRAME_EX* EXframe, const _matrix* parentMatrix);
+	void SetUpFrameMatricesPointer(D3DXFRAME_EX* EXframe);
 
 private:
 	D3DXFRAME* m_rootFrame;

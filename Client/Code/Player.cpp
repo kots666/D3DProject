@@ -22,7 +22,7 @@ HRESULT CPlayer::Ready()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_transCom->SetScale(0.01f, 0.01f, 0.01f);
+	m_transCom->SetScale(0.1f, 0.1f, 0.1f);
 
 	// Goku
 	//m_meshCom->SetAnimationSet(0);
@@ -40,6 +40,7 @@ _int CPlayer::Update(const _float& deltaTime)
 
 	Engine::CGameObject::Update(deltaTime);
 
+	m_meshCom->UpdateFrameMatrices(m_transCom->GetWorldMatrix());
 	m_meshCom->PlayAnimation(deltaTime);
 	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
 
