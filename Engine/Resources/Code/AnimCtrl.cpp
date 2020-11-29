@@ -37,9 +37,9 @@ HRESULT CAnimCtrl::Ready()
 	return S_OK;
 }
 
-void CAnimCtrl::SetAnimationSet(const _uint & index)
+_bool CAnimCtrl::IsAnimationSetChange(const _uint & index, _double* blendTime)
 {
-	if (m_oldAnimIdx == index) return;
+	if (m_oldAnimIdx == index) return false;
 
 	m_newTrack = m_currentTrack ^ 1;
 
@@ -61,20 +61,22 @@ void CAnimCtrl::SetAnimationSet(const _uint & index)
 	m_animCtrl->UnkeyAllTrackEvents(m_currentTrack);
 	m_animCtrl->UnkeyAllTrackEvents(m_newTrack);
 
+	_double transitionTime = 0.025;
+
 	// 현재 설정된 트랙을 재생 또는 종료 시키기 위한 함수(3인자 : 언제부터 현재 트랙을 해제할 것인가)
-	m_animCtrl->KeyTrackEnable(m_currentTrack, FALSE, m_accTime + 0.25);
+	m_animCtrl->KeyTrackEnable(m_currentTrack, FALSE, m_accTime + transitionTime);
 
 	// 인자값으로 들어오는 트랙에 세팅된 애니메이션 셋을 어떤 속도로 움직일 것인지 설정하는 함수(속도의 상수 값은 1)
-	m_animCtrl->KeyTrackSpeed(m_currentTrack, 1.f, m_accTime, 0.25, D3DXTRANSITION_LINEAR);
+	m_animCtrl->KeyTrackSpeed(m_currentTrack, 0.f, m_accTime, transitionTime, D3DXTRANSITION_LINEAR);
 
 	// 인자값으로 들어오는 트랙의 가중치를 설정하는 함수
-	m_animCtrl->KeyTrackWeight(m_currentTrack, 0.1f, m_accTime, 0.25, D3DXTRANSITION_LINEAR);
+	m_animCtrl->KeyTrackWeight(m_currentTrack, 0.f, m_accTime, transitionTime, D3DXTRANSITION_LINEAR);
 
 
 	// New 트랙의 활성화를 지시하는 함수
 	m_animCtrl->SetTrackEnable(m_newTrack, TRUE);
-	m_animCtrl->KeyTrackSpeed(m_newTrack, 1.f, m_accTime, 0.25, D3DXTRANSITION_LINEAR);
-	m_animCtrl->KeyTrackWeight(m_newTrack, 0.9f, m_accTime, 0.25, D3DXTRANSITION_LINEAR);
+	m_animCtrl->KeyTrackSpeed(m_newTrack, 1.f, m_accTime, transitionTime, D3DXTRANSITION_LINEAR);
+	m_animCtrl->KeyTrackWeight(m_newTrack, 1.f, m_accTime, transitionTime, D3DXTRANSITION_LINEAR);
 
 	m_animCtrl->ResetTime(); // AdvanceTime 호출 시 내부적으로 누적되던 시간을 초기화하는 함수
 	m_accTime = 0.f;
@@ -84,6 +86,10 @@ void CAnimCtrl::SetAnimationSet(const _uint & index)
 
 	m_oldAnimIdx = index;
 	m_currentTrack = m_newTrack;
+
+	*blendTime = transitionTime;
+
+	return true;
 }
 
 void CAnimCtrl::PlayAnimation(const _float & deltaTime)
@@ -101,7 +107,7 @@ _bool CAnimCtrl::IsAnimationSetEnd()
 
 	m_animCtrl->GetTrackDesc(m_currentTrack, &trackInfo);
 
-	if (trackInfo.Position >= m_period - 0.1)
+	if (trackInfo.Position >= m_period - 0.03)
 		return true;
 
 	return false;

@@ -8,7 +8,8 @@
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 device) :
 	Engine::CGameObject(device),
-	m_dir(0.f, 0.f, 0.f)
+	m_dir(0.f, 0.f, 0.f),
+	m_yRotAngle(0.f)
 {
 
 }
@@ -22,13 +23,17 @@ HRESULT CPlayer::Ready()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_transCom->SetScale(0.1f, 0.1f, 0.1f);
+	m_transCom->SetScale(0.01f, 0.01f, 0.01f);
 
 	// Goku
 	//m_meshCom->SetAnimationSet(0);
 
 	// Player
 	m_meshCom->SetAnimationSet(0);
+	m_meshCom->SetIsRootMotion(true);
+	m_meshCom->SetBoneName("Bip001");
+
+	m_accPos = { 0.f, 0.f, 0.f };
 
 	return S_OK;
 }
@@ -37,17 +42,31 @@ _int CPlayer::Update(const _float& deltaTime)
 {
 	SetUpOnTerrain();
 	KeyInput(deltaTime);
+	UpdateAnimMatrices();
 
 	Engine::CGameObject::Update(deltaTime);
 
-	m_meshCom->UpdateFrameMatrices(m_transCom->GetWorldMatrix());
-	m_meshCom->PlayAnimation(deltaTime);
-	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
+	_vec3 movePos;
+	_vec3 scale;
+	m_meshCom->CalcMovePos("Bip001", movePos);
+
+	D3DXVec3TransformNormal(&movePos, &movePos, &m_yScaleRotMat);
+
+	//movePos.x = 0;
+	movePos.y = 0;
+
+	m_accPos = movePos;
+
+	m_transCom->MovePos(&movePos);
+	m_transCom->SetMovePosAtWorldMatrix(&movePos);
 
 	_vec3 pos;
 	m_transCom->GetInfo(Engine::INFO_POS, &pos);
+	cout << "X : " << pos.x << ", Y : " << pos.y << ", Z : " << pos.z << endl;
 
-	//cout << "X : " << pos.x << ", Y : " << pos.y << ", Z : " << pos.z << endl;
+	m_meshCom->UpdateFrameMatrices(deltaTime, &m_yRotMat);
+	m_meshCom->PlayAnimation(deltaTime);
+	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
 
 	return 0;
 }
@@ -132,7 +151,7 @@ void CPlayer::KeyInput(const _float& deltaTime)
 	if (Engine::GetDIMouseState(Engine::DIM_RB) & 0x80)
 	{
 		// Player
-		m_meshCom->SetAnimationSet(0);
+		m_meshCom->SetAnimationSet(1, true);
 	}
 
 	if (m_meshCom->IsAnimationSetEnd())
@@ -166,6 +185,18 @@ _vec3 CPlayer::PickUpOnTerrain()
 		return _vec3(0.f, 0.f, 0.f);
 
 	return m_calcCom->PickingOnTerrain(g_hWnd, terrainBufferCom, terrainTransformCom);
+}
+
+void CPlayer::UpdateAnimMatrices()
+{
+	D3DXQUATERNION qt;
+	_vec3 up = { 0.f, 1.f, 0.f };
+	D3DXQuaternionRotationAxis(&qt, &up, D3DXToRadian(m_yRotAngle - 90.f));
+	D3DXMatrixRotationQuaternion(&m_yRotMat, &qt);
+
+	D3DXMatrixScaling(&m_yScaleRotMat, 0.01f, 0.01f, 0.01f);
+
+	m_yScaleRotMat *= m_yRotMat;
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 device)

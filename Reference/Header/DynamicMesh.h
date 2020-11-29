@@ -17,15 +17,25 @@ private:
 public:
 	HRESULT Ready(const _tchar* filePath, const _tchar* fileName);
 	void Render();
+
+public:
+	void UpdateFrameMatrices(const _float& deltaTime, const _matrix* parentMatrix = nullptr);
+	void SetAnimationSet(const _uint& index, const _bool& isRoot = true);
+	void PlayAnimation(const _float& deltaTime);
+	
+	void CalcMovePos(const char* name, _vec3& outPos, const _matrix* parentMat = nullptr);
+
+public:
+	// Getter
 	const D3DXFRAME_EX* GetFrameByName(const char* frameName);
 	_bool IsAnimationSetEnd();
 
 public:
-	void SetAnimationSet(const _uint& index);
-	_bool CanCalcBoneMove(const char* name, const _matrix* parentMatrix, _vec3* out);
-	void UpdateFrameMatrices(const _matrix* parentMatrix);
-	void PlayAnimation(const _float& deltaTime);
-
+	// Setter
+	void SetIsRootMotion(const _bool& isRoot) { m_isRootMotion = isRoot; }
+	void SetBoneName(const char* name) { m_boneName = name; }
+	void AddToAccMovePos(const _vec3& movePos) { m_accMovePos += movePos; }
+	
 private:
 	_bool CanCalcBoneMove(const D3DXFRAME_EX* EXframe, const char* name, const _matrix* parentMatrix, _matrix* combineMatrix, _vec3* out);
 	void UpdateFrameMatrices(D3DXFRAME_EX* EXframe, const _matrix* parentMatrix);
@@ -37,6 +47,13 @@ private:
 	CAnimCtrl* m_animCtrl;
 	list<D3DXMESHCONTAINER_EX*> m_meshContainerList;
 
+	const char* m_boneName;
+	_bool m_isRootMotion;
+	_bool m_isBlendTime;
+	_double m_blendTime;
+	_vec3 m_accMovePos;
+	_vec3 m_prevPos;
+
 public:
 	static CDynamicMesh* Create(LPDIRECT3DDEVICE9 device, const _tchar* filePath, const _tchar* fileName);
 	virtual CComponent* Clone() override;
@@ -44,7 +61,8 @@ public:
 };
 
 END
-#endif // DynamicMesh_h__
+
+#endif
 
 
 //typedef struct _D3DXFRAME

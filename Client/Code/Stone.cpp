@@ -36,7 +36,7 @@ _int CStone::Update(const _float& deltaTime)
 	_vec3 pos;
 	m_transCom->GetInfo(Engine::INFO_POS, &pos);
 
-	m_isDraw = m_optimizationCom->IsInFrustumForObject(&pos, 0.f);
+	//m_isDraw = m_optimizationCom->IsInFrustumForObject(&pos, 0.f);
 
 	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
 

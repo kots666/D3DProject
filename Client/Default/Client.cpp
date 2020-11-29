@@ -76,7 +76,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			Engine::SetDeltaTime(L"Timer_Immediate");
 
 			_float getTime = Engine::GetDeltaTime(L"Timer_Immediate");
-
+			
 			if (Engine::IsPermitCall(L"Frame_FPS60", getTime))
 			{
 				Engine::SetDeltaTime(L"Timer_FPS60");

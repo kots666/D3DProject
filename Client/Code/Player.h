@@ -35,6 +35,8 @@ private:
 	void SetUpOnTerrain();
 	_vec3 PickUpOnTerrain();
 
+	void UpdateAnimMatrices();
+
 private:
 	Engine::CDynamicMesh* m_meshCom = nullptr;
 	Engine::CTransform* m_transCom = nullptr;
@@ -44,6 +46,10 @@ private:
 
 	_vec3 m_dir;
 	_float m_speed = 5.f;
+	_float m_yRotAngle;
+	_matrix m_yRotMat;
+	_matrix m_yScaleRotMat;
+	_vec3 m_accPos;
 
 public:
 	static CPlayer*	Create(LPDIRECT3DDEVICE9 device);

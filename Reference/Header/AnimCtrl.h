@@ -15,7 +15,7 @@ private:
 
 public:
 	HRESULT Ready();
-	void SetAnimationSet(const _uint& index);
+	_bool IsAnimationSetChange(const _uint& index, _double* blendTime);
 	void PlayAnimation(const _float& deltaTime);
 
 public:
@@ -31,6 +31,7 @@ private:
 	_uint m_oldAnimIdx;
 
 	_double m_period;
+
 
 public:
 	static CAnimCtrl* Create(LPD3DXANIMATIONCONTROLLER animCtrl);

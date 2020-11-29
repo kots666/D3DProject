@@ -113,8 +113,8 @@ _uint CLoading::LoadingForStage()
 		Engine::RESOURCE_STAGE,
 		L"Mesh_Player",
 		Engine::TYPE_DYNAMIC,
-		L"../Resource/Mesh/DynamicMesh/Glad/",
-		L"Glad.X"), E_FAIL);
+		L"../Resource/Mesh/DynamicMesh/Gladiator/",
+		L"Gladiator.X"), E_FAIL);
 
 	// Stone
 	FAILED_CHECK_RETURN(Engine::ReadyMesh(

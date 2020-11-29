@@ -7,13 +7,17 @@ USING(Engine)
 
 CDynamicMesh::CDynamicMesh(LPDIRECT3DDEVICE9 device) :
 	CMesh(device), m_loader(nullptr),
-	m_rootFrame(nullptr), m_animCtrl(nullptr)
+	m_rootFrame(nullptr), m_animCtrl(nullptr),
+	m_boneName(nullptr), m_isRootMotion(false),
+	m_accMovePos({ 0.f, 0.f, 0.f }), m_prevPos({ 0.f, 0.f, 0.f })
 {
 }
 
 CDynamicMesh::CDynamicMesh(const CDynamicMesh& rhs) :
 	CMesh(rhs), m_rootFrame(rhs.m_rootFrame),
-	m_loader(rhs.m_loader), m_meshContainerList(rhs.m_meshContainerList)
+	m_loader(rhs.m_loader), m_meshContainerList(rhs.m_meshContainerList),
+	m_boneName(rhs.m_boneName), m_isRootMotion(rhs.m_isRootMotion),
+	m_accMovePos(rhs.m_accMovePos), m_prevPos(rhs.m_prevPos)
 {
 	m_animCtrl = CAnimCtrl::Create(*rhs.m_animCtrl);
 }
@@ -99,6 +103,72 @@ void CDynamicMesh::Render()
 	}
 }
 
+void CDynamicMesh::UpdateFrameMatrices(const _float& deltaTime, const _matrix * parentMatrix)
+{
+	if (m_isBlendTime)
+	{
+		m_blendTime -= deltaTime;
+
+		if (0.0 >= m_blendTime)
+		{
+			m_isBlendTime = false;
+		}
+	}
+
+	if (nullptr == parentMatrix)
+	{
+		_matrix tmp;
+		parentMatrix = D3DXMatrixIdentity(&tmp);
+	}
+
+	UpdateFrameMatrices((D3DXFRAME_EX*)m_rootFrame, parentMatrix);
+}
+
+void CDynamicMesh::SetAnimationSet(const _uint & index, const _bool & isRoot)
+{
+	_bool isToDefault = m_animCtrl->IsAnimationSetChange(index, &m_blendTime);
+	m_isRootMotion = isRoot;
+
+	if (isToDefault)
+	{
+		m_isBlendTime = true;
+		m_accMovePos = m_prevPos = { 0.f, 0.f, 0.f };
+	}
+}
+
+void CDynamicMesh::PlayAnimation(const _float & deltaTime)
+{
+	m_animCtrl->PlayAnimation(deltaTime);
+}
+
+void CDynamicMesh::CalcMovePos(const char * name, _vec3& outPos, const _matrix* parentMat)
+{
+	if (m_isRootMotion && !m_isBlendTime)
+	{
+		_matrix initMat;
+		D3DXMatrixIdentity(&initMat);
+
+		if (nullptr == parentMat)
+		{
+			parentMat = &initMat;
+		}
+
+		if (CanCalcBoneMove((D3DXFRAME_EX*)m_rootFrame, name, parentMat, &initMat, &outPos))
+		{
+			m_prevPos = m_accMovePos;
+			m_accMovePos = outPos;
+
+			outPos = m_accMovePos - m_prevPos;
+
+			return;
+		}
+	}
+
+	outPos = { 0.f, 0.f, 0.f };
+
+	return;
+}
+
 const D3DXFRAME_EX * CDynamicMesh::GetFrameByName(const char * frameName)
 {
 	return (D3DXFRAME_EX*)D3DXFrameFind(m_rootFrame, frameName);
@@ -107,36 +177,6 @@ const D3DXFRAME_EX * CDynamicMesh::GetFrameByName(const char * frameName)
 _bool CDynamicMesh::IsAnimationSetEnd()
 {
 	return m_animCtrl->IsAnimationSetEnd();
-}
-
-void CDynamicMesh::SetAnimationSet(const _uint & index)
-{
-	m_animCtrl->SetAnimationSet(index);
-}
-
-_bool CDynamicMesh::CanCalcBoneMove(const char * name, const _matrix * parentMatrix, _vec3 * out)
-{
-	_matrix initMat;
-	D3DXMatrixIdentity(&initMat);
-
-	if (CanCalcBoneMove((D3DXFRAME_EX*)m_rootFrame, name, parentMatrix, &initMat, out))
-	{
-		return true;
-	}
-
-	out = nullptr;
-
-	return false;
-}
-
-void CDynamicMesh::UpdateFrameMatrices(const _matrix * parentMatrix)
-{
-	UpdateFrameMatrices((D3DXFRAME_EX*)m_rootFrame, parentMatrix);
-}
-
-void CDynamicMesh::PlayAnimation(const _float & deltaTime)
-{
-	m_animCtrl->PlayAnimation(deltaTime);
 }
 
 _bool CDynamicMesh::CanCalcBoneMove(const D3DXFRAME_EX * EXframe, const char * name, const _matrix * parentMatrix, _matrix * combineMatrix, _vec3 * out)
@@ -150,7 +190,7 @@ _bool CDynamicMesh::CanCalcBoneMove(const D3DXFRAME_EX * EXframe, const char * n
 	{
 		if (0 == strcmp(EXframe->Name, name))
 		{
-			*out = { 10.f, 10.f, 10.f };
+			*out = _vec3(combineMatrix->m[3][0], combineMatrix->m[3][1], combineMatrix->m[3][2]);
 			return true;
 		}
 	}
@@ -167,17 +207,29 @@ void CDynamicMesh::UpdateFrameMatrices(D3DXFRAME_EX* EXFrame, const _matrix* par
 	if (nullptr == EXFrame)
 		return;
 
-	EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
-
-	if (nullptr != EXFrame->Name)
+	if (m_isRootMotion && !m_isBlendTime && nullptr != EXFrame->Name && nullptr != m_boneName)
 	{
-		if (0 == strcmp(EXFrame->Name, "Bip001"))
+		if (0 == strcmp(EXFrame->Name, m_boneName))
 		{
-			_vec3 pos;
-			memcpy(&pos, &(EXFrame->combinedTransformationMatrix.m[3]), sizeof(_vec3));
-			cout << pos.x << ", " << pos.y << ", " << pos.z << endl;
+			EXFrame->TransformationMatrix.m[3][0] = 0;
+			EXFrame->TransformationMatrix.m[3][2] = 0;
+
+			EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
+			/*
+			_matrix rootMotionMat = EXFrame->TransformationMatrix;
+			rootMotionMat.m[3][0] = 0;
+			rootMotionMat.m[3][2] = 0;
+
+			EXFrame->combinedTransformationMatrix = rootMotionMat * (*parentMatrix);
+			*/
+		}
+		else
+		{
+			EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
 		}
 	}
+	else
+		EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
 
 	if (nullptr != EXFrame->pFrameSibling)
 		UpdateFrameMatrices((D3DXFRAME_EX*)EXFrame->pFrameSibling, parentMatrix);
