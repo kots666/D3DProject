@@ -31,7 +31,7 @@ private:
 	_uint m_oldAnimIdx;
 
 	_double m_period;
-
+	_double m_curTransitionTime;
 
 public:
 	static CAnimCtrl* Create(LPD3DXANIMATIONCONTROLLER animCtrl);

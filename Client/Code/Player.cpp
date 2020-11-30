@@ -151,13 +151,13 @@ void CPlayer::KeyInput(const _float& deltaTime)
 	if (Engine::GetDIMouseState(Engine::DIM_RB) & 0x80)
 	{
 		// Player
-		m_meshCom->SetAnimationSet(1, true);
+		m_meshCom->SetAnimationSet(2, true);
 	}
 
 	if (m_meshCom->IsAnimationSetEnd())
 	{
 		// Player
-		m_meshCom->SetAnimationSet(0);
+		m_meshCom->SetAnimationSet(0, false);
 	}
 }
 

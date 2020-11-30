@@ -56,7 +56,8 @@ HRESULT CDynamicMesh::Ready(const _tchar* filePath, const _tchar* fileName)
 	_matrix matTemp;
 
 	//UpdateFrameMatrices((D3DXFRAME_EX*)m_rootFrame, D3DXMatrixIdentity(&matTemp));
-	UpdateFrameMatrices((D3DXFRAME_EX*)m_rootFrame, D3DXMatrixRotationY(&matTemp, D3DXToRadian(180.f)));
+	//UpdateFrameMatrices((D3DXFRAME_EX*)m_rootFrame, D3DXMatrixRotationY(&matTemp, D3DXToRadian(180.f)));
+	SetInitFrameMatrices((D3DXFRAME_EX*)m_rootFrame, D3DXMatrixIdentity(&matTemp));
 	SetUpFrameMatricesPointer((D3DXFRAME_EX*)m_rootFrame);
 
 	return S_OK;
@@ -237,6 +238,29 @@ void CDynamicMesh::UpdateFrameMatrices(D3DXFRAME_EX* EXFrame, const _matrix* par
 	if (nullptr != EXFrame->pFrameFirstChild)
 		UpdateFrameMatrices((D3DXFRAME_EX*)EXFrame->pFrameFirstChild, &EXFrame->combinedTransformationMatrix);
 
+}
+
+void CDynamicMesh::SetInitFrameMatrices(D3DXFRAME_EX * EXFrame, const _matrix * parentMatrix)
+{
+	if (nullptr == EXFrame)
+		return;
+
+	if (nullptr != EXFrame->Name)
+	{
+		if (0 == strcmp(EXFrame->Name, "Bip001"))
+		{
+			EXFrame->TransformationMatrix.m[3][0] = 0;
+			EXFrame->TransformationMatrix.m[3][2] = 0;
+		}
+	}
+
+	EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
+
+	if (nullptr != EXFrame->pFrameSibling)
+		SetInitFrameMatrices((D3DXFRAME_EX*)EXFrame->pFrameSibling, parentMatrix);
+
+	if (nullptr != EXFrame->pFrameFirstChild)
+		SetInitFrameMatrices((D3DXFRAME_EX*)EXFrame->pFrameFirstChild, &EXFrame->combinedTransformationMatrix);
 }
 
 void CDynamicMesh::SetUpFrameMatricesPointer(D3DXFRAME_EX * EXFrame)

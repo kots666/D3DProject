@@ -9,7 +9,7 @@ GuardStart	6	408	411
 GuardLoop	7	412	501
 GuardDmg	8	502	519
 GuardBreak	9	520	542
-GuardEnd		10	543	545
+GuardEnd	10	543	545
 CounterATK01	11	546	581
 CounterATK02	12	582	625
 KnockBack	13	626	695

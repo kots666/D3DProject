@@ -39,6 +39,7 @@ public:
 private:
 	_bool CanCalcBoneMove(const D3DXFRAME_EX* EXframe, const char* name, const _matrix* parentMatrix, _matrix* combineMatrix, _vec3* out);
 	void UpdateFrameMatrices(D3DXFRAME_EX* EXframe, const _matrix* parentMatrix);
+	void SetInitFrameMatrices(D3DXFRAME_EX* EXframe, const _matrix* parentMatrix);
 	void SetUpFrameMatricesPointer(D3DXFRAME_EX* EXframe);
 
 private:

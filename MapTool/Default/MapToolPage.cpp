@@ -24,6 +24,7 @@ CMapToolPage::~CMapToolPage()
 void CMapToolPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_TREE1, m_treeCtrl);
 }
 
 
