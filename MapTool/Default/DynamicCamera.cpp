@@ -55,7 +55,7 @@ _int CDynamicCamera::Update(const _float& deltaTime)
 	}
 	else
 	{
-		if (Engine::GetDIMouseState(Engine::DIM_LB))
+		if (Engine::GetDIKeyDownState(VK_LBUTTON))
 			MousePicking();
 	}
 	
@@ -114,7 +114,7 @@ void CDynamicCamera::KeyInput(const _float& deltaTime)
 	}
 
 	// 마우스 전환
-	if (GetAsyncKeyState(VK_CONTROL) & 0x8000)
+	if (Engine::GetDIKeyDownState(VK_LCONTROL))
 	{
 		m_canClick ^= true;
 		m_isFix ^= true;
@@ -344,8 +344,6 @@ void CDynamicCamera::TerrainPicking()
 	D3DXVec3TransformCoord(&pickPos, &pickPos, &matWorld);
 
 	CNaviMesh::GetInstance()->AddPos(pickPos);
-
-	cout << pickPos.x << ", " << pickPos.y << ", " << pickPos.z << endl;
 }
 
 void CDynamicCamera::NaviColliderPicking()

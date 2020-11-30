@@ -96,7 +96,7 @@ void CDynamicCamera::KeyInput(const _float& deltaTime)
 	}
 
 	// 마우스 전환
-	if (Engine::GetDIKeyState(DIK_LCONTROL) & 0x80)
+	if (Engine::GetDIKeyDownState(VK_LCONTROL))
 	{
 		m_canClick ^= true;
 		m_isFix ^= true;

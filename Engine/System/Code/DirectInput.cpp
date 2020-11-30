@@ -55,6 +55,12 @@ HRESULT CDirectInput::Ready(HINSTANCE hInst, HWND hWnd)
 void CDirectInput::Update()
 {
 	m_keyBoard->GetDeviceState(256, m_keyState);
+	for (_int i = 0; i < 256; ++i)
+	{
+		_short keyState = GetAsyncKeyState(i);
+		m_keyDownState[i] = keyState & 0x0001;
+		m_keyUpState[i] = keyState & 0x8000;
+	}
 	m_mouse->GetDeviceState(sizeof(m_mouseState), &m_mouseState);
 }
 

@@ -33,8 +33,6 @@ HRESULT CPlayer::Ready()
 	m_meshCom->SetIsRootMotion(true);
 	m_meshCom->SetBoneName("Bip001");
 
-	m_accPos = { 0.f, 0.f, 0.f };
-
 	return S_OK;
 }
 
@@ -54,8 +52,6 @@ _int CPlayer::Update(const _float& deltaTime)
 
 	//movePos.x = 0;
 	movePos.y = 0;
-
-	m_accPos = movePos;
 
 	m_transCom->MovePos(&movePos);
 	m_transCom->SetMovePosAtWorldMatrix(&movePos);
@@ -157,7 +153,7 @@ void CPlayer::KeyInput(const _float& deltaTime)
 	if (m_meshCom->IsAnimationSetEnd())
 	{
 		// Player
-		m_meshCom->SetAnimationSet(0, false);
+		m_meshCom->SetAnimationSet(0);
 	}
 }
 

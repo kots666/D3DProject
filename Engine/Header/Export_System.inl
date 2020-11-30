@@ -1,3 +1,4 @@
+#include "Export_System.h"
 HRESULT ReadyGraphicDevice(HWND hWnd, WINMODE mode, const _uint& sizeX, const _uint& sizeY, CGraphicDevice** graphicDevice)
 {
 	return CGraphicDevice::GetInstance()->Ready(hWnd, mode, sizeX, sizeY, graphicDevice);
@@ -48,6 +49,14 @@ void RenderFont(const _tchar* fontTag, const _tchar* string, const _vec2* pos, D
 _byte GetDIKeyState(_ubyte keyID)
 {
 	return CDirectInput::GetInstance()->GetDIKeyState(keyID);
+}
+_byte GetDIKeyDownState(_ubyte keyID)
+{
+	return CDirectInput::GetInstance()->GetDIKeyDownState(keyID);
+}
+_byte GetDIKeyUpState(_ubyte keyID)
+{
+	return CDirectInput::GetInstance()->GetDIKeyUpState(keyID);
 }
 _byte GetDIMouseState(MOUSEKEYSTATE mouse)
 {

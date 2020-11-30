@@ -26,7 +26,8 @@ private:
 	Engine::CTriCol* m_bufferCom = nullptr;
 	Engine::CTransform* m_transCom = nullptr;
 	Engine::CRenderer* m_rendererCom = nullptr;
-	//Engine::CCollider* m_colliderCom = nullptr;
+	
+	LPD3DXLINE m_line;
 
 	_vec3 m_pos[3];
 

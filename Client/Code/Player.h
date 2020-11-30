@@ -49,9 +49,6 @@ private:
 	_float m_yRotAngle;
 	_matrix m_yRotMat;
 	_matrix m_yScaleRotMat;
-	_vec3 m_accPos;
-
-	_int m_index = 1;
 
 public:
 	static CPlayer*	Create(LPDIRECT3DDEVICE9 device);

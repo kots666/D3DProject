@@ -3,11 +3,14 @@
 #include "TriCol.h"
 
 CNaviCell::CNaviCell(LPDIRECT3DDEVICE9 device, _vec3 pos1, _vec3 pos2, _vec3 pos3) :
-	CGameObject(device)
+	CGameObject(device), m_line(nullptr)
 {
 	m_pos[0] = pos1;
 	m_pos[1] = pos2;
 	m_pos[2] = pos3;
+
+	m_line = Engine::CGraphicDevice::GetInstance()->GetLine();
+	SafeAddRef(m_line);
 }
 
 CNaviCell::~CNaviCell()
@@ -42,7 +45,24 @@ void CNaviCell::Render()
 {
 	m_device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
-	m_bufferCom->Render();
+	_vec3 vertices[] =
+	{
+	m_pos[0],
+	m_pos[1],
+	m_pos[2],
+	m_pos[0]
+	};
+
+	_matrix viewMat, projMat;
+	m_device->GetTransform(D3DTS_VIEW, &viewMat);
+	m_device->GetTransform(D3DTS_PROJECTION, &projMat);
+
+	viewMat *= projMat;
+
+	m_line->SetWidth(5.f);
+	m_line->Begin();
+	m_line->DrawTransform(vertices, 4, &viewMat, D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
+	m_line->End();
 
 	m_device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 }
@@ -85,5 +105,7 @@ CNaviCell * CNaviCell::Create(LPDIRECT3DDEVICE9 device, _vec3 pos1, _vec3 pos2, 
 
 void CNaviCell::Free()
 {
+	SafeRelease(m_line);
+
 	CGameObject::Free();
 }

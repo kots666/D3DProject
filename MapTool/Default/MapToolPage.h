@@ -17,11 +17,14 @@ public:
 	enum { IDD = IDD_MAPTOOLPAGE };
 #endif
 
+public:
+	CTreeCtrl m_treeCtrl;
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
 	DECLARE_MESSAGE_MAP()
 
 public:
-	CTreeCtrl m_treeCtrl;
+	virtual BOOL OnInitDialog();
 };

@@ -56,8 +56,8 @@ HRESULT CDynamicMesh::Ready(const _tchar* filePath, const _tchar* fileName)
 	_matrix matTemp;
 
 	//UpdateFrameMatrices((D3DXFRAME_EX*)m_rootFrame, D3DXMatrixIdentity(&matTemp));
-	//UpdateFrameMatrices((D3DXFRAME_EX*)m_rootFrame, D3DXMatrixRotationY(&matTemp, D3DXToRadian(180.f)));
-	SetInitFrameMatrices((D3DXFRAME_EX*)m_rootFrame, D3DXMatrixIdentity(&matTemp));
+	UpdateFrameMatrices((D3DXFRAME_EX*)m_rootFrame, D3DXMatrixRotationY(&matTemp, D3DXToRadian(180.f)));
+	//SetInitFrameMatrices((D3DXFRAME_EX*)m_rootFrame, D3DXMatrixIdentity(&matTemp));
 	SetUpFrameMatricesPointer((D3DXFRAME_EX*)m_rootFrame);
 
 	return S_OK;

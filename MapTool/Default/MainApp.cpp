@@ -46,30 +46,6 @@ void CMainApp::Render()
 	m_managementClass->RenderScene();
 	CNaviMesh::GetInstance()->Render();
 
-	LPD3DXLINE line;
-	D3DXCreateLine(m_device, &line);
-
-	_vec3 vertices[] =
-	{
-	{10.f, 10.f, 10.f},
-	{0.f, 10.f, 10.f},
-	{5.f, 20.f, 20.f},
-	{10.f, 10.f, 10.f},
-	};
-
-	_matrix viewMat, projMat;
-	m_device->GetTransform(D3DTS_VIEW, &viewMat);
-	m_device->GetTransform(D3DTS_PROJECTION, &projMat);
-
-	viewMat *= projMat;
-
-	line->SetWidth(10);
-	line->Begin();
-	line->DrawTransform(vertices, 4, &viewMat, D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
-	line->End();
-
-	line->Release();
-
 	Engine::RenderEnd();
 }
 

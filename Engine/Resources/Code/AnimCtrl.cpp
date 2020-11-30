@@ -61,7 +61,7 @@ _bool CAnimCtrl::IsAnimationSetChange(const _uint & index, _double* blendTime)
 	m_animCtrl->UnkeyAllTrackEvents(m_currentTrack);
 	m_animCtrl->UnkeyAllTrackEvents(m_newTrack);
 
-	_double transitionTime = 0.01;
+	_double transitionTime = 0.018;
 
 	// 현재 설정된 트랙을 재생 또는 종료 시키기 위한 함수(3인자 : 언제부터 현재 트랙을 해제할 것인가)
 	m_animCtrl->KeyTrackEnable(m_currentTrack, FALSE, m_accTime + transitionTime);

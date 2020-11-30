@@ -38,6 +38,8 @@ inline void RenderFont(const _tchar* fontTag, const _tchar* string, const _vec2*
 
 // DirectInput
 inline _byte GetDIKeyState(_ubyte keyID);
+inline _byte GetDIKeyDownState(_ubyte keyID);
+inline _byte GetDIKeyUpState(_ubyte keyID);
 inline _byte GetDIMouseState(MOUSEKEYSTATE mouse);
 inline _long GetDIMouseMove(MOUSEMOVESTATE mouseState);
 inline HRESULT ReadyDirectInput(HINSTANCE hInst, HWND hWnd);
