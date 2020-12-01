@@ -5,6 +5,7 @@
 #include "MainView.h"
 #include "Terrain.h"
 #include "NaviMesh.h"
+#include "NaviCell.h"
 
 CDynamicCamera::CDynamicCamera(LPDIRECT3DDEVICE9 device) :
 	Engine::CCamera(device)
@@ -74,7 +75,7 @@ void CDynamicCamera::KeyInput(const _float& deltaTime)
 		_vec3 look;
 		memcpy(look, &matCamWorld.m[2][0], sizeof(_vec3));
 
-		_vec3 length = *D3DXVec3Normalize(&look, &look) * 5.f * deltaTime;
+		_vec3 length = *D3DXVec3Normalize(&look, &look) * m_speed * deltaTime;
 
 		m_eye += length;
 		m_at += length;
@@ -85,7 +86,7 @@ void CDynamicCamera::KeyInput(const _float& deltaTime)
 		_vec3 look;
 		memcpy(look, &matCamWorld.m[2][0], sizeof(_vec3));
 
-		_vec3 length = *D3DXVec3Normalize(&look, &look) * 5.f * deltaTime;
+		_vec3 length = *D3DXVec3Normalize(&look, &look) * m_speed * deltaTime;
 
 		m_eye -= length;
 		m_at -= length;
@@ -96,7 +97,7 @@ void CDynamicCamera::KeyInput(const _float& deltaTime)
 		_vec3 right;
 		memcpy(right, &matCamWorld.m[0][0], sizeof(_vec3));
 
-		_vec3 length = *D3DXVec3Normalize(&right, &right) * 5.f * deltaTime;
+		_vec3 length = *D3DXVec3Normalize(&right, &right) * m_speed * deltaTime;
 
 		m_eye -= length;
 		m_at -= length;
@@ -107,7 +108,7 @@ void CDynamicCamera::KeyInput(const _float& deltaTime)
 		_vec3 right;
 		memcpy(right, &matCamWorld.m[0][0], sizeof(_vec3));
 
-		_vec3 length = *D3DXVec3Normalize(&right, &right) * 5.f * deltaTime;
+		_vec3 length = *D3DXVec3Normalize(&right, &right) * m_speed * deltaTime;
 
 		m_eye += length;
 		m_at += length;
@@ -317,7 +318,44 @@ void CDynamicCamera::TerrainPicking()
 
 void CDynamicCamera::NaviColliderPicking()
 {
+	vector<CNaviCell*>* cellList = CNaviMesh::GetInstance()->GetCellList();
 
+	for (auto cell : *cellList)
+	{
+		_vec3* pos = cell->GetAllPos();
+
+		for (_int i = 0; i < 3; ++i)
+		{
+			if (IsCollideToSphere(m_rayPos, m_rayDir, pos[i], 0.5f))
+			{
+				// 처음 만난 애
+				int i = 0;
+
+				break;
+			}
+		}
+	}
+}
+
+_bool CDynamicCamera::IsCollideToSphere(const _vec3 & rayPos, const _vec3 & rayDir, const _vec3 & centerPos, const _float & radius)
+{
+	_matrix invMat;
+	D3DXMatrixIdentity(&invMat);
+
+	invMat.m[3][0] = -centerPos.x;
+	invMat.m[3][1] = -centerPos.y;
+	invMat.m[3][2] = -centerPos.z;
+
+	_vec3 pos, dir;
+	D3DXVec3TransformCoord(&pos, &rayPos, &invMat);
+	D3DXVec3TransformNormal(&dir, &rayDir, &invMat);
+
+	float vv = D3DXVec3Dot(&dir, &dir);
+	float qv = D3DXVec3Dot(&pos, &dir);
+	float qq = D3DXVec3Dot(&pos, &pos);
+	float rr = radius * radius;
+
+	return (qv * qv) - vv * (qq - rr) >= 0;
 }
 
 CDynamicCamera * CDynamicCamera::Create(LPDIRECT3DDEVICE9 device, const _vec3 * eye, const _vec3 * at, const _vec3 * up, const _float & fovY, const _float & aspect, const _float & nearZ, const _float & farZ)

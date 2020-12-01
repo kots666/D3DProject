@@ -21,6 +21,7 @@ public:
 
 public:
 	_vec3* GetPos(const _int& vertexIndex);
+	_vec3* GetAllPos() { return m_pos; }
 
 private:
 	HRESULT AddComponent();

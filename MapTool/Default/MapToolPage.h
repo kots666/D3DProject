@@ -1,5 +1,6 @@
 #pragma once
 #include "afxcmn.h"
+#include "afxwin.h"
 
 
 // CMapToolPage 대화 상자입니다.
@@ -19,7 +20,8 @@ public:
 
 public:
 	void ChangeType();
-	void AddItem(int index);
+	void AddItem(const _int& index);
+	void ChangeValue(const _int& cellIndex, const _int& vertexIndex, const _float& value, const _int& xyz);
 
 public:
 	CTreeCtrl m_treeCtrl;
@@ -31,6 +33,10 @@ public:
 	_float m_valueY;
 	_float m_valueZ;
 
+	CEdit m_editCtrlX;
+	CEdit m_editCtrlY;
+	CEdit m_editCtrlZ;
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
@@ -38,9 +44,15 @@ protected:
 
 public:
 	virtual BOOL OnInitDialog();
-	afx_msg void OnBnClickedRadio1();
-	afx_msg void OnBnClickedRadio2();
-	afx_msg void OnTvnSelchangedTree1(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnClickedTerrainPicking();
+	afx_msg void OnClickedVertexPicking();
+	afx_msg void OnSelectedTreeControl(NMHDR *pNMHDR, LRESULT *pResult);
 	
-	afx_msg void OnDeltaposSpin3(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnDeltaPosX(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnDeltaPosY(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnDeltaPosZ(NMHDR *pNMHDR, LRESULT *pResult);
+
+	afx_msg void OnChangeEditX();
+	afx_msg void OnChangeEditY();
+	afx_msg void OnChangeEditZ();
 };

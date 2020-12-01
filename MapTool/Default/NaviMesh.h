@@ -18,6 +18,7 @@ public:
 public:
 	void AddPos(_vec3 pos);
 	_vec3* GetPos(const _int& cellIndex, const _int& vertexIndex);
+	vector<CNaviCell*>* GetCellList() { return &m_cellList; }
 
 private:
 	void Release();

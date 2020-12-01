@@ -43,6 +43,15 @@
     <Filter Include="00. Resources\02. Mesh\02. DynamicMesh\02. AnimController">
       <UniqueIdentifier>{4b0ee866-1512-4f5c-858b-c1901bd28b41}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00. Resources\02. Mesh\03. NaviMesh">
+      <UniqueIdentifier>{ab87688f-6ea2-4d04-bf7f-241d93e510a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. Resources\02. Mesh\03. NaviMesh\00. Cell">
+      <UniqueIdentifier>{7fcacf3e-1c21-4c34-ae9e-ce2c026ad703}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. Resources\02. Mesh\03. NaviMesh\01. Line">
+      <UniqueIdentifier>{e980eaa9-c4c5-4949-96f9-ef6e93cb8fa7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Resources.cpp">
@@ -83,6 +92,15 @@
     </ClCompile>
     <ClCompile Include="..\Code\AnimCtrl.cpp">
       <Filter>00. Resources\02. Mesh\02. DynamicMesh\02. AnimController</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\NaviMesh.cpp">
+      <Filter>00. Resources\02. Mesh\03. NaviMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\NaviCell.cpp">
+      <Filter>00. Resources\02. Mesh\03. NaviMesh\00. Cell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\NaviLine.cpp">
+      <Filter>00. Resources\02. Mesh\03. NaviMesh\01. Line</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +145,15 @@
     </ClInclude>
     <ClInclude Include="..\Code\AnimCtrl.h">
       <Filter>00. Resources\02. Mesh\02. DynamicMesh\02. AnimController</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\NaviMesh.h">
+      <Filter>00. Resources\02. Mesh\03. NaviMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\NaviCell.h">
+      <Filter>00. Resources\02. Mesh\03. NaviMesh\00. Cell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\NaviLine.h">
+      <Filter>00. Resources\02. Mesh\03. NaviMesh\01. Line</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

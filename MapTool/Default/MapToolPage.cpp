@@ -34,14 +34,22 @@ void CMapToolPage::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT2, m_valueX);
 	DDX_Text(pDX, IDC_EDIT3, m_valueY);
 	DDX_Text(pDX, IDC_EDIT4, m_valueZ);
+	DDX_Control(pDX, IDC_EDIT2, m_editCtrlX);
+	DDX_Control(pDX, IDC_EDIT3, m_editCtrlY);
+	DDX_Control(pDX, IDC_EDIT4, m_editCtrlZ);
 }
 
 
 BEGIN_MESSAGE_MAP(CMapToolPage, CPropertyPage)
-	ON_BN_CLICKED(IDC_RADIO1, &CMapToolPage::OnBnClickedRadio1)
-	ON_BN_CLICKED(IDC_RADIO2, &CMapToolPage::OnBnClickedRadio2)
-	ON_NOTIFY(TVN_SELCHANGED, IDC_TREE1, &CMapToolPage::OnTvnSelchangedTree1)
-	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN3, &CMapToolPage::OnDeltaposSpin3)
+	ON_BN_CLICKED(IDC_RADIO1, &CMapToolPage::OnClickedTerrainPicking)
+	ON_BN_CLICKED(IDC_RADIO2, &CMapToolPage::OnClickedVertexPicking)
+	ON_NOTIFY(TVN_SELCHANGED, IDC_TREE1, &CMapToolPage::OnSelectedTreeControl)
+	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN3, &CMapToolPage::OnDeltaPosX)
+	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN4, &CMapToolPage::OnDeltaPosY)
+	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN5, &CMapToolPage::OnDeltaPosZ)
+	ON_EN_CHANGE(IDC_EDIT2, &CMapToolPage::OnChangeEditX)
+	ON_EN_CHANGE(IDC_EDIT3, &CMapToolPage::OnChangeEditY)
+	ON_EN_CHANGE(IDC_EDIT4, &CMapToolPage::OnChangeEditZ)
 END_MESSAGE_MAP()
 
 
@@ -53,7 +61,7 @@ void CMapToolPage::ChangeType()
 	dynamic_cast<CDynamicCamera*>(Engine::GetCurScene()->GetLayer(L"Environment")->GetGameObject(L"DynamicCamera"))->SetPickType(m_mode);
 }
 
-void CMapToolPage::AddItem(int index)
+void CMapToolPage::AddItem(const _int& index)
 {
 	HTREEITEM root;
 
@@ -76,6 +84,19 @@ void CMapToolPage::AddItem(int index)
 	child3 = m_treeCtrl.InsertItem(L"_2", index, 2, root, TVI_LAST);
 }
 
+void CMapToolPage::ChangeValue(const _int & cellIndex, const _int & vertexIndex, const _float & value, const _int & xyz)
+{
+	_vec3* pos = CNaviMesh::GetInstance()->GetPos(cellIndex, vertexIndex);
+	if (nullptr == pos) return;
+
+	switch (xyz)
+	{
+	case 0: pos->x = value; break;
+	case 1: pos->y = value; break;
+	case 2: pos->z = value; break;
+	}
+}
+
 BOOL CMapToolPage::OnInitDialog()
 {
 	CPropertyPage::OnInitDialog();
@@ -87,7 +108,7 @@ BOOL CMapToolPage::OnInitDialog()
 }
 
 
-void CMapToolPage::OnBnClickedRadio1()
+void CMapToolPage::OnClickedTerrainPicking()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	UpdateData(TRUE);
@@ -98,7 +119,7 @@ void CMapToolPage::OnBnClickedRadio1()
 }
 
 
-void CMapToolPage::OnBnClickedRadio2()
+void CMapToolPage::OnClickedVertexPicking()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	UpdateData(TRUE);
@@ -109,7 +130,7 @@ void CMapToolPage::OnBnClickedRadio2()
 }
 
 
-void CMapToolPage::OnTvnSelchangedTree1(NMHDR *pNMHDR, LRESULT *pResult)
+void CMapToolPage::OnSelectedTreeControl(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
@@ -142,17 +163,106 @@ void CMapToolPage::OnTvnSelchangedTree1(NMHDR *pNMHDR, LRESULT *pResult)
 }
 
 
-void CMapToolPage::OnDeltaposSpin3(NMHDR *pNMHDR, LRESULT *pResult)
+void CMapToolPage::OnDeltaPosX(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	UpdateData(TRUE);
 
-	_float value = pNMUpDown->iPos + pNMUpDown->iDelta;
+	_float value = 0.1f * pNMUpDown->iDelta;
 
-	m_valueX += value;
+	m_valueX -= value;
+
+	ChangeValue(m_naviIndex, m_vertexIndex, m_valueX, 0);
 
 	UpdateData(FALSE);
 
 	*pResult = 0;
+}
+
+
+void CMapToolPage::OnDeltaPosY(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);
+
+	_float value = 0.1f * pNMUpDown->iDelta;
+
+	m_valueY -= value;
+
+	ChangeValue(m_naviIndex, m_vertexIndex, m_valueY, 1);
+
+	UpdateData(FALSE);
+
+	*pResult = 0;
+}
+
+
+void CMapToolPage::OnDeltaPosZ(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);
+
+	_float value = 0.1f * pNMUpDown->iDelta;
+
+	m_valueZ -= value;
+
+	ChangeValue(m_naviIndex, m_vertexIndex, m_valueZ, 2);
+
+	UpdateData(FALSE);
+
+	*pResult = 0;
+}
+
+
+void CMapToolPage::OnChangeEditX()
+{
+	UpdateData(TRUE);
+
+	CString str;
+
+	m_editCtrlX.GetWindowTextW(str);
+	_float value = _tstof(str);
+
+	m_valueX = value;
+
+	ChangeValue(m_naviIndex, m_vertexIndex, m_valueX, 0);
+
+	UpdateData(FALSE);
+}
+
+
+void CMapToolPage::OnChangeEditY()
+{
+	UpdateData(TRUE);
+
+	CString str;
+
+	m_editCtrlY.GetWindowTextW(str);
+	_float value = _tstof(str);
+
+	m_valueY = value;
+
+	ChangeValue(m_naviIndex, m_vertexIndex, m_valueY, 1);
+
+	UpdateData(FALSE);
+}
+
+
+void CMapToolPage::OnChangeEditZ()
+{
+	UpdateData(TRUE);
+
+	CString str;
+
+	m_editCtrlZ.GetWindowTextW(str);
+	_float value = _tstof(str);
+
+	m_valueZ = value;
+
+	ChangeValue(m_naviIndex, m_vertexIndex, m_valueZ, 2);
+
+	UpdateData(FALSE);
 }

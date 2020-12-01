@@ -35,6 +35,7 @@ private:
 
 	void TerrainPicking();
 	void NaviColliderPicking();
+	_bool IsCollideToSphere(const _vec3& rayPos, const _vec3& rayDir, const _vec3& centerPos, const _float& radius);
 
 public:
 	static CDynamicCamera* Create(LPDIRECT3DDEVICE9 device, 
@@ -54,6 +55,8 @@ private:
 	_vec3 m_rayDir = { 0.f, 0.f, 0.f };
 
 	_int m_pickType = 0;
+
+	_float m_speed = 20.f;
 
 	CMainFrame* m_mainFrame;
 	CMainView* m_toolView;
