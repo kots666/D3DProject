@@ -175,12 +175,19 @@ void CDynamicCamera::FixMouse()
 
 void CDynamicCamera::MousePicking()
 {
-	//CalcRay();
+	POINT mouse{ 0 };
 
-	switch (m_pickType)
+	GetCursorPos(&mouse);
+	ScreenToClient(m_hWnd, &mouse);
+
+	if (0 < mouse.x && mouse.x < WINCX && 0 < mouse.y && mouse.y < WINCY)
 	{
-	case 0: TerrainPicking(); break;
-	case 1: NaviColliderPicking(); break;
+		CalcRay();
+		switch (m_pickType)
+		{
+		case 0: TerrainPicking(); break;
+		case 1: NaviColliderPicking(); break;
+		}
 	}
 }
 
@@ -225,58 +232,20 @@ void CDynamicCamera::CalcRay()
 	D3DXVec3TransformCoord(&rayPos, &rayPos, &matView);
 	D3DXVec3TransformNormal(&rayDir, &rayDir, &matView);
 
+	m_rayPos = rayPos;
 	m_rayDir = rayDir;
 }
 
 void CDynamicCamera::TerrainPicking()
 {
-	POINT mouse{ 0 };
-
-	GetCursorPos(&mouse);
-	ScreenToClient(m_hWnd, &mouse);
-
-	_vec3 mousePos;
-
-	D3DVIEWPORT9 viewPort;
-	ZeroMemory(&viewPort, sizeof(D3DVIEWPORT9));
-	m_device->GetViewport(&viewPort);
-
-	// 뷰포트 -> 투영
-
-	mousePos.x = (mouse.x / (viewPort.Width * 0.5f)) - 1.f;
-	mousePos.y = (mouse.y / -(viewPort.Height * 0.5f)) + 1.f;
-	mousePos.z = 0.f;
-
-	// L * W * V * P * (P^-1)
-	// L * W * V
-
-	// 투영 -> 뷰 스페이스
-	_matrix	matProj;
-	m_device->GetTransform(D3DTS_PROJECTION, &matProj);
-	D3DXMatrixInverse(&matProj, NULL, &matProj);
-	D3DXVec3TransformCoord(&mousePos, &mousePos, &matProj);
-
-	// 뷰 스페이스 -> 월드
-	_matrix	matView;
-	m_device->GetTransform(D3DTS_VIEW, &matView);
-	D3DXMatrixInverse(&matView, NULL, &matView);
-
-	_vec3 rayPos, rayDir;
-
-	rayPos = _vec3(0.f, 0.f, 0.f);
-	rayDir = mousePos - rayPos;
-
-	D3DXVec3TransformCoord(&rayPos, &rayPos, &matView);
-	D3DXVec3TransformNormal(&rayDir, &rayDir, &matView);
+	_vec3 rayPos = m_rayPos;
+	_vec3 rayDir = m_rayDir;
 
 	Engine::CTransform* terrainTransCom = dynamic_cast<CTransform*>(Engine::GetComponent(L"Environment", L"Terrain", L"Com_Transform", Engine::ID_DYNAMIC));
 	NULL_CHECK(terrainTransCom);
 
 	Engine::CTerrainTex* terrainBufferCom = dynamic_cast<Engine::CTerrainTex*>(Engine::GetComponent(L"Environment", L"Terrain", L"Com_Buffer", Engine::ID_STATIC));
 	NULL_CHECK(terrainBufferCom);
-
-	//_vec3 rayPos = m_eye;
-	//_vec3 rayDir = m_rayDir;
 
 	// 월드 -> 로컬
 	_matrix	matWorld, invWorld;
@@ -348,6 +317,7 @@ void CDynamicCamera::TerrainPicking()
 
 void CDynamicCamera::NaviColliderPicking()
 {
+
 }
 
 CDynamicCamera * CDynamicCamera::Create(LPDIRECT3DDEVICE9 device, const _vec3 * eye, const _vec3 * at, const _vec3 * up, const _float & fovY, const _float & aspect, const _float & nearZ, const _float & farZ)

@@ -17,6 +17,7 @@ public:
 
 public:
 	void AddPos(_vec3 pos);
+	_vec3* GetPos(const _int& cellIndex, const _int& vertexIndex);
 
 private:
 	void Release();
@@ -25,6 +26,7 @@ private:
 	vector<CNaviCell*> m_cellList;
 	_vec3 m_tmpPos[3];
 	_int m_count;
+	_int m_indexCount;
 	LPDIRECT3DDEVICE9 m_device;
 };
 

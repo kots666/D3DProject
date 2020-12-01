@@ -247,9 +247,11 @@ BEGIN
     EDITTEXT        IDC_EDIT2,98,11,82,12,ES_AUTOHSCROLL
     EDITTEXT        IDC_EDIT3,98,29,82,12,ES_AUTOHSCROLL
     EDITTEXT        IDC_EDIT4,98,46,82,12,ES_AUTOHSCROLL
-    CONTROL         "",IDC_SPIN3,"msctls_updown32",UDS_ARROWKEYS,182,11,11,12
-    CONTROL         "",IDC_SPIN4,"msctls_updown32",UDS_ARROWKEYS,182,29,11,12
-    CONTROL         "",IDC_SPIN5,"msctls_updown32",UDS_ARROWKEYS,182,46,11,12
+    CONTROL         "",IDC_SPIN3,"msctls_updown32",UDS_AUTOBUDDY | UDS_ARROWKEYS,182,11,11,12
+    CONTROL         "",IDC_SPIN4,"msctls_updown32",UDS_AUTOBUDDY | UDS_ARROWKEYS,182,29,11,12
+    CONTROL         "",IDC_SPIN5,"msctls_updown32",UDS_AUTOBUDDY | UDS_ARROWKEYS,182,46,11,12
+    CONTROL         "Terrain Picking",IDC_RADIO1,"Button",BS_AUTORADIOBUTTON | WS_GROUP,6,90,61,10
+    CONTROL         "Vertex Picking",IDC_RADIO2,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,78,90,61,10
 END
 
 IDD_MAINVIEW DIALOG 0, 0, 320, 200
@@ -308,57 +310,6 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// DESIGNINFO
-//
-
-#ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO
-BEGIN
-    IDD_ABOUTBOX, DIALOG
-    BEGIN
-        , 50
-    END
-
-    IDD_MYFORMVIEW, DIALOG
-    BEGIN
-        , 50
-    END
-
-    IDD_UNITTOOL, DIALOG
-    BEGIN
-        , 50
-    END
-
-    IDD_MAPTOOL, DIALOG
-    BEGIN
-        , 50
-    END
-
-    IDD_MAPTOOLPAGE, DIALOG
-    BEGIN
-    END
-
-    IDD_MAINVIEW, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 313
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 193
-    END
-
-    IDD_SHEETVIEW, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 313
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 193
-    END
-END
-#endif    // APSTUDIO_INVOKED
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
 // AFX_DIALOG_LAYOUT
 //
 
@@ -381,6 +332,21 @@ IDD_MAPTOOLPAGE AFX_DIALOG_LAYOUT
 BEGIN
     0
 END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_MAPTOOLPAGE, DIALOG
+    BEGIN
+    END
+END
+#endif    // APSTUDIO_INVOKED
 
 
 /////////////////////////////////////////////////////////////////////////////

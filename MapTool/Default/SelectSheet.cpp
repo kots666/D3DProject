@@ -12,7 +12,8 @@ IMPLEMENT_DYNAMIC(CSelectSheet, CPropertySheet)
 
 CSelectSheet::CSelectSheet()
 {
-	AddPage(&m_mapToolPage);
+	m_mapToolPage = new CMapToolPage;
+	AddPage(m_mapToolPage);
 }
 
 CSelectSheet::CSelectSheet(UINT nIDCaption, CWnd* pParentWnd, UINT iSelectPage)
@@ -29,6 +30,11 @@ CSelectSheet::CSelectSheet(LPCTSTR pszCaption, CWnd* pParentWnd, UINT iSelectPag
 
 CSelectSheet::~CSelectSheet()
 {
+	if (nullptr != m_mapToolPage)
+	{
+		delete m_mapToolPage;
+		m_mapToolPage = nullptr;
+	}
 }
 
 

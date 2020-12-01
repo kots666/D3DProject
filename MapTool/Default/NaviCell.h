@@ -19,6 +19,9 @@ public:
 	virtual _int Update(const _float& deltaTime) override;
 	virtual void Render();
 
+public:
+	_vec3* GetPos(const _int& vertexIndex);
+
 private:
 	HRESULT AddComponent();
 

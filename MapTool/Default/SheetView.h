@@ -1,6 +1,6 @@
 #pragma once
 
-class CSelectSheet;
+#include "SelectSheet.h"
 
 // CSheetView Æû ºäÀÔ´Ï´Ù.
 

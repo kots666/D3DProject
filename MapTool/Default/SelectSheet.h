@@ -14,8 +14,8 @@ public:
 	CSelectSheet(LPCTSTR pszCaption, CWnd* pParentWnd = NULL, UINT iSelectPage = 0);
 	virtual ~CSelectSheet();
 
-private:
-	CMapToolPage m_mapToolPage;
+public:
+	CMapToolPage* m_mapToolPage;
 
 protected:
 	DECLARE_MESSAGE_MAP()

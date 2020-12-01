@@ -50,8 +50,8 @@ private:
 	_bool m_canClick = false;
 	_bool m_isFix = true;
 	
+	_vec3 m_rayPos = { 0.f, 0.f, 0.f };
 	_vec3 m_rayDir = { 0.f, 0.f, 0.f };
-	_float m_rayDist = 0.f;
 
 	_int m_pickType = 0;
 

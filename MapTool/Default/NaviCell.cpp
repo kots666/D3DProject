@@ -67,6 +67,13 @@ void CNaviCell::Render()
 	m_device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 }
 
+_vec3 * CNaviCell::GetPos(const _int & vertexIndex)
+{
+	if (0 > vertexIndex || vertexIndex > 2) return nullptr;
+
+	return &m_pos[vertexIndex];
+}
+
 HRESULT CNaviCell::AddComponent()
 {
 	Engine::CComponent* component = nullptr;
