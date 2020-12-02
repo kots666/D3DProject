@@ -19,13 +19,17 @@ public:
 #endif
 
 public:
-	void ChangeType();
+	void ChangePickingModeType();
+	void ChangeTransModeType();
 	void AddItem(const _int& index);
 	void ChangeValue(const _int& cellIndex, const _int& vertexIndex, const _float& value, const _int& xyz);
+	void ChangeEditValue(const _float& valueX, const _float& valueY, const _float& valueZ);
+	void SelectPickedVertex(const _int& cellIndex, const _int& vertexIndex);
 
 public:
 	CTreeCtrl m_treeCtrl;
-	_int m_mode;
+	_int m_pickingMode;
+	_int m_transMode;
 	_int m_naviIndex;
 	_int m_vertexIndex;
 
@@ -55,4 +59,7 @@ public:
 	afx_msg void OnChangeEditX();
 	afx_msg void OnChangeEditY();
 	afx_msg void OnChangeEditZ();
+	
+	afx_msg void OnClickedTogetherMode();
+	afx_msg void OnClickedSoloMode();
 };

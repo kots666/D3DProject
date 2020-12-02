@@ -21,6 +21,7 @@ public:
 
 public:
 	void SetPickType(_int type) { m_pickType = type; }
+	void SetTransType(_int type) { m_transType = type; }
 
 public:
 	const _int GetPickType() const { return m_pickType; }
@@ -34,6 +35,7 @@ private:
 	void CalcRay();
 
 	void TerrainPicking();
+	void FindNearlyPoint(_vec3* outPos);
 	void NaviColliderPicking();
 	_bool IsCollideToSphere(const _vec3& rayPos, const _vec3& rayDir, const _vec3& centerPos, const _float& radius);
 
@@ -55,6 +57,7 @@ private:
 	_vec3 m_rayDir = { 0.f, 0.f, 0.f };
 
 	_int m_pickType = 0;
+	_int m_transType = 0;
 
 	_float m_speed = 20.f;
 

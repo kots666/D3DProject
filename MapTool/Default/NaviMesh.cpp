@@ -77,6 +77,20 @@ _vec3 * CNaviMesh::GetPos(const _int & cellIndex, const _int & vertexIndex)
 	return m_cellList[cellIndex]->GetPos(vertexIndex);
 }
 
+void CNaviMesh::ResetSelected()
+{
+	for (auto cell : m_cellList)
+	{
+		for (_int i = 0; i < 3; ++i)
+			cell->SetSelected(i, false);
+	}
+}
+
+void CNaviMesh::SetIsSelected(const _int & cellIndex, const _int & vertexIndex, const _bool & isSelected)
+{
+	m_cellList[cellIndex]->SetSelected(vertexIndex, isSelected);
+}
+
 void CNaviMesh::Release()
 {
 	for (auto& elem : m_cellList)

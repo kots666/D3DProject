@@ -6,6 +6,8 @@
 #include "Terrain.h"
 #include "NaviMesh.h"
 #include "NaviCell.h"
+#include "SheetView.h"
+
 
 CDynamicCamera::CDynamicCamera(LPDIRECT3DDEVICE9 device) :
 	Engine::CCamera(device)
@@ -307,34 +309,76 @@ void CDynamicCamera::TerrainPicking()
 					pickPos = terrainVtxPos[vtxIdx[0]] + uValue * (terrainVtxPos[vtxIdx[1]] - terrainVtxPos[vtxIdx[0]]) + vValue * (terrainVtxPos[vtxIdx[2]] - terrainVtxPos[vtxIdx[0]]);
 				}
 			}
-
 		}
 	}
 
 	D3DXVec3TransformCoord(&pickPos, &pickPos, &matWorld);
 
+	if (0 == m_transType) FindNearlyPoint(&pickPos);
+
 	CNaviMesh::GetInstance()->AddPos(pickPos);
+}
+
+void CDynamicCamera::FindNearlyPoint(_vec3 * outPos)
+{
+	_vec3 pos = *outPos;
+	_vec3 minPos;
+	_float min = 9999.f;
+	_bool isCollide = false;
+
+	vector<CNaviCell*>* cellVec = CNaviMesh::GetInstance()->GetCellList();
+
+	for (auto cell : *cellVec)
+	{
+		_vec3* vertices = cell->GetAllPos();
+
+		for (_int i = 0; i < 3; ++i)
+		{
+			_float dist = D3DXVec3Length(&(pos - vertices[i]));
+
+			if (2.f >= dist)
+			{
+				if (min > dist)
+				{
+					minPos = vertices[i];
+					min = dist;
+					isCollide = true;
+				}
+			}
+		}
+	}
+	if (isCollide)
+		*outPos = minPos;
 }
 
 void CDynamicCamera::NaviColliderPicking()
 {
 	vector<CNaviCell*>* cellList = CNaviMesh::GetInstance()->GetCellList();
+	_int size = cellList->size();
 
-	for (auto cell : *cellList)
+	for (_int i = 0; i < size; ++i)
 	{
-		_vec3* pos = cell->GetAllPos();
-
-		for (_int i = 0; i < 3; ++i)
+		_vec3* pos = (*cellList)[i]->GetAllPos();
+		for (_int j = 0; j < 3; ++j)
 		{
-			if (IsCollideToSphere(m_rayPos, m_rayDir, pos[i], 0.5f))
+			if (IsCollideToSphere(m_rayPos, m_rayDir, pos[j], 0.2f))
 			{
 				// 처음 만난 애
-				int i = 0;
+				CMainFrame* main = dynamic_cast<CMainFrame*>(AfxGetMainWnd());
+				if (nullptr == main) return;
 
-				break;
+				CSheetView* selectView = dynamic_cast<CSheetView*>(main->m_mainSplitter.GetPane(0, 0));
+				if (nullptr == selectView) return;
+
+				selectView->m_selectSheet->m_mapToolPage->SelectPickedVertex(i, j);
+
+				goto skip;
 			}
 		}
 	}
+
+skip:
+	return;
 }
 
 _bool CDynamicCamera::IsCollideToSphere(const _vec3 & rayPos, const _vec3 & rayDir, const _vec3 & centerPos, const _float & radius)

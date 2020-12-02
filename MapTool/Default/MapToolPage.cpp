@@ -7,6 +7,7 @@
 #include "afxdialogex.h"
 #include "DynamicCamera.h"
 #include "NaviMesh.h"
+#include "NaviCell.h"
 
 // CMapToolPage 대화 상자입니다.
 
@@ -14,10 +15,11 @@ IMPLEMENT_DYNAMIC(CMapToolPage, CPropertyPage)
 
 CMapToolPage::CMapToolPage()
 	: CPropertyPage(IDD_MAPTOOLPAGE)
-	, m_mode(0)
+	, m_pickingMode(0)
 	, m_valueX(0)
 	, m_valueY(0)
 	, m_valueZ(0)
+	, m_transMode(0)
 {
 
 }
@@ -30,13 +32,14 @@ void CMapToolPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_TREE1, m_treeCtrl);
-	DDX_Radio(pDX, IDC_RADIO1, m_mode);
+	DDX_Radio(pDX, IDC_RADIO1, m_pickingMode);
 	DDX_Text(pDX, IDC_EDIT2, m_valueX);
 	DDX_Text(pDX, IDC_EDIT3, m_valueY);
 	DDX_Text(pDX, IDC_EDIT4, m_valueZ);
 	DDX_Control(pDX, IDC_EDIT2, m_editCtrlX);
 	DDX_Control(pDX, IDC_EDIT3, m_editCtrlY);
 	DDX_Control(pDX, IDC_EDIT4, m_editCtrlZ);
+	DDX_Radio(pDX, IDC_RADIO3, m_transMode);
 }
 
 
@@ -50,15 +53,22 @@ BEGIN_MESSAGE_MAP(CMapToolPage, CPropertyPage)
 	ON_EN_CHANGE(IDC_EDIT2, &CMapToolPage::OnChangeEditX)
 	ON_EN_CHANGE(IDC_EDIT3, &CMapToolPage::OnChangeEditY)
 	ON_EN_CHANGE(IDC_EDIT4, &CMapToolPage::OnChangeEditZ)
+	ON_BN_CLICKED(IDC_RADIO3, &CMapToolPage::OnClickedTogetherMode)
+	ON_BN_CLICKED(IDC_RADIO4, &CMapToolPage::OnClickedSoloMode)
 END_MESSAGE_MAP()
 
 
 // CMapToolPage 메시지 처리기입니다.
 
 
-void CMapToolPage::ChangeType()
+void CMapToolPage::ChangePickingModeType()
 {
-	dynamic_cast<CDynamicCamera*>(Engine::GetCurScene()->GetLayer(L"Environment")->GetGameObject(L"DynamicCamera"))->SetPickType(m_mode);
+	dynamic_cast<CDynamicCamera*>(Engine::GetCurScene()->GetLayer(L"Environment")->GetGameObject(L"DynamicCamera"))->SetPickType(m_pickingMode);
+}
+
+void CMapToolPage::ChangeTransModeType()
+{
+	dynamic_cast<CDynamicCamera*>(Engine::GetCurScene()->GetLayer(L"Environment")->GetGameObject(L"DynamicCamera"))->SetTransType(m_transMode);
 }
 
 void CMapToolPage::AddItem(const _int& index)
@@ -97,6 +107,28 @@ void CMapToolPage::ChangeValue(const _int & cellIndex, const _int & vertexIndex,
 	}
 }
 
+void CMapToolPage::ChangeEditValue(const _float & valueX, const _float & valueY, const _float & valueZ)
+{
+	m_valueX = valueX;
+	m_valueY = valueY;
+	m_valueZ = valueZ;
+}
+
+void CMapToolPage::SelectPickedVertex(const _int & cellIndex, const _int & vertexIndex)
+{
+	UpdateData(TRUE);
+
+	const _vec3* pos = CNaviMesh::GetInstance()->GetPos(cellIndex, vertexIndex);
+	if (nullptr == pos) return;
+
+	ChangeEditValue(pos->x, pos->y, pos->z);
+
+	CNaviMesh::GetInstance()->ResetSelected();
+	CNaviMesh::GetInstance()->SetIsSelected(cellIndex, vertexIndex, true);
+
+	UpdateData(FALSE);
+}
+
 BOOL CMapToolPage::OnInitDialog()
 {
 	CPropertyPage::OnInitDialog();
@@ -110,23 +142,15 @@ BOOL CMapToolPage::OnInitDialog()
 
 void CMapToolPage::OnClickedTerrainPicking()
 {
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	UpdateData(TRUE);
-
-	m_mode = 0;
-
-	ChangeType();
+	m_pickingMode = 0;
+	ChangePickingModeType();
 }
 
 
 void CMapToolPage::OnClickedVertexPicking()
 {
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	UpdateData(TRUE);
-
-	m_mode = 1;
-
-	ChangeType();
+	m_pickingMode = 1;
+	ChangePickingModeType();
 }
 
 
@@ -152,9 +176,9 @@ void CMapToolPage::OnSelectedTreeControl(NMHDR *pNMHDR, LRESULT *pResult)
 
 	if (nullptr != pos)
 	{
-		m_valueX = pos->x;
-		m_valueY = pos->y;
-		m_valueZ = pos->z;
+		CNaviMesh::GetInstance()->ResetSelected();
+		CNaviMesh::GetInstance()->SetIsSelected(m_naviIndex, m_vertexIndex, true);
+		ChangeEditValue(pos->x, pos->y, pos->z);
 	}
 
 	UpdateData(FALSE);
@@ -189,9 +213,26 @@ void CMapToolPage::OnDeltaPosY(NMHDR *pNMHDR, LRESULT *pResult)
 
 	_float value = 0.1f * pNMUpDown->iDelta;
 
-	m_valueY -= value;
+	if (0 == m_transMode)
+	{
+		vector<CNaviCell*>* cellVec = CNaviMesh::GetInstance()->GetCellList();
 
-	ChangeValue(m_naviIndex, m_vertexIndex, m_valueY, 1);
+		for (auto cell : *cellVec)
+		{
+			_vec3* verPos = cell->GetAllPos();
+
+			for (_int i = 0; i < 3; ++i)
+			{
+				
+			}
+		}
+	}
+	else
+	{
+		m_valueY -= value;
+
+		ChangeValue(m_naviIndex, m_vertexIndex, m_valueY, 1);
+	}
 
 	UpdateData(FALSE);
 
@@ -264,5 +305,19 @@ void CMapToolPage::OnChangeEditZ()
 
 	ChangeValue(m_naviIndex, m_vertexIndex, m_valueZ, 2);
 
+	UpdateData(FALSE);
+}
+
+
+void CMapToolPage::OnClickedTogetherMode()
+{
+	m_transMode = 0;
+	UpdateData(FALSE);
+}
+
+
+void CMapToolPage::OnClickedSoloMode()
+{
+	m_transMode = 1;
 	UpdateData(FALSE);
 }

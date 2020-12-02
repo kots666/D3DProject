@@ -17,8 +17,14 @@ public:
 
 public:
 	void AddPos(_vec3 pos);
+	
+public:
 	_vec3* GetPos(const _int& cellIndex, const _int& vertexIndex);
 	vector<CNaviCell*>* GetCellList() { return &m_cellList; }
+
+public:
+	void ResetSelected();
+	void SetIsSelected(const _int& cellIndex, const _int& vertexIndex, const _bool& isSelected);
 
 private:
 	void Release();

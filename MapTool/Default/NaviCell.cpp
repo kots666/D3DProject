@@ -9,6 +9,12 @@ CNaviCell::CNaviCell(LPDIRECT3DDEVICE9 device, _vec3 pos1, _vec3 pos2, _vec3 pos
 	m_pos[1] = pos2;
 	m_pos[2] = pos3;
 
+	for (_int i = 0; i < 3; ++i)
+	{
+		m_isSelected[i] = false;
+		D3DXCreateSphere(m_device, 0.2f, 8, 8, &m_sphere[i], nullptr);
+	}
+
 	m_line = Engine::CGraphicDevice::GetInstance()->GetLine();
 	SafeAddRef(m_line);
 }
@@ -45,6 +51,33 @@ void CNaviCell::Render()
 {
 	m_device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
+	for (_int i = 0; i < 3; ++i)
+	{
+		D3DMATERIAL9 mtrl;
+		ZeroMemory(&mtrl, sizeof(D3DMATERIAL9));
+		D3DXCOLOR color;
+		if (m_isSelected[i])
+			color = D3DXCOLOR(0.f, 1.f, 0.f, 1.f);
+		else
+			color = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+		mtrl.Ambient = color;
+		mtrl.Diffuse = color;
+		mtrl.Specular = color;
+		mtrl.Emissive = D3DXCOLOR(0.f, 0.f, 0.f, 1.f);
+		mtrl.Power = 0;
+
+		_matrix matWorld;
+		D3DXMatrixIdentity(&matWorld);
+
+		memcpy(&matWorld.m[3], &m_pos[i], sizeof(_vec3));
+
+		m_device->SetTexture(0, nullptr);
+		m_device->SetMaterial(&mtrl);
+		m_device->SetTransform(D3DTS_WORLD, &matWorld);
+
+		m_sphere[i]->DrawSubset(0);
+	}
+
 	_vec3 vertices[] =
 	{
 	m_pos[0],
@@ -57,11 +90,21 @@ void CNaviCell::Render()
 	m_device->GetTransform(D3DTS_VIEW, &viewMat);
 	m_device->GetTransform(D3DTS_PROJECTION, &projMat);
 
-	viewMat *= projMat;
+	for (_ulong i = 0; i < 4; ++i)
+	{
+		D3DXVec3TransformCoord(&vertices[i], &vertices[i], &viewMat);
 
-	m_line->SetWidth(5.f);
+		if (vertices[i].z <= 0.1f)
+			vertices[i].z = 0.1f;
+
+		D3DXVec3TransformCoord(&vertices[i], &vertices[i], &projMat);
+	}
+
+	_matrix matTmp;
+
+	m_line->SetWidth(4.f);
 	m_line->Begin();
-	m_line->DrawTransform(vertices, 4, &viewMat, D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
+	m_line->DrawTransform(vertices, 4, D3DXMatrixIdentity(&matTmp), D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
 	m_line->End();
 
 	m_device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
