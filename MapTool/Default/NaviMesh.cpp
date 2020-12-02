@@ -46,13 +46,15 @@ void CNaviMesh::Render()
 	}
 }
 
-void CNaviMesh::AddPos(_vec3 pos)
+void CNaviMesh::AddPos(const _vec3& pos)
 {
 	m_tmpPos[m_count++] = pos;
 
 	if (m_count >= 3)
 	{
 		m_count = 0;
+
+		if (0 <= CheckCCW(m_tmpPos)) return;
 
 		m_cellList.emplace_back(CNaviCell::Create(m_device, m_tmpPos[0], m_tmpPos[1], m_tmpPos[2]));
 
@@ -65,9 +67,32 @@ void CNaviMesh::AddPos(_vec3 pos)
 		selectView->m_selectSheet->m_mapToolPage->AddItem(m_indexCount);
 
 		++m_indexCount;
-
-		//CMapToolPage::GetActiveWindow()->Get AddItem()
 	}
+}
+
+void CNaviMesh::DeleteCell(const _int & index)
+{
+	--m_indexCount;
+	m_cellList[index]->Release();
+
+	m_cellList.erase(m_cellList.begin() + index);
+}
+
+void CNaviMesh::DeleteAllCell()
+{
+	for (auto& elem : m_cellList)
+	{
+		if (nullptr != elem)
+		{
+			elem->Release();
+		}
+	}
+
+	m_cellList.clear();
+	m_cellList.shrink_to_fit();
+
+	m_count = 0;
+	m_indexCount = 0;
 }
 
 _vec3 * CNaviMesh::GetPos(const _int & cellIndex, const _int & vertexIndex)
@@ -91,18 +116,20 @@ void CNaviMesh::SetIsSelected(const _int & cellIndex, const _int & vertexIndex, 
 	m_cellList[cellIndex]->SetSelected(vertexIndex, isSelected);
 }
 
+_int CNaviMesh::CheckCCW(const _vec3 * posArray)
+{
+	_int tmpSum = posArray[0].x * posArray[1].z + posArray[1].x * posArray[2].z + posArray[2].x * posArray[0].z;
+
+	tmpSum = tmpSum - posArray[0].z * posArray[1].x - posArray[1].z * posArray[2].x - posArray[2].z * posArray[0].x;
+
+	if (0 < tmpSum) return 1;
+	else if (0 > tmpSum) return -1;
+	else return 0;
+}
+
 void CNaviMesh::Release()
 {
-	for (auto& elem : m_cellList)
-	{
-		if (nullptr != elem)
-		{
-			elem->Release();
-		}
-	}
-
-	m_cellList.clear();
-	m_cellList.shrink_to_fit();
+	DeleteAllCell();
 
 	SafeRelease(m_device);
 }

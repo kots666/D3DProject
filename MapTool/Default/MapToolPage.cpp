@@ -55,6 +55,9 @@ BEGIN_MESSAGE_MAP(CMapToolPage, CPropertyPage)
 	ON_EN_CHANGE(IDC_EDIT4, &CMapToolPage::OnChangeEditZ)
 	ON_BN_CLICKED(IDC_RADIO3, &CMapToolPage::OnClickedTogetherMode)
 	ON_BN_CLICKED(IDC_RADIO4, &CMapToolPage::OnClickedSoloMode)
+	ON_BN_CLICKED(IDC_BUTTON1, &CMapToolPage::OnClickedDelete)
+	ON_BN_CLICKED(IDC_BUTTON2, &CMapToolPage::OnClickedSave)
+	ON_BN_CLICKED(IDC_BUTTON8, &CMapToolPage::OnClickedLoad)
 END_MESSAGE_MAP()
 
 
@@ -96,14 +99,47 @@ void CMapToolPage::AddItem(const _int& index)
 
 void CMapToolPage::ChangeValue(const _int & cellIndex, const _int & vertexIndex, const _float & value, const _int & xyz)
 {
-	_vec3* pos = CNaviMesh::GetInstance()->GetPos(cellIndex, vertexIndex);
-	if (nullptr == pos) return;
-
-	switch (xyz)
+	if (0 == m_transMode)
 	{
-	case 0: pos->x = value; break;
-	case 1: pos->y = value; break;
-	case 2: pos->z = value; break;
+		_vec3* pos = CNaviMesh::GetInstance()->GetPos(cellIndex, vertexIndex);
+		if (nullptr == pos) return;
+
+		_vec3 comparePos = *pos;
+		_vec3 toChangePos = comparePos;
+
+		switch (xyz)
+		{
+		case 0: toChangePos.x = value; break;
+		case 1: toChangePos.y = value; break;
+		case 2: toChangePos.z = value; break;
+		}
+
+		vector<CNaviCell*>* cellVec = CNaviMesh::GetInstance()->GetCellList();
+
+		for (auto cell : *cellVec)
+		{
+			_vec3* vertices = cell->GetAllPos();
+
+			for (_int i = 0; i < 3; ++i)
+			{
+				if (vertices[i] == comparePos)
+				{
+					vertices[i] = toChangePos;
+				}
+			}
+		}
+	}
+	else
+	{
+		_vec3* pos = CNaviMesh::GetInstance()->GetPos(cellIndex, vertexIndex);
+		if (nullptr == pos) return;
+
+		switch (xyz)
+		{
+		case 0: pos->x = value; break;
+		case 1: pos->y = value; break;
+		case 2: pos->z = value; break;
+		}
 	}
 }
 
@@ -122,6 +158,9 @@ void CMapToolPage::SelectPickedVertex(const _int & cellIndex, const _int & verte
 	if (nullptr == pos) return;
 
 	ChangeEditValue(pos->x, pos->y, pos->z);
+
+	m_cellIndex = cellIndex;
+	m_vertexIndex = vertexIndex;
 
 	CNaviMesh::GetInstance()->ResetSelected();
 	CNaviMesh::GetInstance()->SetIsSelected(cellIndex, vertexIndex, true);
@@ -170,14 +209,14 @@ void CMapToolPage::OnSelectedTreeControl(NMHDR *pNMHDR, LRESULT *pResult)
 	itemCur = pNMTreeView->itemNew.hItem;
 	itemParent = m_treeCtrl.GetParentItem(itemCur);
 
-	m_treeCtrl.GetItemImage(itemCur, m_naviIndex, m_vertexIndex);
+	m_treeCtrl.GetItemImage(itemCur, m_cellIndex, m_vertexIndex);
 
-	const _vec3* pos = CNaviMesh::GetInstance()->GetPos(m_naviIndex, m_vertexIndex);
+	const _vec3* pos = CNaviMesh::GetInstance()->GetPos(m_cellIndex, m_vertexIndex);
 
 	if (nullptr != pos)
 	{
 		CNaviMesh::GetInstance()->ResetSelected();
-		CNaviMesh::GetInstance()->SetIsSelected(m_naviIndex, m_vertexIndex, true);
+		CNaviMesh::GetInstance()->SetIsSelected(m_cellIndex, m_vertexIndex, true);
 		ChangeEditValue(pos->x, pos->y, pos->z);
 	}
 
@@ -197,7 +236,7 @@ void CMapToolPage::OnDeltaPosX(NMHDR *pNMHDR, LRESULT *pResult)
 
 	m_valueX -= value;
 
-	ChangeValue(m_naviIndex, m_vertexIndex, m_valueX, 0);
+	ChangeValue(m_cellIndex, m_vertexIndex, m_valueX, 0);
 
 	UpdateData(FALSE);
 
@@ -213,26 +252,9 @@ void CMapToolPage::OnDeltaPosY(NMHDR *pNMHDR, LRESULT *pResult)
 
 	_float value = 0.1f * pNMUpDown->iDelta;
 
-	if (0 == m_transMode)
-	{
-		vector<CNaviCell*>* cellVec = CNaviMesh::GetInstance()->GetCellList();
+	m_valueY -= value;
 
-		for (auto cell : *cellVec)
-		{
-			_vec3* verPos = cell->GetAllPos();
-
-			for (_int i = 0; i < 3; ++i)
-			{
-				
-			}
-		}
-	}
-	else
-	{
-		m_valueY -= value;
-
-		ChangeValue(m_naviIndex, m_vertexIndex, m_valueY, 1);
-	}
+	ChangeValue(m_cellIndex, m_vertexIndex, m_valueY, 1);
 
 	UpdateData(FALSE);
 
@@ -250,7 +272,7 @@ void CMapToolPage::OnDeltaPosZ(NMHDR *pNMHDR, LRESULT *pResult)
 
 	m_valueZ -= value;
 
-	ChangeValue(m_naviIndex, m_vertexIndex, m_valueZ, 2);
+	ChangeValue(m_cellIndex, m_vertexIndex, m_valueZ, 2);
 
 	UpdateData(FALSE);
 
@@ -269,7 +291,7 @@ void CMapToolPage::OnChangeEditX()
 
 	m_valueX = value;
 
-	ChangeValue(m_naviIndex, m_vertexIndex, m_valueX, 0);
+	ChangeValue(m_cellIndex, m_vertexIndex, m_valueX, 0);
 
 	UpdateData(FALSE);
 }
@@ -286,7 +308,7 @@ void CMapToolPage::OnChangeEditY()
 
 	m_valueY = value;
 
-	ChangeValue(m_naviIndex, m_vertexIndex, m_valueY, 1);
+	ChangeValue(m_cellIndex, m_vertexIndex, m_valueY, 1);
 
 	UpdateData(FALSE);
 }
@@ -303,7 +325,7 @@ void CMapToolPage::OnChangeEditZ()
 
 	m_valueZ = value;
 
-	ChangeValue(m_naviIndex, m_vertexIndex, m_valueZ, 2);
+	ChangeValue(m_cellIndex, m_vertexIndex, m_valueZ, 2);
 
 	UpdateData(FALSE);
 }
@@ -319,5 +341,132 @@ void CMapToolPage::OnClickedTogetherMode()
 void CMapToolPage::OnClickedSoloMode()
 {
 	m_transMode = 1;
+	UpdateData(FALSE);
+}
+
+
+void CMapToolPage::OnClickedDelete()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+
+	CNaviMesh::GetInstance()->DeleteCell(m_cellIndex);
+
+	HTREEITEM item = m_treeCtrl.GetSelectedItem();
+
+	m_treeCtrl.DeleteItem(item);
+
+	m_treeCtrl.DeleteAllItems();
+
+	vector<CNaviCell*>* cellVec = CNaviMesh::GetInstance()->GetCellList();
+
+	int index = 0;
+
+	for (auto& cell : *cellVec)
+	{
+		HTREEITEM root;
+
+		TCHAR rootName[5] = L"";
+
+		wsprintf(rootName, L"%d", index);
+
+		root = m_treeCtrl.InsertItem(rootName, index, 999, TVI_ROOT, TVI_LAST);
+
+		HTREEITEM child;
+
+		child = m_treeCtrl.InsertItem(L"_0", index, 0, root, TVI_LAST);
+
+		HTREEITEM child2;
+
+		child2 = m_treeCtrl.InsertItem(L"_1", index, 1, root, TVI_LAST);
+
+		HTREEITEM child3;
+
+		child3 = m_treeCtrl.InsertItem(L"_2", index, 2, root, TVI_LAST);
+
+		++index;
+	}
+}
+
+
+void CMapToolPage::OnClickedSave()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);
+
+	CFileDialog Dlg(FALSE, L"dat", L"*.dat", OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, L"Data File(*.dat) | *.dat||", this);
+	TCHAR szCurPath[MAX_PATH] = L"";
+	TCHAR szDataPath[MAX_PATH] = L"";
+	GetCurrentDirectory(MAX_PATH, szCurPath);
+	PathRemoveFileSpec(szCurPath);
+	PathCombine(szDataPath, szCurPath, L"Data");
+	Dlg.m_ofn.lpstrInitialDir = szDataPath;
+
+	if (IDOK == Dlg.DoModal())
+	{
+		CString strPath = Dlg.GetPathName();
+		HANDLE hFile = CreateFile(strPath.GetString(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+
+		if (INVALID_HANDLE_VALUE == hFile)
+			return;
+
+		DWORD dwByte = 0;
+
+		vector<CNaviCell*>* cellVec = CNaviMesh::GetInstance()->GetCellList();
+
+		for (auto& cell : *cellVec)
+		{
+			_vec3* posArr = cell->GetAllPos();
+
+			for (_int i = 0; i < 3; ++i)
+			{
+				WriteFile(hFile, &posArr[i], sizeof(_vec3), &dwByte, nullptr);
+			}
+		}
+
+		CloseHandle(hFile);
+	}
+}
+
+
+void CMapToolPage::OnClickedLoad()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);
+
+	CFileDialog Dlg(TRUE, L"dat", L"*.dat", OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, L"Data File(*.dat) | *.dat||", this);
+	TCHAR szCurPath[MAX_PATH] = L"";
+	TCHAR szDataPath[MAX_PATH] = L"";
+	GetCurrentDirectory(MAX_PATH, szCurPath);
+	PathRemoveFileSpec(szCurPath);
+	PathCombine(szDataPath, szCurPath, L"Data");
+	Dlg.m_ofn.lpstrInitialDir = szDataPath;
+
+	if (IDOK == Dlg.DoModal())
+	{
+		CString strPath = Dlg.GetPathName();
+		HANDLE hFile = CreateFile(strPath.GetString(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+
+		if (INVALID_HANDLE_VALUE == hFile)
+			return;
+
+		DWORD dwByte = 0;
+
+		CNaviMesh::GetInstance()->DeleteAllCell();
+		m_treeCtrl.DeleteAllItems();
+
+		while (true)
+		{
+			_vec3 pos[3];
+
+			for (_int i = 0; i < 3; ++i)
+			{
+				ReadFile(hFile, &pos[i], sizeof(_vec3), &dwByte, nullptr);
+				CNaviMesh::GetInstance()->AddPos(pos[i]);
+			}
+
+			if (0 == dwByte) break;
+		}
+		CloseHandle(hFile);
+	}
 	UpdateData(FALSE);
 }

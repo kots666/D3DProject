@@ -371,14 +371,9 @@ void CDynamicCamera::NaviColliderPicking()
 				if (nullptr == selectView) return;
 
 				selectView->m_selectSheet->m_mapToolPage->SelectPickedVertex(i, j);
-
-				goto skip;
 			}
 		}
 	}
-
-skip:
-	return;
 }
 
 _bool CDynamicCamera::IsCollideToSphere(const _vec3 & rayPos, const _vec3 & rayDir, const _vec3 & centerPos, const _float & radius)

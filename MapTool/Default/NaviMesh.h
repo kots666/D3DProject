@@ -16,7 +16,9 @@ public:
 	virtual void Render();
 
 public:
-	void AddPos(_vec3 pos);
+	void AddPos(const _vec3& pos);
+	void DeleteCell(const _int& index);
+	void DeleteAllCell();
 	
 public:
 	_vec3* GetPos(const _int& cellIndex, const _int& vertexIndex);
@@ -25,6 +27,9 @@ public:
 public:
 	void ResetSelected();
 	void SetIsSelected(const _int& cellIndex, const _int& vertexIndex, const _bool& isSelected);
+	
+public:
+	_int CheckCCW(const _vec3* posArray);
 
 private:
 	void Release();

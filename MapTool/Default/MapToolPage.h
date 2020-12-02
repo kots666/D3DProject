@@ -30,7 +30,7 @@ public:
 	CTreeCtrl m_treeCtrl;
 	_int m_pickingMode;
 	_int m_transMode;
-	_int m_naviIndex;
+	_int m_cellIndex;
 	_int m_vertexIndex;
 
 	_float m_valueX;
@@ -62,4 +62,7 @@ public:
 	
 	afx_msg void OnClickedTogetherMode();
 	afx_msg void OnClickedSoloMode();
+	afx_msg void OnClickedDelete();
+	afx_msg void OnClickedSave();
+	afx_msg void OnClickedLoad();
 };
