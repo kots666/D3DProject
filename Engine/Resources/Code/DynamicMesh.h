@@ -42,6 +42,8 @@ private:
 	void SetInitFrameMatrices(D3DXFRAME_EX* EXframe, const _matrix* parentMatrix);
 	void SetUpFrameMatricesPointer(D3DXFRAME_EX* EXframe);
 
+	void DeepCopyMatrices(D3DXFRAME_EX* EXFrame, D3DXFRAME_EX* rhsFrame);
+
 private:
 	D3DXFRAME* m_rootFrame;
 	CHierarchyLoader* m_loader;

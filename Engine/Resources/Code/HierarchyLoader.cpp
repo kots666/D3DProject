@@ -21,7 +21,8 @@ STDMETHODIMP CHierarchyLoader::CreateFrame(THIS_ LPCSTR Name, LPD3DXFRAME *ppNew
 	AllocateName(&EXFrame->Name, Name);
 
 	// 처음에는 항등행렬로 초기화시켜준다.
-	EXFrame->combinedTransformationMatrix = *D3DXMatrixIdentity(&EXFrame->TransformationMatrix);
+	EXFrame->combinedTransformationMatrix = new _matrix;
+	*EXFrame->combinedTransformationMatrix = *D3DXMatrixIdentity(&EXFrame->TransformationMatrix);
 
 	*ppNewFrame = EXFrame;
 
@@ -161,6 +162,8 @@ STDMETHODIMP CHierarchyLoader::CreateMeshContainer(THIS_ LPCSTR Name,
 STDMETHODIMP CHierarchyLoader::DestroyFrame(THIS_ LPD3DXFRAME pFrameToFree)
 {
 	SafeDeleteArray(pFrameToFree->Name);
+	D3DXFRAME_EX* EXFrame = (D3DXFRAME_EX*)pFrameToFree;
+	SafeDelete(EXFrame->combinedTransformationMatrix);
 
 	if (nullptr != pFrameToFree->pMeshContainer)
 		DestroyMeshContainer(pFrameToFree->pMeshContainer);

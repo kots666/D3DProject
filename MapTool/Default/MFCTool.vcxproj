@@ -219,6 +219,7 @@
     <ClInclude Include="MFCToolView.h" />
     <ClInclude Include="MiniView.h" />
     <ClInclude Include="MyFormView.h" />
+    <ClInclude Include="ObjectToolPage.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SelectSheet.h" />
     <ClInclude Include="SheetView.h" />
@@ -242,6 +243,7 @@
     <ClCompile Include="MFCToolView.cpp" />
     <ClCompile Include="MiniView.cpp" />
     <ClCompile Include="MyFormView.cpp" />
+    <ClCompile Include="ObjectToolPage.cpp" />
     <ClCompile Include="SelectSheet.cpp" />
     <ClCompile Include="SheetView.cpp" />
     <ClCompile Include="Stage.cpp" />

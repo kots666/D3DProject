@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MapToolPage.h"
+#include "ObjectToolPage.h"
 
 // CSelectSheet
 
@@ -16,6 +17,7 @@ public:
 
 public:
 	CMapToolPage* m_mapToolPage;
+	CObjectToolPage* m_objToolPage;
 
 protected:
 	DECLARE_MESSAGE_MAP()

@@ -3,6 +3,7 @@
 #include "TerrainTex.h"
 #include "Transform.h"
 #include "StaticMesh.h"
+#include "DynamicMesh.h"
 #include "Collider.h"
 
 CStone::CStone(LPDIRECT3DDEVICE9 device) :
@@ -31,7 +32,7 @@ _int CStone::Update(const _float& deltaTime)
 
 	Engine::CGameObject::Update(deltaTime);
 
-	m_isColl = CollideToObject(L"GameLogic", L"Player");
+	//m_isColl = CollideToObject(L"GameLogic", L"Player");
 
 	_vec3 pos;
 	m_transCom->GetInfo(Engine::INFO_POS, &pos);
@@ -66,7 +67,7 @@ HRESULT CStone::AddComponent()
 	Engine::CComponent* component = nullptr;
 	
 	// Mesh
-	component = m_meshCom = dynamic_cast<Engine::CStaticMesh*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Mesh_Stone"));
+	component = m_meshCom = dynamic_cast<Engine::CDynamicMesh*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Mesh_Player"));
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Mesh", component);
 
@@ -86,10 +87,10 @@ HRESULT CStone::AddComponent()
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Calculator", component);
 
-	// Collider
-	component = m_colliderCom = Engine::CCollider::Create(m_device, m_meshCom->GetVtxPos(), m_meshCom->GetNumVtx(), m_meshCom->GetStride());
-	NULL_CHECK_RETURN(component, E_FAIL);
-	m_compMap[Engine::ID_STATIC].emplace(L"Com_Collider", component);
+	//// Collider
+	//component = m_colliderCom = Engine::CCollider::Create(m_device, m_meshCom->GetVtxPos(), m_meshCom->GetNumVtx(), m_meshCom->GetStride());
+	//NULL_CHECK_RETURN(component, E_FAIL);
+	//m_compMap[Engine::ID_STATIC].emplace(L"Com_Collider", component);
 
 	component = m_optimizationCom = dynamic_cast<Engine::COptimization*>(Engine::CloneComp(L"Proto_Optimization"));
 	NULL_CHECK_RETURN(component, E_FAIL);

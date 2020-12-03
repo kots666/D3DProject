@@ -14,6 +14,9 @@ CSelectSheet::CSelectSheet()
 {
 	m_mapToolPage = new CMapToolPage;
 	AddPage(m_mapToolPage);
+
+	m_objToolPage = new CObjectToolPage;
+	AddPage(m_objToolPage);
 }
 
 CSelectSheet::CSelectSheet(UINT nIDCaption, CWnd* pParentWnd, UINT iSelectPage)
@@ -34,6 +37,12 @@ CSelectSheet::~CSelectSheet()
 	{
 		delete m_mapToolPage;
 		m_mapToolPage = nullptr;
+	}
+
+	if (nullptr != m_objToolPage)
+	{
+		delete m_objToolPage;
+		m_objToolPage = nullptr;
 	}
 }
 

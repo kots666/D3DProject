@@ -54,7 +54,7 @@ namespace Engine
 		
 	typedef struct D3DXFRAME_EX : public D3DXFRAME
 	{
-		_matrix combinedTransformationMatrix;
+		_matrix* combinedTransformationMatrix;
 
 	}D3DXFRAME_EX;
 

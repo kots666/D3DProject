@@ -84,7 +84,7 @@ _int CSword::Update(const _float& deltaTime)
 
 		const Engine::D3DXFRAME_EX* EXFrame = playerMeshCom->GetFrameByName("R_Hand");
 
-		m_parentBoneMatrix = &EXFrame->combinedTransformationMatrix;
+		m_parentBoneMatrix = EXFrame->combinedTransformationMatrix;
 
 		Engine::CTransform* playerTransCom = dynamic_cast<Engine::CTransform*>(Engine::GetComponent(L"GameLogic", L"Player", L"Com_Transform", Engine::ID_DYNAMIC));
 		NULL_CHECK_RETURN(playerTransCom, 0);

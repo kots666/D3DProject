@@ -14,11 +14,16 @@ CDynamicMesh::CDynamicMesh(LPDIRECT3DDEVICE9 device) :
 }
 
 CDynamicMesh::CDynamicMesh(const CDynamicMesh& rhs) :
-	CMesh(rhs), m_rootFrame(rhs.m_rootFrame),
+	CMesh(rhs),
+	//m_rootFrame(rhs.m_rootFrame),
 	m_loader(rhs.m_loader), m_meshContainerList(rhs.m_meshContainerList),
 	m_boneName(rhs.m_boneName), m_isRootMotion(rhs.m_isRootMotion),
 	m_accMovePos(rhs.m_accMovePos), m_prevPos(rhs.m_prevPos)
 {
+	m_rootFrame = new D3DXFRAME_EX;
+	memcpy(&m_rootFrame, &rhs.m_rootFrame, sizeof(D3DXFRAME_EX));
+
+	DeepCopyMatrices((D3DXFRAME_EX*)m_rootFrame, (D3DXFRAME_EX*)rhs.m_rootFrame);
 	m_animCtrl = CAnimCtrl::Create(*rhs.m_animCtrl);
 }
 
@@ -215,7 +220,7 @@ void CDynamicMesh::UpdateFrameMatrices(D3DXFRAME_EX* EXFrame, const _matrix* par
 			EXFrame->TransformationMatrix.m[3][0] = 0;
 			EXFrame->TransformationMatrix.m[3][2] = 0;
 
-			EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
+			*EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
 			/*
 			_matrix rootMotionMat = EXFrame->TransformationMatrix;
 			rootMotionMat.m[3][0] = 0;
@@ -226,17 +231,17 @@ void CDynamicMesh::UpdateFrameMatrices(D3DXFRAME_EX* EXFrame, const _matrix* par
 		}
 		else
 		{
-			EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
+			*EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
 		}
 	}
 	else
-		EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
+		*EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
 
 	if (nullptr != EXFrame->pFrameSibling)
 		UpdateFrameMatrices((D3DXFRAME_EX*)EXFrame->pFrameSibling, parentMatrix);
 
 	if (nullptr != EXFrame->pFrameFirstChild)
-		UpdateFrameMatrices((D3DXFRAME_EX*)EXFrame->pFrameFirstChild, &EXFrame->combinedTransformationMatrix);
+		UpdateFrameMatrices((D3DXFRAME_EX*)EXFrame->pFrameFirstChild, EXFrame->combinedTransformationMatrix);
 
 }
 
@@ -254,13 +259,13 @@ void CDynamicMesh::SetInitFrameMatrices(D3DXFRAME_EX * EXFrame, const _matrix * 
 		}
 	}
 
-	EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
+	*EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
 
 	if (nullptr != EXFrame->pFrameSibling)
 		SetInitFrameMatrices((D3DXFRAME_EX*)EXFrame->pFrameSibling, parentMatrix);
 
 	if (nullptr != EXFrame->pFrameFirstChild)
-		SetInitFrameMatrices((D3DXFRAME_EX*)EXFrame->pFrameFirstChild, &EXFrame->combinedTransformationMatrix);
+		SetInitFrameMatrices((D3DXFRAME_EX*)EXFrame->pFrameFirstChild, EXFrame->combinedTransformationMatrix);
 }
 
 void CDynamicMesh::SetUpFrameMatricesPointer(D3DXFRAME_EX * EXFrame)
@@ -275,7 +280,7 @@ void CDynamicMesh::SetUpFrameMatricesPointer(D3DXFRAME_EX * EXFrame)
 			const char* boneName = EXMeshContainer->pSkinInfo->GetBoneName(i);
 			D3DXFRAME_EX* foundFrame = (D3DXFRAME_EX*)D3DXFrameFind(m_rootFrame, boneName);
 
-			EXMeshContainer->frameCombinedMatrix[i] = &foundFrame->combinedTransformationMatrix;
+			EXMeshContainer->frameCombinedMatrix[i] = foundFrame->combinedTransformationMatrix;
 		}
 		
 		m_meshContainerList.push_back(EXMeshContainer);
@@ -286,6 +291,22 @@ void CDynamicMesh::SetUpFrameMatricesPointer(D3DXFRAME_EX * EXFrame)
 
 	if (nullptr != EXFrame->pFrameFirstChild)
 		SetUpFrameMatricesPointer((D3DXFRAME_EX*)EXFrame->pFrameFirstChild);
+}
+
+void CDynamicMesh::DeepCopyMatrices(D3DXFRAME_EX * EXFrame, D3DXFRAME_EX * rhsFrame)
+{
+	if (nullptr == EXFrame) return;
+
+	if (nullptr == rhsFrame) return;
+
+	EXFrame->combinedTransformationMatrix = new _matrix;
+	*EXFrame->combinedTransformationMatrix = *rhsFrame->combinedTransformationMatrix;
+
+	if (nullptr != EXFrame->pFrameSibling && nullptr != rhsFrame->pFrameSibling)
+		DeepCopyMatrices((D3DXFRAME_EX*)EXFrame->pFrameSibling, (D3DXFRAME_EX*)rhsFrame->pFrameSibling);
+
+	if (nullptr != EXFrame->pFrameFirstChild && nullptr != rhsFrame->pFrameFirstChild)
+		DeepCopyMatrices((D3DXFRAME_EX*)EXFrame->pFrameFirstChild, (D3DXFRAME_EX*)rhsFrame->pFrameFirstChild);
 }
 
 CDynamicMesh* CDynamicMesh::Create(LPDIRECT3DDEVICE9 device, const _tchar* filePath, const _tchar* fileName)

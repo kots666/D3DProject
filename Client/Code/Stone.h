@@ -7,6 +7,7 @@
 BEGIN(Engine)
 
 class CStaticMesh;
+class CDynamicMesh;
 class CTransform;
 class CRenderer;
 class CCalculator;
@@ -33,7 +34,7 @@ private:
 	_bool CollideToObject(const _tchar* layerTag, const _tchar* objTag);
 
 private:
-	Engine::CStaticMesh* m_meshCom = nullptr;
+	Engine::CDynamicMesh* m_meshCom = nullptr;
 	Engine::CTransform* m_transCom = nullptr;
 	Engine::CRenderer* m_rendererCom = nullptr;
 	Engine::CCalculator* m_calcCom = nullptr;

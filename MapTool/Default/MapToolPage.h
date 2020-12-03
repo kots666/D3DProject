@@ -13,6 +13,10 @@ public:
 	CMapToolPage();
 	virtual ~CMapToolPage();
 
+public:
+	virtual BOOL OnSetActive() override;
+	virtual BOOL OnKillActive() override;
+
 // 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_MAPTOOLPAGE };

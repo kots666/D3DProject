@@ -51,6 +51,7 @@ using namespace std;
 
 #include "Engine_Define.h"
 #include "Export_Function.h"
+#include <afxdlgs.h>
 
 USING(Engine)
 /////////////////////////////

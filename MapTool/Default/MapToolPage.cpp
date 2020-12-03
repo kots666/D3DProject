@@ -28,6 +28,20 @@ CMapToolPage::~CMapToolPage()
 {
 }
 
+BOOL CMapToolPage::OnSetActive()
+{
+	int i = 0;
+
+	return CPropertyPage::OnSetActive();
+}
+
+BOOL CMapToolPage::OnKillActive()
+{
+	int i = 0;
+
+	return CPropertyPage::OnKillActive();
+}
+
 void CMapToolPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
