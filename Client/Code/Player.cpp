@@ -58,7 +58,7 @@ _int CPlayer::Update(const _float& deltaTime)
 
 	_vec3 pos;
 	m_transCom->GetInfo(Engine::INFO_POS, &pos);
-	cout << "X : " << pos.x << ", Y : " << pos.y << ", Z : " << pos.z << endl;
+	//cout << "X : " << pos.x << ", Y : " << pos.y << ", Z : " << pos.z << endl;
 
 	m_meshCom->UpdateFrameMatrices(deltaTime, &m_yRotMat);
 	m_meshCom->PlayAnimation(deltaTime);

@@ -37,12 +37,9 @@ public:
 	void AddToAccMovePos(const _vec3& movePos) { m_accMovePos += movePos; }
 	
 private:
-	_bool CanCalcBoneMove(const D3DXFRAME_EX* EXframe, const char* name, const _matrix* parentMatrix, _matrix* combineMatrix, _vec3* out);
-	void UpdateFrameMatrices(D3DXFRAME_EX* EXframe, const _matrix* parentMatrix);
-	void SetInitFrameMatrices(D3DXFRAME_EX* EXframe, const _matrix* parentMatrix);
-	void SetUpFrameMatricesPointer(D3DXFRAME_EX* EXframe);
-
-	void DeepCopyMatrices(D3DXFRAME_EX* EXFrame, D3DXFRAME_EX* rhsFrame);
+	_bool CanCalcBoneMove(const D3DXFRAME_EX* EXFrame, const char* name, const _matrix* parentMatrix, _matrix* combineMatrix, _vec3* out);
+	void UpdateFrameMatrices(D3DXFRAME_EX* EXFrame, const _matrix* parentMatrix);
+	void SetUpFrameMatricesPointer(D3DXFRAME_EX* EXFrame);
 
 private:
 	D3DXFRAME* m_rootFrame;
@@ -56,6 +53,11 @@ private:
 	_double m_blendTime;
 	_vec3 m_accMovePos;
 	_vec3 m_prevPos;
+
+	_matrix m_parentMat;
+	_uint m_animIndex;
+	_float m_deltaTime;
+	_bool m_isRoot;
 
 public:
 	static CDynamicMesh* Create(LPDIRECT3DDEVICE9 device, const _tchar* filePath, const _tchar* fileName);

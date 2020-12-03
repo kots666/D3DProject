@@ -7,7 +7,8 @@ USING(Engine)
 
 CDynamicMesh::CDynamicMesh(LPDIRECT3DDEVICE9 device) :
 	CMesh(device), m_loader(nullptr),
-	m_rootFrame(nullptr), m_animCtrl(nullptr),
+	m_rootFrame(nullptr),
+	m_animCtrl(nullptr),
 	m_boneName(nullptr), m_isRootMotion(false),
 	m_accMovePos({ 0.f, 0.f, 0.f }), m_prevPos({ 0.f, 0.f, 0.f })
 {
@@ -15,21 +16,17 @@ CDynamicMesh::CDynamicMesh(LPDIRECT3DDEVICE9 device) :
 
 CDynamicMesh::CDynamicMesh(const CDynamicMesh& rhs) :
 	CMesh(rhs),
-	//m_rootFrame(rhs.m_rootFrame),
-	m_loader(rhs.m_loader), m_meshContainerList(rhs.m_meshContainerList),
+	m_rootFrame(rhs.m_rootFrame),
+	m_loader(rhs.m_loader),
+	m_meshContainerList(rhs.m_meshContainerList),
 	m_boneName(rhs.m_boneName), m_isRootMotion(rhs.m_isRootMotion),
 	m_accMovePos(rhs.m_accMovePos), m_prevPos(rhs.m_prevPos)
 {
-	m_rootFrame = new D3DXFRAME_EX;
-	memcpy(&m_rootFrame, &rhs.m_rootFrame, sizeof(D3DXFRAME_EX));
-
-	DeepCopyMatrices((D3DXFRAME_EX*)m_rootFrame, (D3DXFRAME_EX*)rhs.m_rootFrame);
 	m_animCtrl = CAnimCtrl::Create(*rhs.m_animCtrl);
 }
 
 CDynamicMesh::~CDynamicMesh()
 {
-
 }
 
 HRESULT CDynamicMesh::Ready(const _tchar* filePath, const _tchar* fileName)
@@ -60,9 +57,7 @@ HRESULT CDynamicMesh::Ready(const _tchar* filePath, const _tchar* fileName)
 
 	_matrix matTemp;
 
-	//UpdateFrameMatrices((D3DXFRAME_EX*)m_rootFrame, D3DXMatrixIdentity(&matTemp));
 	UpdateFrameMatrices((D3DXFRAME_EX*)m_rootFrame, D3DXMatrixRotationY(&matTemp, D3DXToRadian(180.f)));
-	//SetInitFrameMatrices((D3DXFRAME_EX*)m_rootFrame, D3DXMatrixIdentity(&matTemp));
 	SetUpFrameMatricesPointer((D3DXFRAME_EX*)m_rootFrame);
 
 	return S_OK;
@@ -70,6 +65,18 @@ HRESULT CDynamicMesh::Ready(const _tchar* filePath, const _tchar* fileName)
 
 void CDynamicMesh::Render()
 {
+	_bool isToDefault = m_animCtrl->IsAnimationSetChange(m_animIndex, &m_blendTime);
+	m_isRootMotion = m_isRoot;
+
+	if (isToDefault)
+	{
+		m_isBlendTime = true;
+		m_accMovePos = m_prevPos = { 0.f, 0.f, 0.f };
+	}
+
+	m_animCtrl->PlayAnimation(m_deltaTime);
+	UpdateFrameMatrices((D3DXFRAME_EX*)m_rootFrame, &m_parentMat);
+
 	// 렌더 시 해당 애니메이션 프레임 값에 맞는 포지션 값을 적용하기 위한 단계
 	for (auto& iter : m_meshContainerList)
 	{
@@ -127,24 +134,21 @@ void CDynamicMesh::UpdateFrameMatrices(const _float& deltaTime, const _matrix * 
 		parentMatrix = D3DXMatrixIdentity(&tmp);
 	}
 
-	UpdateFrameMatrices((D3DXFRAME_EX*)m_rootFrame, parentMatrix);
+	m_parentMat = *parentMatrix;
+
+	//UpdateFrameMatrices((D3DXFRAME_EX*)m_rootFrame, parentMatrix);
 }
 
 void CDynamicMesh::SetAnimationSet(const _uint & index, const _bool & isRoot)
 {
-	_bool isToDefault = m_animCtrl->IsAnimationSetChange(index, &m_blendTime);
-	m_isRootMotion = isRoot;
-
-	if (isToDefault)
-	{
-		m_isBlendTime = true;
-		m_accMovePos = m_prevPos = { 0.f, 0.f, 0.f };
-	}
+	m_animIndex = index;
+	m_isRoot = isRoot;
 }
 
 void CDynamicMesh::PlayAnimation(const _float & deltaTime)
 {
-	m_animCtrl->PlayAnimation(deltaTime);
+	//m_animCtrl->PlayAnimation(deltaTime);
+	m_deltaTime = deltaTime;
 }
 
 void CDynamicMesh::CalcMovePos(const char * name, _vec3& outPos, const _matrix* parentMat)
@@ -220,52 +224,24 @@ void CDynamicMesh::UpdateFrameMatrices(D3DXFRAME_EX* EXFrame, const _matrix* par
 			EXFrame->TransformationMatrix.m[3][0] = 0;
 			EXFrame->TransformationMatrix.m[3][2] = 0;
 
-			*EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
-			/*
-			_matrix rootMotionMat = EXFrame->TransformationMatrix;
-			rootMotionMat.m[3][0] = 0;
-			rootMotionMat.m[3][2] = 0;
-
-			EXFrame->combinedTransformationMatrix = rootMotionMat * (*parentMatrix);
-			*/
+			EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
 		}
 		else
 		{
-			*EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
+			EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
 		}
 	}
 	else
-		*EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
+	{
+		EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
+	}
 
 	if (nullptr != EXFrame->pFrameSibling)
 		UpdateFrameMatrices((D3DXFRAME_EX*)EXFrame->pFrameSibling, parentMatrix);
 
 	if (nullptr != EXFrame->pFrameFirstChild)
-		UpdateFrameMatrices((D3DXFRAME_EX*)EXFrame->pFrameFirstChild, EXFrame->combinedTransformationMatrix);
+		UpdateFrameMatrices((D3DXFRAME_EX*)EXFrame->pFrameFirstChild, &EXFrame->combinedTransformationMatrix);
 
-}
-
-void CDynamicMesh::SetInitFrameMatrices(D3DXFRAME_EX * EXFrame, const _matrix * parentMatrix)
-{
-	if (nullptr == EXFrame)
-		return;
-
-	if (nullptr != EXFrame->Name)
-	{
-		if (0 == strcmp(EXFrame->Name, "Bip001"))
-		{
-			EXFrame->TransformationMatrix.m[3][0] = 0;
-			EXFrame->TransformationMatrix.m[3][2] = 0;
-		}
-	}
-
-	*EXFrame->combinedTransformationMatrix = EXFrame->TransformationMatrix * (*parentMatrix);
-
-	if (nullptr != EXFrame->pFrameSibling)
-		SetInitFrameMatrices((D3DXFRAME_EX*)EXFrame->pFrameSibling, parentMatrix);
-
-	if (nullptr != EXFrame->pFrameFirstChild)
-		SetInitFrameMatrices((D3DXFRAME_EX*)EXFrame->pFrameFirstChild, EXFrame->combinedTransformationMatrix);
 }
 
 void CDynamicMesh::SetUpFrameMatricesPointer(D3DXFRAME_EX * EXFrame)
@@ -280,7 +256,7 @@ void CDynamicMesh::SetUpFrameMatricesPointer(D3DXFRAME_EX * EXFrame)
 			const char* boneName = EXMeshContainer->pSkinInfo->GetBoneName(i);
 			D3DXFRAME_EX* foundFrame = (D3DXFRAME_EX*)D3DXFrameFind(m_rootFrame, boneName);
 
-			EXMeshContainer->frameCombinedMatrix[i] = foundFrame->combinedTransformationMatrix;
+			EXMeshContainer->frameCombinedMatrix[i] = &foundFrame->combinedTransformationMatrix;
 		}
 		
 		m_meshContainerList.push_back(EXMeshContainer);
@@ -293,21 +269,59 @@ void CDynamicMesh::SetUpFrameMatricesPointer(D3DXFRAME_EX * EXFrame)
 		SetUpFrameMatricesPointer((D3DXFRAME_EX*)EXFrame->pFrameFirstChild);
 }
 
-void CDynamicMesh::DeepCopyMatrices(D3DXFRAME_EX * EXFrame, D3DXFRAME_EX * rhsFrame)
-{
-	if (nullptr == EXFrame) return;
+//void CDynamicMesh::CloneFrame(D3DXFRAME ** dstFrame, const D3DXFRAME * srcFrame)
+//{
+//	if (nullptr == srcFrame) return;
+//
+//	if (nullptr == *dstFrame)
+//		*dstFrame = new D3DXFRAME_EX(*(D3DXFRAME_EX*)srcFrame);
+//
+//	if (nullptr != srcFrame->pFrameSibling)
+//	{
+//		(*dstFrame)->pFrameSibling = new D3DXFRAME_EX(*(D3DXFRAME_EX*)srcFrame->pFrameSibling);
+//		CloneFrame(&(*dstFrame)->pFrameSibling, srcFrame->pFrameSibling);
+//	}
+//
+//	if (nullptr != srcFrame->pFrameFirstChild)
+//	{
+//		(*dstFrame)->pFrameFirstChild = new D3DXFRAME_EX(*(D3DXFRAME_EX*)srcFrame->pFrameFirstChild);
+//		CloneFrame(&(*dstFrame)->pFrameFirstChild, srcFrame->pFrameFirstChild);
+//	}
+//}
+//
+//void CDynamicMesh::CloneMeshContainer(list<D3DXMESHCONTAINER_EX*>& dstList, const list<D3DXMESHCONTAINER_EX*>& srcList)
+//{
+//	D3DXMESHCONTAINER_EX* newMeshContainer = nullptr;
+//
+//	for (auto& meshContainer : srcList)
+//	{
+//		newMeshContainer = new D3DXMESHCONTAINER_EX(*meshContainer);
+//
+//		newMeshContainer->frameCombinedMatrix = new _matrix*[meshContainer->numBones];
+//
+//		for (DWORD i = 0; i < meshContainer->numBones; ++i)
+//		{
+//			const char* boneName = meshContainer->pSkinInfo->GetBoneName(i);
+//			D3DXFRAME_EX* frame = (D3DXFRAME_EX*)D3DXFrameFind(m_cloneRootFrame, boneName);
+//			newMeshContainer->frameCombinedMatrix[i] = &frame->combinedTransformationMatrix;
+//		}
+//
+//		dstList.push_back(newMeshContainer);
+//	}
+//}
 
-	if (nullptr == rhsFrame) return;
-
-	EXFrame->combinedTransformationMatrix = new _matrix;
-	*EXFrame->combinedTransformationMatrix = *rhsFrame->combinedTransformationMatrix;
-
-	if (nullptr != EXFrame->pFrameSibling && nullptr != rhsFrame->pFrameSibling)
-		DeepCopyMatrices((D3DXFRAME_EX*)EXFrame->pFrameSibling, (D3DXFRAME_EX*)rhsFrame->pFrameSibling);
-
-	if (nullptr != EXFrame->pFrameFirstChild && nullptr != rhsFrame->pFrameFirstChild)
-		DeepCopyMatrices((D3DXFRAME_EX*)EXFrame->pFrameFirstChild, (D3DXFRAME_EX*)rhsFrame->pFrameFirstChild);
-}
+//void CDynamicMesh::DestroyCloneFrame(D3DXFRAME_EX * EXFrame)
+//{
+//	if (nullptr == EXFrame) return;
+//	
+//	if (nullptr != EXFrame->pFrameSibling)
+//		DestroyCloneFrame((D3DXFRAME_EX*)EXFrame->pFrameSibling);
+//	if (nullptr != EXFrame->pFrameFirstChild)
+//		DestroyCloneFrame((D3DXFRAME_EX*)EXFrame->pFrameFirstChild);
+//
+//	SafeDelete(EXFrame);
+//	EXFrame = nullptr;
+//}
 
 CDynamicMesh* CDynamicMesh::Create(LPDIRECT3DDEVICE9 device, const _tchar* filePath, const _tchar* fileName)
 {
@@ -335,6 +349,16 @@ void CDynamicMesh::Free()
 		m_loader->DestroyFrame(m_rootFrame);
 		SafeRelease(m_loader);
 	}
+	//else
+	//{
+	//	DestroyCloneFrame((D3DXFRAME_EX*)m_cloneRootFrame);
+
+	//	for (auto& meshCon : m_meshContainerList)
+	//	{
+	//		SafeDeleteArray(meshCon->frameCombinedMatrix);
+	//		SafeDelete(meshCon);
+	//	}
+	//}
 	m_meshContainerList.clear();
 }
 

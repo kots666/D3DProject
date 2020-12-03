@@ -54,8 +54,7 @@ namespace Engine
 		
 	typedef struct D3DXFRAME_EX : public D3DXFRAME
 	{
-		_matrix* combinedTransformationMatrix;
-
+		_matrix combinedTransformationMatrix;
 	}D3DXFRAME_EX;
 
 
@@ -71,7 +70,6 @@ namespace Engine
 		_matrix* frameOffsetMatrix; // 애니메이션을 포함한 최초의 뼈 상태
 		_matrix** frameCombinedMatrix; // frame 마다 가지고 있는 CombinedTransformationMatrix의 주소값들을 보관하기 위한 포인터
 		_matrix* renderingMatrix;	//pFrameOffsetMatrix * (*ppFrameCombinedMatrix) 결과값으로 최종적으로 렌더링을 하기 위한 행렬
-
 	}D3DXMESHCONTAINER_EX;
 }
 
