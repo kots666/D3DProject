@@ -158,20 +158,21 @@ STDMETHODIMP CHierarchyLoader::CreateMeshContainer(THIS_ LPCSTR Name,
 	return S_OK;
 }
 
-STDMETHODIMP CHierarchyLoader::DestroyFrame(THIS_ LPD3DXFRAME pFrameToFree)
+STDMETHODIMP CHierarchyLoader::DestroyFrame(THIS_ LPD3DXFRAME frameToFree)
 {
-	SafeDeleteArray(pFrameToFree->Name);
+	SafeDeleteArray(frameToFree->Name);
+	//SafeDelete(((D3DXFRAME_EX*)frameToFree)->combinedTransformationMatrix);
 
-	if (nullptr != pFrameToFree->pMeshContainer)
-		DestroyMeshContainer(pFrameToFree->pMeshContainer);
+	if (nullptr != frameToFree->pMeshContainer)
+		DestroyMeshContainer(frameToFree->pMeshContainer);
 
-	if (nullptr != pFrameToFree->pFrameSibling)
-		DestroyFrame(pFrameToFree->pFrameSibling);
+	if (nullptr != frameToFree->pFrameSibling)
+		DestroyFrame(frameToFree->pFrameSibling);
 
-	if (nullptr != pFrameToFree->pFrameFirstChild)
-		DestroyFrame(pFrameToFree->pFrameFirstChild);
+	if (nullptr != frameToFree->pFrameFirstChild)
+		DestroyFrame(frameToFree->pFrameFirstChild);
 
-	SafeDelete(pFrameToFree);
+	SafeDelete(frameToFree);
 
 	return S_OK;
 }

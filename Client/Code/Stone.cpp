@@ -20,7 +20,7 @@ HRESULT CStone::Ready()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_meshCom->SetAnimationSet(0);
+	m_meshCom->SetAnimationSet(10);
 	m_transCom->SetScale(0.01f, 0.01f, 0.01f);
 	m_transCom->SetPos(10.f, 0.f, 5.f);
 	m_transCom->SetRotation(Engine::ROT_Y, D3DXToRadian(45.f));
@@ -41,8 +41,8 @@ _int CStone::Update(const _float& deltaTime)
 
 	//m_isDraw = m_optimizationCom->IsInFrustumForObject(&pos, 0.f);
 
-	m_meshCom->UpdateFrameMatrices(deltaTime);
 	m_meshCom->PlayAnimation(deltaTime);
+	m_meshCom->UpdateFrameMatrices(deltaTime);
 	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
 
 	return 0;

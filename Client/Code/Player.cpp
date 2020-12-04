@@ -42,8 +42,9 @@ _int CPlayer::Update(const _float& deltaTime)
 	KeyInput(deltaTime);
 	UpdateAnimMatrices();
 
-	Engine::CGameObject::Update(deltaTime);
-
+	m_meshCom->PlayAnimation(deltaTime);
+	m_meshCom->UpdateFrameMatrices(deltaTime, &m_yRotMat);
+	
 	_vec3 movePos;
 	_vec3 scale;
 	m_meshCom->CalcMovePos("Bip001", movePos);
@@ -54,15 +55,17 @@ _int CPlayer::Update(const _float& deltaTime)
 	movePos.y = 0;
 
 	m_transCom->MovePos(&movePos);
-	m_transCom->SetMovePosAtWorldMatrix(&movePos);
+	//m_transCom->SetMovePosAtWorldMatrix(&movePos);
+
+	cout << "X : " << movePos.x << ", Y : " << movePos.y << ", Z : " << movePos.z << endl;
 
 	_vec3 pos;
 	m_transCom->GetInfo(Engine::INFO_POS, &pos);
 	//cout << "X : " << pos.x << ", Y : " << pos.y << ", Z : " << pos.z << endl;
 
-	m_meshCom->UpdateFrameMatrices(deltaTime, &m_yRotMat);
-	m_meshCom->PlayAnimation(deltaTime);
 	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
+
+	Engine::CGameObject::Update(deltaTime);
 
 	return 0;
 }

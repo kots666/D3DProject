@@ -107,7 +107,7 @@ _bool CAnimCtrl::IsAnimationSetEnd()
 
 	m_animCtrl->GetTrackDesc(m_currentTrack, &trackInfo);
 
-	if (trackInfo.Position >= m_period - 0.03)
+	if (trackInfo.Position >= m_period - 0.1)
 		return true;
 
 	return false;
