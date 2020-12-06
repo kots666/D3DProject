@@ -45,6 +45,12 @@ public:
 	CEdit m_editCtrlY;
 	CEdit m_editCtrlZ;
 
+	_bool m_isFocusX;
+	_bool m_isFocusY;
+	_bool m_isFocusZ;
+
+	_bool m_isFocus = true;
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
@@ -69,4 +75,11 @@ public:
 	afx_msg void OnClickedDelete();
 	afx_msg void OnClickedSave();
 	afx_msg void OnClickedLoad();
+	afx_msg void OnSetFocusX();
+	afx_msg void OnSetFocusY();
+	afx_msg void OnSetFocusZ();
+	afx_msg void OnKillFocusX();
+	afx_msg void OnKillFocusY();
+	afx_msg void OnKillFocusZ();
+	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 };

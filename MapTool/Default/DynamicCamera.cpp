@@ -49,6 +49,10 @@ HRESULT CDynamicCamera::Ready(const _vec3* eye, const _vec3* at, const _vec3* up
 
 _int CDynamicCamera::Update(const _float& deltaTime)
 {
+	CSheetView* sheetView = dynamic_cast<CSheetView*>((m_mainFrame)->m_mainSplitter.GetPane(0, 0));
+	if (nullptr != sheetView)
+		m_canPickNaviMesh = sheetView->m_selectSheet->m_mapToolPage->m_isFocus;
+
 	KeyInput(deltaTime);
 
 	if (m_isFix)
@@ -58,7 +62,7 @@ _int CDynamicCamera::Update(const _float& deltaTime)
 	}
 	else
 	{
-		if (Engine::GetDIKeyDownState(VK_LBUTTON))
+		if (Engine::GetDIKeyDownState(VK_LBUTTON) && m_canPickNaviMesh)
 			MousePicking();
 	}
 	

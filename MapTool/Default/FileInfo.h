@@ -7,5 +7,7 @@ public:
 
 public:
 	static CString ConvertToRelativePath(const CString& absPath);
+	static CString ConverToRelativePathOnly(const CString& absPath);
+	static CString DeleteFileName(const CString& relativePath);
 };
 

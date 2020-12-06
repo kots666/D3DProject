@@ -171,6 +171,11 @@ void CTransform::SetScale(const _float & xScale, const _float & yScale, const _f
 	m_scale = _vec3(xScale, yScale, zScale);
 }
 
+void CTransform::SetRotation(const _float & xRot, const _float & yRot, const _float & zRot)
+{
+	m_angle = { xRot, yRot, zRot };
+}
+
 void CTransform::SetRotation(ROTATION rotType, const _float & angle)
 {
 	*(((_float*)&m_angle) + rotType) += angle;

@@ -30,14 +30,14 @@ CMapToolPage::~CMapToolPage()
 
 BOOL CMapToolPage::OnSetActive()
 {
-	int i = 0;
+	m_isFocus = true;
 
 	return CPropertyPage::OnSetActive();
 }
 
 BOOL CMapToolPage::OnKillActive()
 {
-	int i = 0;
+	m_isFocus = false;
 
 	return CPropertyPage::OnKillActive();
 }
@@ -72,6 +72,13 @@ BEGIN_MESSAGE_MAP(CMapToolPage, CPropertyPage)
 	ON_BN_CLICKED(IDC_BUTTON1, &CMapToolPage::OnClickedDelete)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMapToolPage::OnClickedSave)
 	ON_BN_CLICKED(IDC_BUTTON8, &CMapToolPage::OnClickedLoad)
+	ON_EN_SETFOCUS(IDC_EDIT2, &CMapToolPage::OnSetFocusX)
+	ON_EN_SETFOCUS(IDC_EDIT3, &CMapToolPage::OnSetFocusY)
+	ON_EN_SETFOCUS(IDC_EDIT4, &CMapToolPage::OnSetFocusZ)
+	ON_EN_KILLFOCUS(IDC_EDIT2, &CMapToolPage::OnKillFocusX)
+	ON_EN_KILLFOCUS(IDC_EDIT3, &CMapToolPage::OnKillFocusY)
+	ON_EN_KILLFOCUS(IDC_EDIT4, &CMapToolPage::OnKillFocusZ)
+	ON_WM_MOUSEWHEEL()
 END_MESSAGE_MAP()
 
 
@@ -483,4 +490,91 @@ void CMapToolPage::OnClickedLoad()
 		CloseHandle(hFile);
 	}
 	UpdateData(FALSE);
+}
+
+void CMapToolPage::OnSetFocusX()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	m_isFocusX = true;
+	m_isFocusY = false;
+	m_isFocusZ = false;
+}
+
+
+void CMapToolPage::OnSetFocusY()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	m_isFocusX = false;
+	m_isFocusY = true;
+	m_isFocusZ = false;
+}
+
+
+void CMapToolPage::OnSetFocusZ()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	m_isFocusX = false;
+	m_isFocusY = false;
+	m_isFocusZ = true;
+}
+
+
+void CMapToolPage::OnKillFocusX()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	m_isFocusX = false;
+}
+
+
+void CMapToolPage::OnKillFocusY()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	m_isFocusY = false;
+}
+
+
+void CMapToolPage::OnKillFocusZ()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	m_isFocusZ = false;
+}
+
+
+BOOL CMapToolPage::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	_float offset = 0.1f;
+
+	if (nFlags & MK_SHIFT)
+		offset = 1.f;
+
+	_float value = zDelta / 120.f * offset;
+
+	if (m_isFocusX)
+	{
+		UpdateData(TRUE);
+		m_valueX += value;
+
+		ChangeValue(m_cellIndex, m_vertexIndex, m_valueX, 0);
+		UpdateData(FALSE);
+	}
+	if (m_isFocusY)
+	{
+		UpdateData(TRUE);
+		m_valueY += value;
+
+		ChangeValue(m_cellIndex, m_vertexIndex, m_valueY, 1);
+		UpdateData(FALSE);
+	}
+	if (m_isFocusZ)
+	{
+		UpdateData(TRUE);
+		m_valueZ += value;
+
+		ChangeValue(m_cellIndex, m_vertexIndex, m_valueZ, 2);
+		UpdateData(FALSE);
+	}
+
+	return CPropertyPage::OnMouseWheel(nFlags, zDelta, pt);
 }

@@ -64,9 +64,9 @@ _uint CLoading::LoadingForStage()
 	NULL_CHECK_RETURN(comp, E_FAIL);
 	Engine::ReadyProto(L"Proto_Calculator", comp);
 
-	comp = Engine::COptimization::Create(m_device);
+	/*comp = Engine::COptimization::Create(m_device);
 	NULL_CHECK_RETURN(comp, E_FAIL);
-	Engine::ReadyProto(L"Proto_Optimization", comp);
+	Engine::ReadyProto(L"Proto_Optimization", comp);*/
 
 	FAILED_CHECK_RETURN(Engine::ReadyBuffer(m_device, Engine::RESOURCE_STAGE, L"Buffer_CubeTex", Engine::BUFFER_CUBETEX, VTXCNTX, VTXCNTZ, VTXITV), E_FAIL);
 

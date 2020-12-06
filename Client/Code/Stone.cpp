@@ -96,9 +96,9 @@ HRESULT CStone::AddComponent()
 	//NULL_CHECK_RETURN(component, E_FAIL);
 	//m_compMap[Engine::ID_STATIC].emplace(L"Com_Collider", component);
 
-	component = m_optimizationCom = dynamic_cast<Engine::COptimization*>(Engine::CloneComp(L"Proto_Optimization"));
+	/*component = m_optimizationCom = dynamic_cast<Engine::COptimization*>(Engine::CloneComp(L"Proto_Optimization"));
 	NULL_CHECK_RETURN(component, E_FAIL);
-	m_compMap[Engine::ID_STATIC].emplace(L"Com_Optimization", component);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_Optimization", component);*/
 
 	return S_OK;
 }

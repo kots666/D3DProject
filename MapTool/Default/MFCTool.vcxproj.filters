@@ -70,6 +70,9 @@
     <Filter Include="00. View\00. SheetView\SelectSheet\01. ObjectToolPage">
       <UniqueIdentifier>{df444e16-48af-4dab-8c56-c5148fdf47bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. GameObject\02. PlacedObject">
+      <UniqueIdentifier>{c285a01d-0a6e-4d2e-b5a1-1a254bb79b21}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -138,6 +141,9 @@
     <ClInclude Include="ObjectToolPage.h">
       <Filter>00. View\00. SheetView\SelectSheet\01. ObjectToolPage</Filter>
     </ClInclude>
+    <ClInclude Include="PlacedObject.h">
+      <Filter>05. GameObject\02. PlacedObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -199,6 +205,9 @@
     </ClCompile>
     <ClCompile Include="ObjectToolPage.cpp">
       <Filter>00. View\00. SheetView\SelectSheet\01. ObjectToolPage</Filter>
+    </ClCompile>
+    <ClCompile Include="PlacedObject.cpp">
+      <Filter>05. GameObject\02. PlacedObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

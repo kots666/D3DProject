@@ -152,7 +152,7 @@ BOOL CMapTool::OnInitDialog()
 		TCHAR buffer[10] = L"";
 		wsprintf(buffer, L"%d", i);
 
-		m_listBox.AddString(buffer);
+		m_meshListBox.AddString(buffer);
 	}*/
 
 	UpdateData(FALSE);
