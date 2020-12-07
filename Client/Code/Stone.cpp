@@ -20,7 +20,7 @@ HRESULT CStone::Ready()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_meshCom->SetAnimationSet(10);
+	m_meshCom->SetAnimation(10, 0.15f, 0.1f, false);
 	m_transCom->SetScale(0.01f, 0.01f, 0.01f);
 	m_transCom->SetPos(10.f, 0.f, 5.f);
 	m_transCom->SetRotation(Engine::ROT_Y, D3DXToRadian(45.f));

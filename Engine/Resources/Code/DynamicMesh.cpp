@@ -130,22 +130,21 @@ void CDynamicMesh::UpdateFrameMatrices(const _float& deltaTime, const _matrix * 
 		UpdateFrameMatrices((D3DXFRAME_EX*)m_rootFrame, (D3DXFRAME_EX*)m_rootFrame, parentMatrix);
 }
 
-void CDynamicMesh::SetAnimationSet(const _uint & index, const _bool & isRoot)
+void CDynamicMesh::SetAnimation(const _uint & index, const _float & transitionTime, const _float & endTimeOffset, const _bool & isRoot)
 {
-	_bool isToDefault = m_animCtrl->IsAnimationSetChange(index, &m_blendTime);
+	_bool isChange = m_animCtrl->IsAnimationSetChange(index, transitionTime, endTimeOffset, &m_blendTime);
 	m_isRootMotion = isRoot;
 
-	if (isToDefault)
+	if (isChange)
 	{
 		m_isBlendTime = true;
-		m_blendTime += 0.02f;
 		m_accMovePos = m_prevPos = { 0.f, 0.f, 0.f };
 	}
 }
 
-void CDynamicMesh::PlayAnimation(const _float & deltaTime)
+void CDynamicMesh::PlayAnimation(const _float & deltaTime, const _float & playSpeed)
 {
-	m_animCtrl->PlayAnimation(deltaTime);
+	m_animCtrl->PlayAnimation(deltaTime, playSpeed);
 }
 
 void CDynamicMesh::CalcMovePos(const char * name, _vec3& outPos, const _matrix* parentMat)

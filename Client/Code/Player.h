@@ -50,6 +50,9 @@ private:
 	_matrix m_yRotMat;
 	_matrix m_yScaleRotMat;
 
+	_int m_playIndex = 0;
+	_float m_accTime = 0.f;
+
 public:
 	static CPlayer*	Create(LPDIRECT3DDEVICE9 device);
 
