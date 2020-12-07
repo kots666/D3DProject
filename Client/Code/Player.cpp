@@ -29,7 +29,7 @@ HRESULT CPlayer::Ready()
 	//m_meshCom->SetAnimationSet(0);
 
 	// Player
-	m_meshCom->SetAnimationSet(0);
+	m_meshCom->SetAnimation(0, 0.15f, 0.1f, false);
 	m_meshCom->SetIsRootMotion(true);
 	m_meshCom->SetBoneName("Bip001");
 
@@ -120,13 +120,16 @@ void CPlayer::KeyInput(const _float& deltaTime)
 {
 	m_transCom->GetInfo(Engine::INFO_LOOK, &m_dir);
 
+	if (m_meshCom->IsAnimationSetEnd())
+	{
+		// Player
+		m_meshCom->SetAnimation(0, 0.15f, 0.1f, false);
+	}
+
 	if (GetAsyncKeyState(VK_UP) & 0x8000)
 	{
-		// Goku Attack
-		//m_meshCom->SetAnimationSet(1);
-
 		// Player
-		m_meshCom->SetAnimationSet(0);
+		m_meshCom->SetAnimation(1, 0.15f, 0.01f, false);
 	}
 
 	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
@@ -147,16 +150,27 @@ void CPlayer::KeyInput(const _float& deltaTime)
 		m_transCom->MoveToPickPos(&pickPos, m_speed, deltaTime);
 	}
 
-	if (Engine::GetDIMouseState(Engine::DIM_RB) & 0x80)
+	if (Engine::GetDIKeyDownState(VK_RBUTTON))
 	{
-		// Player
-		m_meshCom->SetAnimationSet(2, true);
-	}
+		if (m_playIndex < 2)
+		{
+			// Player
+			m_meshCom->SetAnimation(2, 0.015f, 0.02f, true);
 
-	if (m_meshCom->IsAnimationSetEnd())
-	{
-		// Player
-		m_meshCom->SetAnimationSet(0);
+			m_playIndex = 2;
+		}
+		else if(m_playIndex < 3)
+		{
+			m_meshCom->SetAnimation(3, 0.015f, 0.02f, true);
+
+			m_playIndex = 3;
+		}
+		else if (m_playIndex < 4)
+		{
+			m_meshCom->SetAnimation(4, 0.015f, 0.02f, true);
+
+			m_playIndex = 4;
+		}
 	}
 }
 

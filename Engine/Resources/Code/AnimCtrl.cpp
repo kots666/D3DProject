@@ -8,7 +8,9 @@ CAnimCtrl::CAnimCtrl(LPD3DXANIMATIONCONTROLLER animCtrl) :
 	m_newTrack(1),
 	m_accTime(0.f),
 	m_oldAnimIdx(999),
-	m_period(0.0)
+	m_period(0.0),
+	m_transitionTime(0.2),
+	m_endTimeOffset(0.1)
 {
 	SafeAddRef(m_animCtrl);
 }
@@ -18,7 +20,9 @@ CAnimCtrl::CAnimCtrl(const CAnimCtrl & rhs) :
 	m_newTrack(rhs.m_newTrack),
 	m_accTime(rhs.m_accTime),
 	m_oldAnimIdx(rhs.m_oldAnimIdx),
-	m_period(rhs.m_period)
+	m_period(rhs.m_period),
+	m_transitionTime(rhs.m_transitionTime),
+	m_endTimeOffset(rhs.m_endTimeOffset)
 {
 	rhs.m_animCtrl->CloneAnimationController(
 		rhs.m_animCtrl->GetMaxNumAnimationOutputs(), // 복제 시 원본 객체에서 제공되고 있는 애니메이션의 개수
@@ -37,7 +41,7 @@ HRESULT CAnimCtrl::Ready()
 	return S_OK;
 }
 
-_bool CAnimCtrl::IsAnimationSetChange(const _uint & index, _double* blendTime)
+_bool CAnimCtrl::IsAnimationSetChange(const _uint & index, const _double & transitionTime, const _double & endTimeOffset, _double * blendTime)
 {
 	if (m_oldAnimIdx == index) return false;
 
@@ -52,8 +56,7 @@ _bool CAnimCtrl::IsAnimationSetChange(const _uint & index, _double* blendTime)
 
 	m_period = animSet->GetPeriod(); // 애니메이션 셋의 재생 시간을 반환하는 함수
 
-
-	// new트랙에 애니메이션 셋 세팅
+									 // new트랙에 애니메이션 셋 세팅
 	m_animCtrl->SetTrackAnimationSet(m_newTrack, animSet);
 
 	// 애니메이션 정보 안에 삽입되어 있는 이벤트 정보를 해제하는 함수(이벤트가 없는 것으로 처리)
@@ -61,22 +64,19 @@ _bool CAnimCtrl::IsAnimationSetChange(const _uint & index, _double* blendTime)
 	m_animCtrl->UnkeyAllTrackEvents(m_currentTrack);
 	m_animCtrl->UnkeyAllTrackEvents(m_newTrack);
 
-	_double transitionTime = 0.018;
-
 	// 현재 설정된 트랙을 재생 또는 종료 시키기 위한 함수(3인자 : 언제부터 현재 트랙을 해제할 것인가)
-	m_animCtrl->KeyTrackEnable(m_currentTrack, FALSE, m_accTime + transitionTime);
+	m_animCtrl->KeyTrackEnable(m_currentTrack, FALSE, m_accTime + m_transitionTime);
 
 	// 인자값으로 들어오는 트랙에 세팅된 애니메이션 셋을 어떤 속도로 움직일 것인지 설정하는 함수(속도의 상수 값은 1)
-	m_animCtrl->KeyTrackSpeed(m_currentTrack, 0.f, m_accTime, transitionTime, D3DXTRANSITION_LINEAR);
+	m_animCtrl->KeyTrackSpeed(m_currentTrack, 0.f, m_accTime, m_transitionTime, D3DXTRANSITION_LINEAR);
 
 	// 인자값으로 들어오는 트랙의 가중치를 설정하는 함수
-	m_animCtrl->KeyTrackWeight(m_currentTrack, 0.f, m_accTime, transitionTime, D3DXTRANSITION_LINEAR);
-
+	m_animCtrl->KeyTrackWeight(m_currentTrack, 0.f, m_accTime, m_transitionTime, D3DXTRANSITION_LINEAR);
 
 	// New 트랙의 활성화를 지시하는 함수
 	m_animCtrl->SetTrackEnable(m_newTrack, TRUE);
-	m_animCtrl->KeyTrackSpeed(m_newTrack, 1.f, m_accTime, transitionTime, D3DXTRANSITION_LINEAR);
-	m_animCtrl->KeyTrackWeight(m_newTrack, 1.f, m_accTime, transitionTime, D3DXTRANSITION_LINEAR);
+	m_animCtrl->KeyTrackSpeed(m_newTrack, 1.f, m_accTime, m_transitionTime, D3DXTRANSITION_LINEAR);
+	m_animCtrl->KeyTrackWeight(m_newTrack, 1.f, m_accTime, m_transitionTime, D3DXTRANSITION_LINEAR);
 
 	m_animCtrl->ResetTime(); // AdvanceTime 호출 시 내부적으로 누적되던 시간을 초기화하는 함수
 	m_accTime = 0.f;
@@ -87,16 +87,24 @@ _bool CAnimCtrl::IsAnimationSetChange(const _uint & index, _double* blendTime)
 	m_oldAnimIdx = index;
 	m_currentTrack = m_newTrack;
 
-	*blendTime = transitionTime;
+	*blendTime = m_transitionTime;
+
+	m_transitionTime = transitionTime;
+
+	m_endTimeOffset = endTimeOffset;
 
 	return true;
 }
 
-void CAnimCtrl::PlayAnimation(const _float & deltaTime)
+void CAnimCtrl::PlayAnimation(const _float & deltaTime, const _float& playSpeed)
 {
-	m_animCtrl->AdvanceTime(deltaTime, NULL);	// 2인자 : 애니메이션 재생에 따라 사운드나, 이펙트를 구동 가능, 하지만 안씀.
-												// AdvanceTime 호출 시 내부적으로 누적되는 시간 값이 있음
-	m_accTime += deltaTime;
+	_float playTime = deltaTime * playSpeed;
+
+	// 2인자 : 애니메이션 재생에 따라 사운드나, 이펙트를 구동 가능, 하지만 안씀.
+	// AdvanceTime 호출 시 내부적으로 누적되는 시간 값이 있음
+	m_animCtrl->AdvanceTime(playTime, NULL);
+
+	m_accTime += playTime;
 }
 
 _bool CAnimCtrl::IsAnimationSetEnd()
@@ -107,7 +115,7 @@ _bool CAnimCtrl::IsAnimationSetEnd()
 
 	m_animCtrl->GetTrackDesc(m_currentTrack, &trackInfo);
 
-	if (trackInfo.Position >= m_period - 0.1)
+	if (trackInfo.Position >= m_period - m_endTimeOffset)
 		return true;
 
 	return false;

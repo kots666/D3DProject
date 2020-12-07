@@ -15,8 +15,8 @@ private:
 
 public:
 	HRESULT Ready();
-	_bool IsAnimationSetChange(const _uint& index, _double* blendTime);
-	void PlayAnimation(const _float& deltaTime);
+	_bool IsAnimationSetChange(const _uint& index, const _double& transitionTime, const _double& endTimeOffset, _double* blendTime);
+	void PlayAnimation(const _float& deltaTime, const _float& playSpeed);
 
 public:
 	LPD3DXANIMATIONCONTROLLER GetAnimCtrl() { return m_animCtrl; }
@@ -31,7 +31,8 @@ private:
 	_uint m_oldAnimIdx;
 
 	_double m_period;
-	_double m_curTransitionTime;
+	_double m_transitionTime;
+	_double m_endTimeOffset;
 
 public:
 	static CAnimCtrl* Create(LPD3DXANIMATIONCONTROLLER animCtrl);
