@@ -225,6 +225,7 @@ int CMFCToolApp::Run()
 			_float deltaTime = Engine::GetDeltaTime(L"Timer_FPS60");
 
 			mainApp->Update(deltaTime);
+			mainApp->LateUpdate(deltaTime);
 			mainApp->Render();
 		}
 	}

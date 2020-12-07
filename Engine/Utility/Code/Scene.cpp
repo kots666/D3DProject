@@ -28,7 +28,25 @@ _int CScene::Update(const _float & deltaTime)
 
 		if (ret & 0x80000000)
 		{
-			MSG_BOX("Layer Problem");
+			MSG_BOX("Layer Update Problem");
+			return ret;
+		}
+	}
+
+	return ret;
+}
+
+_int CScene::LateUpdate(const _float & deltaTime)
+{
+	_int ret = 0;
+
+	for (auto& iter : m_layerMap)
+	{
+		ret = iter.second->LateUpdate(deltaTime);
+
+		if (ret & 0x80000000)
+		{
+			MSG_BOX("Layer LateUpdate Problem");
 			return ret;
 		}
 	}

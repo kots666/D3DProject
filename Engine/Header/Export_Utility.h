@@ -21,6 +21,7 @@ inline CComponent* GetComponent(const _tchar* layerKey, const _tchar* objKey, co
 
 inline HRESULT SetUpScene(CScene* scene);
 inline _int UpdateScene(const _float& deltaTime);
+inline _int LateUpdateScene(const _float& deltaTime);
 inline void RenderScene();
 
 inline CScene* GetCurScene();

@@ -17,12 +17,18 @@ public:
 	virtual _int Update(const _float& deltaTime);
 	virtual void Render() {}
 
+public:
+	// Setter
+	void SetIsDead(const _bool& isDead) { m_isDead = isDead; }
+
 	// Getter
+	_bool GetIsDead() const { return m_isDead; }
 	CComponent* GetComponent(const _tchar* key, COMPONENTID id);
 
 protected:
 	LPDIRECT3DDEVICE9 m_device;
 	map<const _tchar*, CComponent*> m_compMap[ID_END];
+	_bool m_isDead;
 
 public:
 	virtual void Free();

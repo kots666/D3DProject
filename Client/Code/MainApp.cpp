@@ -51,6 +51,15 @@ _int CMainApp::Update(const _float & deltaTime)
 	return 0;
 }
 
+_int CMainApp::LateUpdate(const _float & deltaTime)
+{
+	_int ret = 0;
+
+	ret = m_managementClass->LateUpdateScene(deltaTime);
+
+	return ret;
+}
+
 void CMainApp::Render()
 {
 	if (nullptr == m_managementClass) return;

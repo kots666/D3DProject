@@ -21,6 +21,7 @@ private:
 public:
 	HRESULT Ready();
 	_int Update(const _float& deltaTime);
+	_int LateUpdate(const _float& deltaTime);
 	void Render();
 
 // protected 함수 변수

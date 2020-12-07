@@ -24,6 +24,11 @@ _int UpdateScene(const _float & deltaTime)
 	return CManagement::GetInstance()->UpdateScene(deltaTime);
 }
 
+inline _int LateUpdateScene(const _float & deltaTime)
+{
+	return CManagement::GetInstance()->LateUpdateScene(deltaTime);
+}
+
 void RenderScene()
 {
 	CManagement::GetInstance()->RenderScene();

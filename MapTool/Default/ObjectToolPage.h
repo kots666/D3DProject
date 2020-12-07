@@ -41,6 +41,7 @@ public:
 	_float m_rotZ = 0.f;
 
 	_int m_focusbit = 0;
+	_int m_indexKey = 0;
 
 	vector<CString*> m_loadedMeshVec;
 	vector<CPlacedObject*> m_placedMeshVec;
@@ -101,4 +102,6 @@ public:
 	afx_msg void OnClickedSave();
 	afx_msg void OnClickedLoad();
 	_int FindTagIndexFromVec(const _tchar* tag);
+	afx_msg void OnClickedDelete();
+	void SetHorizontalScroll(CListBox& listBox);
 };

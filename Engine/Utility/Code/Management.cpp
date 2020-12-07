@@ -33,6 +33,15 @@ _int CManagement::UpdateScene(const _float & deltaTime)
 	return 0;
 }
 
+_int CManagement::LateUpdateScene(const _float & deltaTime)
+{
+	if (nullptr == m_scene) return -1;
+
+	m_scene->LateUpdate(deltaTime);
+
+	return 0;
+}
+
 void CManagement::RenderScene()
 {
 	CRenderer::GetInstance()->Render();

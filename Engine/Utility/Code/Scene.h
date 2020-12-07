@@ -14,6 +14,7 @@ protected:
 public:
 	virtual HRESULT Ready();
 	virtual _int Update(const _float& deltaTime);
+	virtual _int LateUpdate(const _float& deltaTime);
 	virtual void Render();
 
 	// Setter

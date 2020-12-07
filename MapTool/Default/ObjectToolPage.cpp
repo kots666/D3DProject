@@ -119,6 +119,8 @@ void CObjectToolPage::PreLoadStaticMeshes()
 		}
 	}
 
+	SetHorizontalScroll(m_meshListBox);
+
 	UpdateData(FALSE);
 }
 
@@ -171,6 +173,7 @@ BEGIN_MESSAGE_MAP(CObjectToolPage, CPropertyPage)
 	ON_LBN_SELCHANGE(IDC_LIST2, &CObjectToolPage::OnSelChangePlacedList)
 	ON_BN_CLICKED(IDC_BUTTON4, &CObjectToolPage::OnClickedSave)
 	ON_BN_CLICKED(IDC_BUTTON5, &CObjectToolPage::OnClickedLoad)
+	ON_BN_CLICKED(IDC_BUTTON9, &CObjectToolPage::OnClickedDelete)
 END_MESSAGE_MAP()
 
 
@@ -201,6 +204,8 @@ void CObjectToolPage::OnDropFiles(HDROP hDropInfo)
 
 		LoadStaticMeshes(fileName, relativePath, fileAndExtension);
 	}
+
+	SetHorizontalScroll(m_meshListBox);
 
 	UpdateData(FALSE);
 }
@@ -310,11 +315,9 @@ void CObjectToolPage::OnClickedPlace()
 
 	if (0 > select || select >= m_loadedMeshVec.size()) return;
 
-	_int size = m_placedMeshVec.size();
-
 	_tchar* key = new _tchar[10];
 
-	wsprintf(key, L"%d", size);
+	wsprintf(key, L"%d", m_indexKey);
 
 	CPlacedObject* newObj = CPlacedObject::Create(CGraphicDevice::GetInstance()->GetDevice(), key, m_loadedMeshVec[select]->GetBuffer());
 	if (nullptr == newObj)
@@ -326,9 +329,19 @@ void CObjectToolPage::OnClickedPlace()
 	m_placedMeshVec.emplace_back(newObj);
 
 	Engine::GetCurScene()->GetLayer(L"Environment")->AddGameObject(key, newObj);
-	m_placedListBox.AddString(*m_loadedMeshVec[select]);
+
+	TCHAR string[MAX_PATH];
+
+	wsprintf(string, L"%d - ", m_indexKey);
+	lstrcat(string, *m_loadedMeshVec[select]);
+
+	m_placedListBox.AddString(string);
+
+	++m_indexKey;
 
 	SetCurSelByPlace(m_placedMeshVec.size() - 1);
+
+	SetHorizontalScroll(m_placedListBox);
 
 	UpdateData(FALSE);
 }
@@ -517,11 +530,15 @@ void CObjectToolPage::OnClickedLoad()
 
 			_int index = FindTagIndexFromVec(fileTag);
 
-			_int size = m_placedMeshVec.size();
-
 			_tchar* key = new _tchar[10];
 
-			wsprintf(key, L"%d", size);
+			if (m_indexKey < 100)
+				wsprintf(key, L"0");
+			
+			if (m_indexKey < 10)
+				lstrcat(key, L"0");
+
+			wsprintf(key, L"%d", m_indexKey);
 
 			CPlacedObject* newObj = CPlacedObject::Create(CGraphicDevice::GetInstance()->GetDevice(), key, m_loadedMeshVec[index]->GetBuffer());
 			newObj->SetPos(pos);
@@ -530,10 +547,20 @@ void CObjectToolPage::OnClickedLoad()
 
 			Engine::GetCurScene()->GetLayer(L"Environment")->AddGameObject(key, newObj);
 			m_placedMeshVec.emplace_back(newObj);
-			m_placedListBox.AddString(m_loadedMeshVec[index]->GetBuffer());
+
+			TCHAR string[MAX_PATH];
+
+			wsprintf(string, L"%d - ", m_indexKey);
+			lstrcat(string, m_loadedMeshVec[index]->GetBuffer());
+
+			m_placedListBox.AddString(string);
+			++m_indexKey;
 		}
 		CloseHandle(hFile);
 	}
+
+	SetHorizontalScroll(m_placedListBox);
+
 	UpdateData(FALSE);
 }
 
@@ -551,4 +578,41 @@ _int CObjectToolPage::FindTagIndexFromVec(const _tchar * tag)
 		++index;
 	}
 	return ret;
+}
+
+void CObjectToolPage::OnClickedDelete()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+
+	UpdateData(TRUE);
+
+	_int select = m_placedListBox.GetCurSel();
+
+	m_placedMeshVec[select]->SetIsDead(true);
+	m_placedMeshVec.erase(m_placedMeshVec.begin() + select);
+
+	m_placedListBox.DeleteString(select);
+
+	UpdateData(FALSE);
+}
+
+void CObjectToolPage::SetHorizontalScroll(CListBox& listBox)
+{
+	CString name;
+	CSize size;
+	int cx = 0;
+
+	CDC* DC = listBox.GetDC();
+
+	for (int i = 0; i < listBox.GetCount(); ++i)
+	{
+		listBox.GetText(i, name);
+		size = DC->GetTextExtent(name);
+
+		if (cx < size.cx) cx = size.cx;
+	}
+
+	listBox.ReleaseDC(DC);
+
+	if (listBox.GetHorizontalExtent() < cx) listBox.SetHorizontalExtent(cx);
 }

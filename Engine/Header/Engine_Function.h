@@ -7,7 +7,7 @@ namespace Engine
 	DWORD SafeAddRef(T& pointer)
 	{
 		DWORD	dwRefCnt = 0;
-		if (NULL != pointer)
+		if (nullptr != pointer)
 			dwRefCnt = pointer->AddRef();
 
 		return dwRefCnt;
@@ -17,11 +17,11 @@ namespace Engine
 	DWORD SafeRelease(T& pointer)
 	{
 		DWORD	dwRefCnt = 0;
-		if (NULL != pointer)
+		if (nullptr != pointer)
 		{
 			dwRefCnt = pointer->Release();
 			if (dwRefCnt == 0)
-				pointer = NULL;
+				pointer = nullptr;
 		}
 		return dwRefCnt;
 	}
@@ -29,30 +29,30 @@ namespace Engine
 	template <typename T>
 	void SafeSingleDestory(T& pointer)
 	{
-		if (NULL != pointer)
+		if (nullptr != pointer)
 		{
 			pointer->DestroyInstance();
-			pointer = NULL;
+			pointer = nullptr;
 		}
 	}
 
 	template <typename T>
 	void SafeDelete(T& pointer)
 	{
-		if (NULL != pointer)
+		if (nullptr != pointer)
 		{
 			delete pointer;
-			pointer = NULL;
+			pointer = nullptr;
 		}
 	}
 
 	template <typename T>
 	void SafeDeleteArray(T& pointer)
 	{
-		if (NULL != pointer)
+		if (nullptr != pointer)
 		{
 			delete[] pointer;
-			pointer = NULL;
+			pointer = nullptr;
 		}
 	}
 	//////////////////////////////////////////////////////////////////
@@ -89,14 +89,17 @@ namespace Engine
 		~CDeleteObj(void) {}
 	public: // operator
 		template <typename T>
-		void operator () (T& pInstance)
+		void operator () (T& instance)
 		{
 			_ulong dwRefCnt = 0;
 
-			dwRefCnt = pInstance->Release();
+			if (nullptr != instance)
+			{
+				dwRefCnt = instance->Release();
 
-			if (0 == dwRefCnt)
-				pInstance = nullptr;
+				if (0 == dwRefCnt)
+					instance = nullptr;
+			}
 		}
 	};
 
@@ -112,10 +115,13 @@ namespace Engine
 		{
 			_ulong dwRefCnt = 0;
 
-			dwRefCnt = Pair.second->Release();
+			if (nullptr != Pair.second)
+			{
+				dwRefCnt = Pair.second->Release();
 
-			if (0 == dwRefCnt)
-				Pair.second = NULL;
+				if (0 == dwRefCnt)
+					Pair.second = nullptr;
+			}
 		}
 	};
 }

@@ -3,7 +3,8 @@
 USING(Engine)
 
 CGameObject::CGameObject(LPDIRECT3DDEVICE9 device) :
-	m_device(device)
+	m_device(device),
+	m_isDead(false)
 {
 	SafeAddRef(m_device);
 }

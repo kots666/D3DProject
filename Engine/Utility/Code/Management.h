@@ -20,6 +20,7 @@ private:
 public:
 	HRESULT	SetUpScene(CScene* scene);
 	_int UpdateScene(const _float& deltaTime);
+	_int LateUpdateScene(const _float& deltaTime);
 	void RenderScene();
 
 	// Getter

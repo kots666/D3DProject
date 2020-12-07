@@ -14,6 +14,7 @@ private:
 public:
 	HRESULT Ready();
 	_int Update(const _float& deltaTime);
+	_int LateUpdate(const _float& deltaTime);
 
 	// Setter
 	HRESULT AddGameObject(const _tchar* key, CGameObject* obj);

@@ -21,13 +21,34 @@ _int CLayer::Update(const _float & deltaTime)
 
 	for (auto& iter : m_objMap)
 	{
-		ret = iter.second->Update(deltaTime);
-
-		if (ret & 0x80000000)
+		if (nullptr != iter.second)
 		{
-			MSG_BOX("GameObject Problem");
-			return ret;
+			ret = iter.second->Update(deltaTime);
+
+			if (ret & 0x80000000)
+			{
+				MSG_BOX("GameObject Problem");
+				return ret;
+			}
 		}
+	}
+
+	return ret;
+}
+
+_int CLayer::LateUpdate(const _float & deltaTime)
+{
+	_int ret = 0;
+
+	for (auto iter = m_objMap.begin(); iter != m_objMap.end();)
+	{
+		if (iter->second->GetIsDead())
+		{
+			SafeRelease(iter->second);
+			iter = m_objMap.erase(iter);
+		}
+		else
+			++iter;
 	}
 
 	return ret;
