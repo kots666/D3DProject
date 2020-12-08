@@ -6,6 +6,7 @@
 #include "CubeTex.h"
 #include "StaticMesh.h"
 #include "DynamicMesh.h"
+#include "NaviMesh.h"
 
 USING(Engine)
 IMPLEMENT_SINGLETON(CResourcesMgr)
@@ -113,6 +114,7 @@ HRESULT CResourcesMgr::ReadyMesh(LPDIRECT3DDEVICE9 device, const _ushort & conta
 		break;
 
 	case TYPE_NAVI:
+		resources = CNaviMesh::Create(device);
 		break;
 	}
 

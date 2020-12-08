@@ -149,6 +149,11 @@ const _matrix * CTransform::GetNRotWorldMatrix(_matrix * outer) const
 	return &m_matNRotWorld;
 }
 
+void CTransform::SetPos(const _vec3 & pos)
+{
+	m_info[INFO_POS] = pos;
+}
+
 void CTransform::SetPos(const _float& x, const _float& y, const _float& z)
 {
 	m_info[INFO_POS].x = x;

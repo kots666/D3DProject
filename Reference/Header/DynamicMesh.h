@@ -23,7 +23,7 @@ public:
 	void SetAnimation(const _uint& index, const _float& transitionTime, const _float& endTimeOffset, const _bool& isRoot);
 	void PlayAnimation(const _float& deltaTime, const _float& playSpeed = 1.f);
 	
-	void CalcMovePos(const char* name, _vec3& outPos, const _matrix* parentMat = nullptr);
+	_bool CanCalcMovePos(const char* name, _vec3& outPos, const _matrix* parentMat = nullptr);
 
 public:
 	// Getter

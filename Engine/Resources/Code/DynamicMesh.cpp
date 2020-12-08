@@ -147,7 +147,7 @@ void CDynamicMesh::PlayAnimation(const _float & deltaTime, const _float & playSp
 	m_animCtrl->PlayAnimation(deltaTime, playSpeed);
 }
 
-void CDynamicMesh::CalcMovePos(const char * name, _vec3& outPos, const _matrix* parentMat)
+_bool CDynamicMesh::CanCalcMovePos(const char * name, _vec3& outPos, const _matrix* parentMat)
 {
 	if (m_isRootMotion && !m_isBlendTime)
 	{
@@ -166,15 +166,13 @@ void CDynamicMesh::CalcMovePos(const char * name, _vec3& outPos, const _matrix* 
 
 			outPos = m_accMovePos - m_prevPos;
 
-			//cout << "X : " << outPos.x << ", Y : " << outPos.y << ", Z : " << outPos.z << endl;
-
-			return;
+			return true;
 		}
 	}
 
 	outPos = { 0.f, 0.f, 0.f };
 
-	return;
+	return false;
 }
 
 const D3DXFRAME_EX * CDynamicMesh::GetFrameByName(const char * frameName)

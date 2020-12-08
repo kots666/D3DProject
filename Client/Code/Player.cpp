@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "DynamicMesh.h"
+#include "NaviMesh.h"
 #include "Transform.h"
 #include "Calculator.h"
 #include "Collider.h"
@@ -24,6 +25,7 @@ HRESULT CPlayer::Ready()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	m_transCom->SetScale(0.01f, 0.01f, 0.01f);
+	m_naviMeshCom->SetNaviIndex(0);
 
 	// Goku
 	//m_meshCom->SetAnimationSet(0);
@@ -46,22 +48,21 @@ _int CPlayer::Update(const _float& deltaTime)
 	m_meshCom->UpdateFrameMatrices(deltaTime, &m_yRotMat);
 	
 	_vec3 movePos;
-	_vec3 scale;
-	m_meshCom->CalcMovePos("Bip001", movePos);
+	if (m_meshCom->CanCalcMovePos("Bip001", movePos))
+	{
+		D3DXVec3TransformNormal(&movePos, &movePos, &m_yScaleRotMat);
+		movePos.y = 0;
+		_vec3 nowPos;
+		_vec3 nowDir;
+		m_transCom->GetInfo(Engine::INFO_POS, &nowPos);
+		m_transCom->GetInfo(Engine::INFO_LOOK, &nowDir);
 
-	D3DXVec3TransformNormal(&movePos, &movePos, &m_yScaleRotMat);
+		_vec3 moveDist = m_naviMeshCom->MoveOnNaviMesh(&nowPos, &(movePos));
 
-	//movePos.x = 0;
-	movePos.y = 0;
+		m_transCom->SetPos(moveDist);
 
-	m_transCom->MovePos(&movePos);
-	//m_transCom->SetMovePosAtWorldMatrix(&movePos);
-
-	cout << "X : " << movePos.x << ", Y : " << movePos.y << ", Z : " << movePos.z << endl;
-
-	_vec3 pos;
-	m_transCom->GetInfo(Engine::INFO_POS, &pos);
-	//cout << "X : " << pos.x << ", Y : " << pos.y << ", Z : " << pos.z << endl;
+		//cout << "X : " << moveDist.x << ", Y : " << moveDist.y << ", Z : " << moveDist.z << endl;
+	}
 
 	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
 
@@ -73,6 +74,7 @@ _int CPlayer::Update(const _float& deltaTime)
 void CPlayer::Render()
 {
 	m_transCom->SetTransform(m_device);
+	m_naviMeshCom->Render();
 	m_meshCom->Render();
 
 	/*
@@ -91,6 +93,11 @@ HRESULT CPlayer::AddComponent()
 	component = m_meshCom = dynamic_cast<Engine::CDynamicMesh*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Mesh_Player"));
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Mesh", component);
+
+	// NaviMesh
+	component = m_naviMeshCom = dynamic_cast<Engine::CNaviMesh*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Mesh_Navi"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_NaviMesh", component);
 
 	// Transform
 	component = m_transCom = dynamic_cast<Engine::CTransform*>(Engine::CloneComp(L"Proto_Transform"));
@@ -128,6 +135,16 @@ void CPlayer::KeyInput(const _float& deltaTime)
 
 	if (GetAsyncKeyState(VK_UP) & 0x8000)
 	{
+		_vec3 nowPos, nowDir;
+		m_transCom->GetInfo(Engine::INFO_POS, &nowPos);
+		m_transCom->GetInfo(Engine::INFO_LOOK, &nowDir);
+		D3DXVec3Normalize(&nowDir, &nowDir);
+
+		_vec3 moveDist = m_naviMeshCom->MoveOnNaviMesh(&nowPos, &(nowDir * deltaTime * m_speed));
+		m_transCom->SetPos(moveDist);
+
+		cout << "X : " << moveDist.x << ", Y : " << moveDist.y << ", Z : " << moveDist.z << endl;
+
 		// Player
 		m_meshCom->SetAnimation(1, 0.15f, 0.01f, false);
 	}

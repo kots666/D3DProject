@@ -125,33 +125,6 @@ _uint CLoading::LoadingForStage()
 		L"../Resource/Mesh/StaticMesh/TombStone/",
 		L"TombStone.X"), E_FAIL);
 
-	/*
-	// Player
-	FAILED_CHECK_RETURN(Engine::ReadyMesh(m_device,
-		Engine::RESOURCE_STAGE,
-		L"Mesh_Player",
-		Engine::TYPE_DYNAMIC,
-		L"../Resource/Mesh/DynamicMesh/Player/",
-		L"Player.X"), E_FAIL);
-
-	// Goku
-	//FAILED_CHECK_RETURN(Engine::ReadyMesh(m_device,
-	//	Engine::RESOURCE_STAGE,
-	//	L"Mesh_Player",
-	//	Engine::TYPE_DYNAMIC,
-	//	L"../Resource/Mesh/DynamicMesh/Goku/",
-	//	L"Goku.X"), E_FAIL);
-
-	// Sword
-	FAILED_CHECK_RETURN(Engine::ReadyMesh(
-		m_device,
-		Engine::RESOURCE_STAGE,
-		L"Mesh_Sword",
-		Engine::TYPE_STATIC,
-		L"../Resource/Mesh/StaticMesh/Sword/",
-		L"Sword.X"), E_FAIL);
-	*/
-
 	//FAILED_CHECK_RETURN(Engine::ReadyMesh(
 	//	m_device,
 	//	Engine::RESOURCE_STAGE,
@@ -161,14 +134,14 @@ _uint CLoading::LoadingForStage()
 	//	L"Tree01.X"),
 	//	E_FAIL);
 
-	//FAILED_CHECK_RETURN(Engine::ReadyMesh(
-	//	m_device,
-	//	Engine::RESOURCE_STAGE,
-	//	L"Mesh_Navi",
-	//	Engine::TYPE_NAVI,
-	//	NULL,
-	//	NULL),
-	//	E_FAIL);
+	FAILED_CHECK_RETURN(Engine::ReadyMesh(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Mesh_Navi",
+		Engine::TYPE_NAVI,
+		NULL,
+		NULL),
+		E_FAIL);
 	
 	lstrcpy(m_loadingStr, L"Loading Complete!!!");
 

@@ -11,6 +11,7 @@ class CTransform;
 class CRenderer;
 class CCalculator;
 class CCollider;
+class CNaviMesh;
 
 END
 
@@ -39,6 +40,7 @@ private:
 
 private:
 	Engine::CDynamicMesh* m_meshCom = nullptr;
+	Engine::CNaviMesh* m_naviMeshCom = nullptr;
 	Engine::CTransform* m_transCom = nullptr;
 	Engine::CCalculator* m_calcCom = nullptr;
 	Engine::CRenderer* m_rendererCom = nullptr;

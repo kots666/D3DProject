@@ -20,10 +20,10 @@ public:
 
 public:
 	_vec3 MoveOnNaviMesh(const _vec3* targetPos, const _vec3* targetDir);
-	HRESULT LinkCell();
+	void SetNaviIndex(const _ulong& index) { m_index = index; }
 
 private:
-	void SetNaviIndex(const _ulong& index) { m_index = index; }
+	HRESULT LinkCell();
 
 private:
 	vector<CNaviCell*> m_vecCell;
