@@ -28,6 +28,7 @@ public:
 public:
 	// Getter
 	void GetInfo(INFO type, _vec3* dir);
+	void GetRotation(_vec3* rot);
 	void GetWorldMatrix(_matrix* outer) const;
 	const _matrix* GetWorldMatrix() const;
 	const _matrix* GetNRotWorldMatrix(_matrix* outer) const;
