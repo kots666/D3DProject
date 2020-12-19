@@ -94,7 +94,7 @@ void CObjectToolPage::DoDataExchange(CDataExchange* pDX)
 
 void CObjectToolPage::PreLoadStaticMeshes()
 {
-	CString dirPath = _T("../Resource/Mesh/StaticMesh/Blade2/*.X");
+	CString dirPath = _T("../Resource/Mesh/StaticMesh/*.X");
 	CString relativePath = CFileInfo::DeleteFileName(dirPath);
 	//검색 클래스
 	CFileFind finder;
@@ -317,7 +317,7 @@ void CObjectToolPage::OnClickedPlace()
 
 	_tchar* key = new _tchar[10];
 
-	wsprintf(key, L"%d", m_indexKey);
+	wsprintf(key, L"%d", placedIndex);
 
 	CPlacedObject* newObj = CPlacedObject::Create(CGraphicDevice::GetInstance()->GetDevice(), key, m_loadedMeshVec[select]->GetBuffer());
 	if (nullptr == newObj)
@@ -332,12 +332,12 @@ void CObjectToolPage::OnClickedPlace()
 
 	TCHAR string[MAX_PATH];
 
-	wsprintf(string, L"%d - ", m_indexKey);
+	wsprintf(string, L"%d - ", placedIndex);
 	lstrcat(string, *m_loadedMeshVec[select]);
 
 	m_placedListBox.AddString(string);
 
-	++m_indexKey;
+	++placedIndex;
 
 	SetCurSelByPlace(m_placedMeshVec.size() - 1);
 
@@ -532,13 +532,13 @@ void CObjectToolPage::OnClickedLoad()
 
 			_tchar* key = new _tchar[10];
 
-			if (m_indexKey < 100)
+			if (placedIndex < 100)
 				wsprintf(key, L"0");
 			
-			if (m_indexKey < 10)
+			if (placedIndex < 10)
 				lstrcat(key, L"0");
 
-			wsprintf(key, L"%d", m_indexKey);
+			wsprintf(key, L"%d", placedIndex);
 
 			CPlacedObject* newObj = CPlacedObject::Create(CGraphicDevice::GetInstance()->GetDevice(), key, m_loadedMeshVec[index]->GetBuffer());
 			newObj->SetPos(pos);
@@ -550,11 +550,11 @@ void CObjectToolPage::OnClickedLoad()
 
 			TCHAR string[MAX_PATH];
 
-			wsprintf(string, L"%d - ", m_indexKey);
+			wsprintf(string, L"%d - ", placedIndex);
 			lstrcat(string, m_loadedMeshVec[index]->GetBuffer());
 
 			m_placedListBox.AddString(string);
-			++m_indexKey;
+			++placedIndex;
 		}
 		CloseHandle(hFile);
 	}

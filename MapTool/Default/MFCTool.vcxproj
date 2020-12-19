@@ -205,6 +205,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ColliderPage.h" />
     <ClInclude Include="MainView.h" />
     <ClInclude Include="MapToolPage.h" />
     <ClInclude Include="NaviCell.h" />
@@ -230,6 +231,7 @@
     <ClInclude Include="Terrain.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ColliderPage.cpp" />
     <ClCompile Include="MainView.cpp" />
     <ClCompile Include="MapToolPage.cpp" />
     <ClCompile Include="NaviCell.cpp" />

@@ -2,6 +2,7 @@
 
 #include "MapToolPage.h"
 #include "ObjectToolPage.h"
+#include "ColliderPage.h"
 
 // CSelectSheet
 
@@ -18,6 +19,7 @@ public:
 public:
 	CMapToolPage* m_mapToolPage;
 	CObjectToolPage* m_objToolPage;
+	CColliderPage* m_colliderPage;
 
 protected:
 	DECLARE_MESSAGE_MAP()

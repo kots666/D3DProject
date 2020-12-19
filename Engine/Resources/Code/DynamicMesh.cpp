@@ -180,6 +180,11 @@ const D3DXFRAME_EX * CDynamicMesh::GetFrameByName(const char * frameName)
 	return (D3DXFRAME_EX*)D3DXFrameFind(m_rootFrame, frameName);
 }
 
+const D3DXFRAME_EX * CDynamicMesh::GetCloneFrameByName(const char * frameName)
+{
+	return (D3DXFRAME_EX*)D3DXFrameFind(m_cloneFrame, frameName);
+}
+
 _bool CDynamicMesh::IsAnimationSetEnd()
 {
 	return m_animCtrl->IsAnimationSetEnd();

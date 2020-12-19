@@ -17,6 +17,7 @@
 #define new DEBUG_NEW
 #endif
 
+int placedIndex = 0;
 
 // CMFCToolApp
 

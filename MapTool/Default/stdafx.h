@@ -52,10 +52,12 @@ using namespace std;
 #include "Engine_Define.h"
 #include "Export_Function.h"
 #include <afxdlgs.h>
+#include <afxdlgs.h>
 
 USING(Engine)
 /////////////////////////////
 extern HWND g_hWnd;
+extern int placedIndex;
 
 constexpr int WINCX = 800;
 constexpr int WINCY = 600;

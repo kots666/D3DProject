@@ -10,6 +10,7 @@
 #include "Calculator.h"
 #include "LightMgr.h"
 #include "Collider.h"
+#include "SphereCollider.h"
 #include "Optimization.h"
 
 BEGIN(Engine)

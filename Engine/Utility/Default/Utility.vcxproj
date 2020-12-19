@@ -200,6 +200,7 @@ call CopyUtility.bat</Command>
     <ClCompile Include="..\Code\ProtoMgr.cpp" />
     <ClCompile Include="..\Code\Renderer.cpp" />
     <ClCompile Include="..\Code\Scene.cpp" />
+    <ClCompile Include="..\Code\SphereCollider.cpp" />
     <ClCompile Include="..\Code\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -218,6 +219,7 @@ call CopyUtility.bat</Command>
     <ClInclude Include="..\Code\ProtoMgr.h" />
     <ClInclude Include="..\Code\Renderer.h" />
     <ClInclude Include="..\Code\Scene.h" />
+    <ClInclude Include="..\Code\SphereCollider.h" />
     <ClInclude Include="..\Code\Transform.h" />
   </ItemGroup>
   <ItemGroup>

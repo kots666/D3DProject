@@ -13,6 +13,7 @@
 #define IDD_MAINVIEW                    314
 #define IDD_SHEETVIEW                   315
 #define IDD_OBJECTTOOLPAGE              316
+#define IDD_ColliderPage                317
 #define IDC_BUTTON1                     1000
 #define IDC_EDIT1                       1001
 #define IDC_BUTTON6                     1001
@@ -35,6 +36,7 @@
 #define IDC_EDIT11                      1011
 #define IDC_RADIO3                      1012
 #define IDC_EDIT12                      1012
+#define IDC_BUTTON10                    1012
 #define IDC_CHECK2                      1013
 #define IDC_CHECK3                      1014
 #define IDC_EDIT6                       1015
@@ -44,6 +46,8 @@
 #define IDC_LIST1                       1018
 #define IDC_TREE1                       1019
 #define IDC_BUTTON9                     1019
+#define IDC_LIST3                       1021
+#define IDC_LIST4                       1022
 #define IDC_SPIN3                       1026
 #define IDC_SPIN4                       1027
 #define IDC_SPIN5                       1028
@@ -53,7 +57,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        315
+#define _APS_NEXT_RESOURCE_VALUE        319
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1032
 #define _APS_NEXT_SYMED_VALUE           317

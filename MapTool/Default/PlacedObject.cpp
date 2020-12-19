@@ -1,13 +1,15 @@
 #include "stdafx.h"
 #include "PlacedObject.h"
 #include "StaticMesh.h"
+#include "DynamicMesh.h"
 #include "TerrainTex.h"
 #include "Transform.h"
 
-CPlacedObject::CPlacedObject(LPDIRECT3DDEVICE9 device,_tchar* key, _tchar * tag) :
+CPlacedObject::CPlacedObject(LPDIRECT3DDEVICE9 device,_tchar* key, _tchar * tag, _bool isDynamic) :
 	CGameObject(device),
 	m_key(key),
-	m_tag(tag)
+	m_tag(tag),
+	m_isDynamic(isDynamic)
 {
 }
 
@@ -18,6 +20,18 @@ CPlacedObject::~CPlacedObject()
 		delete m_key;
 		m_key = nullptr;
 	}
+
+	for (auto& sphere : m_sphereColliderList)
+	{
+		sphere->Release();
+		sphere = nullptr;
+	}
+
+	for (auto& name : m_sphereColliderNameList)
+	{
+		delete name;
+		name = nullptr;
+	}
 }
 
 HRESULT CPlacedObject::Ready()
@@ -27,6 +41,11 @@ HRESULT CPlacedObject::Ready()
 	m_pos = { 0.f, 0.f, 0.f };
 	m_scale = { 0.01f, 0.01f, 0.01f };
 	m_rotation = { 0.f, 0.f, 0.f };
+
+	if (m_isDynamic)
+	{
+		m_dynamicMeshCom->SetAnimation(0, 0.25f, 0.1f, false);
+	}
 
 	return S_OK;
 }
@@ -41,6 +60,17 @@ _int CPlacedObject::Update(const _float& deltaTime)
 
 	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
 
+	for (auto& sphere : m_sphereColliderList)
+	{
+		sphere->UpdateByBone();
+	}
+
+	/*if (m_isDynamic)
+	{
+		m_dynamicMeshCom->PlayAnimation(deltaTime);
+		m_dynamicMeshCom->UpdateFrameMatrices(deltaTime);
+	}*/
+
 	return 0;
 }
 
@@ -49,8 +79,85 @@ void CPlacedObject::Render()
 	m_transCom->SetTransform(m_device);
 
 	m_device->SetRenderState(D3DRS_LIGHTING, FALSE);
-	m_meshCom->Render();
+
+	if (m_isDynamic)
+		m_dynamicMeshCom->Render();
+	else
+		m_meshCom->Render();
+
+	for (auto& sphere : m_sphereColliderList)
+	{
+		_matrix tmp;
+		m_transCom->GetWorldMatrix(&tmp);
+		sphere->Render(COLLTYPE::COL_FALSE, &tmp);
+	}
+
 	m_device->SetRenderState(D3DRS_LIGHTING, TRUE);
+}
+
+void CPlacedObject::AddSphereCollider(_matrix* boneMat, const _vec3& offset, const _float& radius)
+{
+	Engine::CSphereCollider* sphereColl = nullptr;
+
+	Engine::CComponent* component = nullptr;
+
+	component = sphereColl = Engine::CSphereCollider::Create(m_device, boneMat, offset, radius);
+	if (nullptr == component)
+		return;
+
+	_int count = m_sphereColliderList.size();
+	_tchar name[MAX_PATH];
+
+	wsprintf(name, L"Com_SphereCollider%d", count);
+
+	m_compMap[Engine::ID_STATIC].emplace(name, component);
+	m_sphereColliderList.emplace_back(sphereColl);
+	m_sphereColliderNameList.emplace_back(name);
+}
+
+void CPlacedObject::AddSphereCollider(Engine::CSphereCollider * newComp, _tchar* name)
+{
+	m_compMap[Engine::ID_STATIC].emplace(name, newComp);
+	m_sphereColliderList.emplace_back(newComp);
+	m_sphereColliderNameList.emplace_back(name);
+}
+
+void CPlacedObject::DeleteSphereCollider(Engine::CSphereCollider * comp, _tchar * name)
+{
+	auto collIter = find_if(m_sphereColliderList.begin(), m_sphereColliderList.end(), [&](CSphereCollider* coll)
+	{
+		return comp == coll;
+	});
+
+	if (m_sphereColliderList.end() != collIter)
+	{
+		m_sphereColliderList.erase(collIter);
+	}
+
+	auto nameIter = find_if(m_sphereColliderNameList.begin(), m_sphereColliderNameList.end(), [&](_tchar* collName)
+	{
+		return !lstrcmp(name, collName);
+	});
+
+	if (m_sphereColliderNameList.end() != nameIter)
+	{
+		delete *nameIter;
+		m_sphereColliderNameList.erase(nameIter);
+	}
+}
+
+const D3DXFRAME_EX * CPlacedObject::FindFrame(const char * name)
+{
+	return m_dynamicMeshCom->GetCloneFrameByName(name);
+}
+
+const D3DXFRAME_EX * CPlacedObject::GetCloneFrame()
+{
+	if (m_isDynamic)
+	{
+		return m_dynamicMeshCom->GetCloneFrame();
+	}
+	return nullptr;
 }
 
 HRESULT CPlacedObject::AddComponent()
@@ -58,9 +165,18 @@ HRESULT CPlacedObject::AddComponent()
 	Engine::CComponent* component = nullptr;
 	
 	// Mesh
-	component = m_meshCom = dynamic_cast<Engine::CStaticMesh*>(Engine::CloneResource(Engine::RESOURCE_STAGE, m_tag));
-	NULL_CHECK_RETURN(component, E_FAIL);
-	m_compMap[Engine::ID_STATIC].emplace(L"Com_Mesh", component);
+	if (m_isDynamic)
+	{
+		component = m_dynamicMeshCom = dynamic_cast<Engine::CDynamicMesh*>(Engine::CloneResource(Engine::RESOURCE_STAGE, m_tag));
+		NULL_CHECK_RETURN(component, E_FAIL);
+		m_compMap[Engine::ID_STATIC].emplace(L"Com_Mesh", component);
+	}
+	else
+	{
+		component = m_meshCom = dynamic_cast<Engine::CStaticMesh*>(Engine::CloneResource(Engine::RESOURCE_STAGE, m_tag));
+		NULL_CHECK_RETURN(component, E_FAIL);
+		m_compMap[Engine::ID_STATIC].emplace(L"Com_Mesh", component);
+	}
 
 	// Transform
 	component = m_transCom = dynamic_cast<Engine::CTransform*>(Engine::CloneComp(L"Proto_Transform"));
@@ -89,9 +205,9 @@ HRESULT CPlacedObject::AddComponent()
 //	m_transCom->SetPos(position.x, height, position.z);
 //}
 
-CPlacedObject * CPlacedObject::Create(LPDIRECT3DDEVICE9 device, _tchar * key, _tchar * tag)
+CPlacedObject * CPlacedObject::Create(LPDIRECT3DDEVICE9 device, _tchar * key, _tchar * tag, _bool isDynamic)
 {
-	CPlacedObject*	instance = new CPlacedObject(device, key, tag);
+	CPlacedObject*	instance = new CPlacedObject(device, key, tag, isDynamic);
 
 	if (FAILED(instance->Ready()))
 		SafeRelease(instance);

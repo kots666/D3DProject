@@ -4,7 +4,8 @@
 #include "NaviMesh.h"
 
 CMainApp::CMainApp() :
-	m_deviceClass(nullptr), m_device(nullptr), m_managementClass(nullptr)
+	m_deviceClass(nullptr), m_device(nullptr), m_managementClass(nullptr),
+	m_frame(0), m_accTime(0.f)
 {
 }
 
@@ -28,6 +29,19 @@ _int CMainApp::Update(const _float & deltaTime)
 	if (nullptr == m_managementClass) return -1;
 
 	UpdateDirectInput();
+
+	++m_frame;
+
+	m_accTime += deltaTime;
+
+	if (m_accTime >= 1.f)
+	{
+		wsprintf(m_fps, L"FPS : %d", m_frame);
+
+		m_accTime = 0.f;
+		m_frame = 0;
+	}
+
 	CNaviMesh::GetInstance()->Update(deltaTime);
 	m_managementClass->UpdateScene(deltaTime);
 
@@ -56,6 +70,8 @@ void CMainApp::Render()
 
 	m_managementClass->RenderScene();
 	CNaviMesh::GetInstance()->Render();
+
+	Engine::RenderFont(L"Font_Jinji", m_fps, &_vec2(450.f, 10.f), D3DXCOLOR(1.f, 1.f, 0.f, 1.f));
 
 	Engine::RenderEnd();
 }

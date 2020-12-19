@@ -17,6 +17,9 @@ CSelectSheet::CSelectSheet()
 
 	m_objToolPage = new CObjectToolPage;
 	AddPage(m_objToolPage);
+
+	m_colliderPage = new CColliderPage;
+	AddPage(m_colliderPage);
 }
 
 CSelectSheet::CSelectSheet(UINT nIDCaption, CWnd* pParentWnd, UINT iSelectPage)
@@ -43,6 +46,12 @@ CSelectSheet::~CSelectSheet()
 	{
 		delete m_objToolPage;
 		m_objToolPage = nullptr;
+	}
+
+	if (nullptr != m_colliderPage)
+	{
+		delete m_colliderPage;
+		m_colliderPage = nullptr;
 	}
 }
 

@@ -27,7 +27,10 @@ public:
 
 public:
 	// Getter
+	const D3DXFRAME_EX* GetRootFrame() { return (D3DXFRAME_EX*)m_rootFrame; }
+	const D3DXFRAME_EX* GetCloneFrame() { return (D3DXFRAME_EX*)m_cloneFrame; }
 	const D3DXFRAME_EX* GetFrameByName(const char* frameName);
+	const D3DXFRAME_EX* GetCloneFrameByName(const char* frameName);
 	_bool IsAnimationSetEnd();
 
 public:
