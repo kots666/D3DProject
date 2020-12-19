@@ -131,6 +131,11 @@ void CTransform::GetInfo(INFO type, _vec3 * dir)
 	memcpy(dir, &m_matWorld.m[type][0], sizeof(_vec3));
 }
 
+void CTransform::GetRotation(_vec3 * rot)
+{
+	*rot = m_angle;
+}
+
 void CTransform::GetWorldMatrix(_matrix * outer) const
 {
 	*outer = m_matWorld;

@@ -24,6 +24,8 @@ HRESULT CPlayer::Ready()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
+	D3DXMatrixRotationY(&m_reviseMat, D3DXToRadian(-90.f));
+
 	m_transCom->SetScale(0.01f, 0.01f, 0.01f);
 	m_naviMeshCom->SetNaviIndex(0);
 
@@ -45,10 +47,10 @@ _int CPlayer::Update(const _float& deltaTime)
 	UpdateAnimMatrices();
 
 	m_meshCom->PlayAnimation(deltaTime);
-	m_meshCom->UpdateFrameMatrices(deltaTime, &m_yRotMat);
+	m_meshCom->UpdateFrameMatrices(deltaTime, &m_reviseMat);
 	
 	_vec3 movePos;
-	if (m_meshCom->CanCalcMovePos("Bip001", movePos))
+	if (m_meshCom->CanCalcMovePos("Bip001", movePos) && 0 < m_playIndex)
 	{
 		D3DXVec3TransformNormal(&movePos, &movePos, &m_yScaleRotMat);
 		movePos.y = 0;
@@ -61,7 +63,7 @@ _int CPlayer::Update(const _float& deltaTime)
 
 		m_transCom->SetPos(moveDist);
 
-		//cout << "X : " << moveDist.x << ", Y : " << moveDist.y << ", Z : " << moveDist.z << endl;
+		//cout << "X : " << movePos.x << ", Y : " << movePos.y << ", Z : " << movePos.z << endl;
 	}
 
 	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
@@ -131,6 +133,7 @@ void CPlayer::KeyInput(const _float& deltaTime)
 	{
 		// Player
 		m_meshCom->SetAnimation(0, 0.15f, 0.1f, false);
+		m_playIndex = 0;
 	}
 
 	if (GetAsyncKeyState(VK_UP) & 0x8000)
@@ -143,7 +146,7 @@ void CPlayer::KeyInput(const _float& deltaTime)
 		_vec3 moveDist = m_naviMeshCom->MoveOnNaviMesh(&nowPos, &(nowDir * deltaTime * m_speed));
 		m_transCom->SetPos(moveDist);
 
-		cout << "X : " << moveDist.x << ", Y : " << moveDist.y << ", Z : " << moveDist.z << endl;
+		//cout << "X : " << moveDist.x << ", Y : " << moveDist.y << ", Z : " << moveDist.z << endl;
 
 		// Player
 		m_meshCom->SetAnimation(1, 0.15f, 0.01f, false);
@@ -156,10 +159,26 @@ void CPlayer::KeyInput(const _float& deltaTime)
 	}
 
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
-		m_transCom->SetRotation(Engine::ROT_Y, D3DXToRadian(90.f * deltaTime));
+	{
+		m_transCom->SetRotation(Engine::ROT_Y, D3DXToRadian(-90.f * deltaTime));
+		m_yRotAngle += -90.f * deltaTime;
+
+		if (m_yRotAngle < -45.f)
+		{
+			_vec3 dir;
+			m_transCom->GetInfo(Engine::INFO_LOOK, &dir);
+			D3DXVec3Normalize(&dir, &dir);
+
+			cout << dir.x << ", " << dir.y << ", " << dir.z << endl;
+		}
+	}
 
 	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
-		m_transCom->SetRotation(Engine::ROT_Y, D3DXToRadian(-90.f * deltaTime));
+	{
+		m_transCom->SetRotation(Engine::ROT_Y, D3DXToRadian(90.f * deltaTime));
+		m_yRotAngle += 90.f * deltaTime;
+		
+	}
 
 	if (Engine::GetDIMouseState(Engine::DIM_LB) & 0x80)
 	{
@@ -221,6 +240,7 @@ void CPlayer::UpdateAnimMatrices()
 {
 	D3DXQUATERNION qt;
 	_vec3 up = { 0.f, 1.f, 0.f };
+
 	D3DXQuaternionRotationAxis(&qt, &up, D3DXToRadian(m_yRotAngle - 90.f));
 	D3DXMatrixRotationQuaternion(&m_yRotMat, &qt);
 

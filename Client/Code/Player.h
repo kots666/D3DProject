@@ -51,6 +51,7 @@ private:
 	_float m_yRotAngle;
 	_matrix m_yRotMat;
 	_matrix m_yScaleRotMat;
+	_matrix m_reviseMat;
 
 	_int m_playIndex = 0;
 	_float m_accTime = 0.f;
