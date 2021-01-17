@@ -55,17 +55,17 @@ namespace Client
 	static void DestroyInstance( void );			
 
 #define IMPLEMENT_SINGLETON(CLASSNAME)				\
-	CLASSNAME*	CLASSNAME::m_instance = NULL;		\
+	CLASSNAME*	CLASSNAME::m_instance = nullptr;	\
 	CLASSNAME*	CLASSNAME::GetInstance( void )	{	\
-		if(NULL == m_instance) {					\
+		if(nullptr == m_instance) {					\
 			m_instance = new CLASSNAME;				\
 		}											\
 		return m_instance;							\
 	}												\
 	void CLASSNAME::DestroyInstance( void ) {		\
-		if(NULL != m_instance)	{					\
+		if(nullptr != m_instance)	{				\
 			delete m_instance;						\
-			m_instance = NULL;						\
+			m_instance = nullptr;					\
 		}											\
 	}
 }

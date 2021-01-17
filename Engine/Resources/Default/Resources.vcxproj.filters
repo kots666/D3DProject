@@ -52,6 +52,9 @@
     <Filter Include="00. Resources\02. Mesh\03. NaviMesh\01. Line">
       <UniqueIdentifier>{e980eaa9-c4c5-4949-96f9-ef6e93cb8fa7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00. Resources\00. VIBuffer\04. TrailRect">
+      <UniqueIdentifier>{46dd8628-953f-463e-951e-ba8266fbbd63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Resources.cpp">
@@ -101,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\NaviLine.cpp">
       <Filter>00. Resources\02. Mesh\03. NaviMesh\01. Line</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TrailRect.cpp">
+      <Filter>00. Resources\00. VIBuffer\04. TrailRect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\NaviLine.h">
       <Filter>00. Resources\02. Mesh\03. NaviMesh\01. Line</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\TrailRect.h">
+      <Filter>00. Resources\00. VIBuffer\04. TrailRect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

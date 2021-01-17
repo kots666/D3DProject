@@ -254,69 +254,74 @@ void CDynamicCamera::TerrainPicking()
 	Engine::CTerrainTex* terrainBufferCom = dynamic_cast<Engine::CTerrainTex*>(Engine::GetComponent(L"Environment", L"Terrain", L"Com_Buffer", Engine::ID_STATIC));
 	NULL_CHECK(terrainBufferCom);
 
-	// 월드 -> 로컬
-	_matrix	matWorld, invWorld;
-	terrainTransCom->GetWorldMatrix(&matWorld);
-	D3DXMatrixInverse(&invWorld, NULL, &matWorld);
-
-	D3DXVec3TransformCoord(&rayPos, &rayPos, &invWorld);
-	D3DXVec3TransformNormal(&rayDir, &rayDir, &invWorld);
-
-	_ulong vtxCntX = terrainBufferCom->GetVtxCntX();
-	_ulong vtxCntZ = terrainBufferCom->GetVtxCntZ();
-
-	const _vec3* terrainVtxPos = terrainBufferCom->GetVtxPos();
-
-	_ulong vtxIdx[3];
-	_float uValue, vValue, dist;
-	_float minDist = 99999.f;
-
 	_vec3 pickPos = { 0.f, 0.f, 0.f };
 
-	for (_ulong i = 0; i < vtxCntZ - 1; ++i)
-	{
-		for (_ulong j = 0; j < vtxCntX - 1; ++j)
-		{
-			_ulong index = i * vtxCntX + j;
+	_float zeroValue = (-rayPos.y) / rayDir.y;
 
-			// 오른쪽 위
-			vtxIdx[0] = index + vtxCntX;
-			vtxIdx[1] = index + vtxCntX + 1;
-			vtxIdx[2] = index + 1;
+	pickPos.x = rayPos.x + rayDir.x * zeroValue;
+	pickPos.z = rayPos.z + rayDir.z * zeroValue;
 
-			// V1 + U(V2 - V1) + V(V3 - V1)
-			if (D3DXIntersectTri(&terrainVtxPos[vtxIdx[0]],
-				&terrainVtxPos[vtxIdx[1]],
-				&terrainVtxPos[vtxIdx[2]], &rayPos, &rayDir, &uValue, &vValue, &dist))
-			{
-				if (minDist > dist)
-				{
-					minDist = dist;
-					pickPos = terrainVtxPos[vtxIdx[0]] + uValue * (terrainVtxPos[vtxIdx[1]] - terrainVtxPos[vtxIdx[0]]) + vValue * (terrainVtxPos[vtxIdx[2]] - terrainVtxPos[vtxIdx[0]]);
-				}
-				//pickPos = rayPos + (rayDir * dist);
-			}
+	// 월드 -> 로컬
+	//_matrix	matWorld, invWorld;
+	//terrainTransCom->GetWorldMatrix(&matWorld);
+	//D3DXMatrixInverse(&invWorld, NULL, &matWorld);
 
-			// 왼쪽 아래
-			vtxIdx[0] = index + vtxCntX;
-			vtxIdx[1] = index + 1;
-			vtxIdx[2] = index;
+	//D3DXVec3TransformCoord(&rayPos, &rayPos, &invWorld);
+	//D3DXVec3TransformNormal(&rayDir, &rayDir, &invWorld);
 
-			// V1 + U(V2 - V1) + V(V3 - V1)
-			if (D3DXIntersectTri(&terrainVtxPos[vtxIdx[0]],
-				&terrainVtxPos[vtxIdx[1]],
-				&terrainVtxPos[vtxIdx[2]], &rayPos, &rayDir, &uValue, &vValue, &dist))
-			{
-				if (minDist > dist)
-				{
-					minDist = dist;
-					pickPos = terrainVtxPos[vtxIdx[0]] + uValue * (terrainVtxPos[vtxIdx[1]] - terrainVtxPos[vtxIdx[0]]) + vValue * (terrainVtxPos[vtxIdx[2]] - terrainVtxPos[vtxIdx[0]]);
-				}
-			}
-		}
-	}
+	//_ulong vtxCntX = terrainBufferCom->GetVtxCntX();
+	//_ulong vtxCntZ = terrainBufferCom->GetVtxCntZ();
 
-	D3DXVec3TransformCoord(&pickPos, &pickPos, &matWorld);
+	//const _vec3* terrainVtxPos = terrainBufferCom->GetVtxPos();
+
+	//_ulong vtxIdx[3];
+	//_float uValue, vValue, dist;
+	//_float minDist = 99999.f;
+
+	//for (_ulong i = 0; i < vtxCntZ - 1; ++i)
+	//{
+	//	for (_ulong j = 0; j < vtxCntX - 1; ++j)
+	//	{
+	//		_ulong index = i * vtxCntX + j;
+
+	//		// 오른쪽 위
+	//		vtxIdx[0] = index + vtxCntX;
+	//		vtxIdx[1] = index + vtxCntX + 1;
+	//		vtxIdx[2] = index + 1;
+
+	//		// V1 + U(V2 - V1) + V(V3 - V1)
+	//		if (D3DXIntersectTri(&terrainVtxPos[vtxIdx[0]],
+	//			&terrainVtxPos[vtxIdx[1]],
+	//			&terrainVtxPos[vtxIdx[2]], &rayPos, &rayDir, &uValue, &vValue, &dist))
+	//		{
+	//			if (minDist > dist)
+	//			{
+	//				minDist = dist;
+	//				pickPos = terrainVtxPos[vtxIdx[0]] + uValue * (terrainVtxPos[vtxIdx[1]] - terrainVtxPos[vtxIdx[0]]) + vValue * (terrainVtxPos[vtxIdx[2]] - terrainVtxPos[vtxIdx[0]]);
+	//			}
+	//			//pickPos = rayPos + (rayDir * dist);
+	//		}
+
+	//		// 왼쪽 아래
+	//		vtxIdx[0] = index + vtxCntX;
+	//		vtxIdx[1] = index + 1;
+	//		vtxIdx[2] = index;
+
+	//		// V1 + U(V2 - V1) + V(V3 - V1)
+	//		if (D3DXIntersectTri(&terrainVtxPos[vtxIdx[0]],
+	//			&terrainVtxPos[vtxIdx[1]],
+	//			&terrainVtxPos[vtxIdx[2]], &rayPos, &rayDir, &uValue, &vValue, &dist))
+	//		{
+	//			if (minDist > dist)
+	//			{
+	//				minDist = dist;
+	//				pickPos = terrainVtxPos[vtxIdx[0]] + uValue * (terrainVtxPos[vtxIdx[1]] - terrainVtxPos[vtxIdx[0]]) + vValue * (terrainVtxPos[vtxIdx[2]] - terrainVtxPos[vtxIdx[0]]);
+	//			}
+	//		}
+	//	}
+	//}
+
+	//D3DXVec3TransformCoord(&pickPos, &pickPos, &matWorld);
 
 	if (0 == m_transType) FindNearlyPoint(&pickPos);
 

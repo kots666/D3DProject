@@ -27,6 +27,8 @@ HRESULT CDynamicCamera::Ready(const _vec3* eye, const _vec3* at, const _vec3* up
 	FAILED_CHECK_RETURN(Engine::CCamera::Ready(), E_FAIL);
 
 	ShowCursor(false);
+
+	m_direction = { 0.f, 0.f, 1.f };
 	
 	return S_OK;
 }
@@ -41,14 +43,41 @@ _int CDynamicCamera::Update(const _float& deltaTime)
 		FixMouse();
 	}
 	
+	return 0;
+}
+
+_int CDynamicCamera::LateUpdate(const _float & deltaTime)
+{
+	Engine::CTransform* playerTransCom = dynamic_cast<Engine::CTransform*>(Engine::GetComponent(L"GameLogic", L"Player", L"Com_Transform", Engine::ID_DYNAMIC));
+	if (nullptr == playerTransCom) return 0;
+
+	_vec3 playerPos;
+	playerTransCom->GetInfo(Engine::INFO_POS, &playerPos);
+
+	_vec3 dir = { 0.f, 0.f, 1.f };
+	_float dist = 12.f;
+
+	_matrix rotXMat, rotYMat;
+	D3DXMatrixRotationX(&rotXMat, D3DXToRadian(m_xDegree));
+	D3DXMatrixRotationY(&rotYMat, D3DXToRadian(m_yDegree));
+
+	rotXMat *= rotYMat;
+
+	D3DXVec3TransformNormal(&dir, &dir, &rotXMat);
+	D3DXVec3Normalize(&dir, &dir);
+
+	m_at = playerPos;
+
+	m_eye = playerPos - (dir * dist);
+
 	_int ret = Engine::CCamera::Update(deltaTime);
-	
+
 	return ret;
 }
 
 void CDynamicCamera::KeyInput(const _float& deltaTime)
 {
-	_matrix matCamWorld;
+	/*_matrix matCamWorld;
 	D3DXMatrixInverse(&matCamWorld, NULL, &m_matView);
 
 	if (Engine::GetDIKeyState(DIK_W) & 0x80)
@@ -93,7 +122,7 @@ void CDynamicCamera::KeyInput(const _float& deltaTime)
 
 		m_eye += length;
 		m_at += length;
-	}
+	}*/
 
 	// 마우스 전환
 	if (Engine::GetDIKeyDownState(VK_LCONTROL))
@@ -112,40 +141,28 @@ void CDynamicCamera::MoveMouse()
 	D3DXMatrixInverse(&matCamWorld, NULL, &m_matView);
 
 	_long mouseMove = 0;
+	_float mouseSense = 60.f;
 
 	// 마우스를 상하로 움직일 때
 	if (mouseMove = Engine::GetDIMouseMove(Engine::DIMS_Y))
 	{
-		_vec3 right;
-		memcpy(&right, &matCamWorld.m[0][0], sizeof(_vec3));
+		m_xDegree += mouseSense * _float(mouseMove) / WINCY;
 
-		_vec3 look = m_at - m_eye;
-		_matrix matRot;
-		_float degree = D3DXToDegree(m_fovY);
-		_float yGap = WINCY / degree;
+		if (25.f > m_xDegree)
+		{
+			m_xDegree = 25.f;
+		}
 
-		D3DXMatrixRotationAxis(&matRot, &right, D3DXToRadian(mouseMove / yGap));
-
-		D3DXVec3TransformNormal(&look, &look, &matRot);
-
-		m_at = m_eye + look;
+		if (50.f < m_xDegree)
+		{
+			m_xDegree = 50.f;
+		}
 	}
 
 	// 마우스를 좌우로 움직일 때
 	if (mouseMove = Engine::GetDIMouseMove(Engine::DIMS_X))
 	{
-		_vec3 up = { 0.f, 1.f, 0.f };
-
-		_vec3 look = m_at - m_eye;
-		_matrix matRot;
-		_float degree = D3DXToDegree(m_fovY);
-		_float xGap = WINCX / degree;
-
-		D3DXMatrixRotationAxis(&matRot, &up, D3DXToRadian(mouseMove / xGap));
-
-		D3DXVec3TransformNormal(&look, &look, &matRot);
-
-		m_at = m_eye + look;
+		m_yDegree += mouseSense * _float(mouseMove) / WINCX;
 	}
 }
 

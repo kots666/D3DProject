@@ -10,6 +10,7 @@ class CTexture;
 class CRenderer;
 class CTransform;
 class CTerrainTex;
+class CShader;
 
 END
 
@@ -28,12 +29,14 @@ public:
 private:
 	HRESULT AddComponent();
 	HRESULT	SetUpMaterial();
+	HRESULT SetUpConstantTable(LPD3DXEFFECT& effect);
 
 private:
 	Engine::CTexture* m_texCom = nullptr;
 	Engine::CTransform* m_transCom = nullptr;
 	Engine::CRenderer* m_rendererCom = nullptr;
 	Engine::CTerrainTex* m_bufferCom = nullptr;
+	Engine::CShader* m_shaderCom = nullptr;
 
 public:
 	static CTerrain* Create(LPDIRECT3DDEVICE9 device);

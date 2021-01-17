@@ -62,14 +62,14 @@ _int CPlacedObject::Update(const _float& deltaTime)
 
 	for (auto& sphere : m_sphereColliderList)
 	{
-		sphere->UpdateByBone();
+		sphere->UpdateByBone(m_transCom->GetWorldMatrix());
 	}
 
-	/*if (m_isDynamic)
+	if (m_isDynamic)
 	{
 		m_dynamicMeshCom->PlayAnimation(deltaTime);
 		m_dynamicMeshCom->UpdateFrameMatrices(deltaTime);
-	}*/
+	}
 
 	return 0;
 }
@@ -87,28 +87,21 @@ void CPlacedObject::Render()
 
 	for (auto& sphere : m_sphereColliderList)
 	{
-		_matrix tmp;
-		m_transCom->GetWorldMatrix(&tmp);
-		sphere->Render(COLLTYPE::COL_FALSE, &tmp);
+		sphere->Render();
 	}
 
 	m_device->SetRenderState(D3DRS_LIGHTING, TRUE);
 }
 
-void CPlacedObject::AddSphereCollider(_matrix* boneMat, const _vec3& offset, const _float& radius)
+void CPlacedObject::AddSphereCollider(_tchar* name, _matrix* boneMat, const _vec3& offset, const _float& radius)
 {
 	Engine::CSphereCollider* sphereColl = nullptr;
 
 	Engine::CComponent* component = nullptr;
 
-	component = sphereColl = Engine::CSphereCollider::Create(m_device, boneMat, offset, radius);
+	component = sphereColl = Engine::CSphereCollider::Create(m_device, name, boneMat, offset, radius);
 	if (nullptr == component)
 		return;
-
-	_int count = m_sphereColliderList.size();
-	_tchar name[MAX_PATH];
-
-	wsprintf(name, L"Com_SphereCollider%d", count);
 
 	m_compMap[Engine::ID_STATIC].emplace(name, component);
 	m_sphereColliderList.emplace_back(sphereColl);
@@ -119,7 +112,6 @@ void CPlacedObject::AddSphereCollider(Engine::CSphereCollider * newComp, _tchar*
 {
 	m_compMap[Engine::ID_STATIC].emplace(name, newComp);
 	m_sphereColliderList.emplace_back(newComp);
-	m_sphereColliderNameList.emplace_back(name);
 }
 
 void CPlacedObject::DeleteSphereCollider(Engine::CSphereCollider * comp, _tchar * name)

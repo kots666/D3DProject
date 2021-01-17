@@ -21,6 +21,7 @@ public:
 public:
 	LPD3DXANIMATIONCONTROLLER GetAnimCtrl() { return m_animCtrl; }
 	_bool IsAnimationSetEnd();
+	void ResetAnimation();
 
 private:
 	LPD3DXANIMATIONCONTROLLER m_animCtrl;

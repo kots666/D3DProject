@@ -20,10 +20,13 @@ public:
 	void Update();
 
 private:
-	LARGE_INTEGER m_frameTime;
+	chrono::steady_clock::time_point m_frameTime;
+	chrono::steady_clock::time_point m_lastTime;
+
+	/*LARGE_INTEGER m_frameTime;
 	LARGE_INTEGER m_fixTime;
 	LARGE_INTEGER m_lastTime;
-	LARGE_INTEGER m_cpuTick;
+	LARGE_INTEGER m_cpuTick;*/
 
 private:
 	_float m_deltaTime;

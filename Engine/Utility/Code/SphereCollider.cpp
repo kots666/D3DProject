@@ -2,11 +2,28 @@
 
 USING(Engine)
 
-CSphereCollider::CSphereCollider(LPDIRECT3DDEVICE9 device, _matrix * boneMat, const _vec3 & offset, const _float & radius) :
+CSphereCollider::CSphereCollider(LPDIRECT3DDEVICE9 device, _tchar* name, _matrix * boneMat, const _vec3 & offset, const _float & radius) :
 	m_device(device),
 	m_attachBone(boneMat),
+	m_name(name),
 	m_offset(offset),
-	m_radius(radius)
+	m_radius(radius),
+	m_canCollide(false),
+	m_isCollide(false),
+	m_accTime(0.f)
+{
+	SafeAddRef(m_device);
+}
+
+CSphereCollider::CSphereCollider(LPDIRECT3DDEVICE9 device, const _vec3 & pos, const _float & radius) :
+	m_device(device),
+	m_attachBone(nullptr),
+	m_name(nullptr),
+	m_offset(pos),
+	m_radius(radius),
+	m_canCollide(true),
+	m_isCollide(false),
+	m_accTime(0.f)
 {
 	SafeAddRef(m_device);
 }
@@ -15,7 +32,10 @@ CSphereCollider::CSphereCollider(const CSphereCollider& rhs) :
 	m_device(rhs.m_device),
 	m_attachBone(rhs.m_attachBone),
 	m_offset(rhs.m_offset),
-	m_radius(rhs.m_radius)
+	m_radius(rhs.m_radius),
+	m_canCollide(rhs.m_canCollide),
+	m_isCollide(rhs.m_isCollide),
+	m_accTime(rhs.m_accTime)
 {
 	SafeAddRef(m_device);
 
@@ -25,7 +45,14 @@ CSphereCollider::CSphereCollider(const CSphereCollider& rhs) :
 
 CSphereCollider::~CSphereCollider()
 {
+	if (nullptr != m_name)
+	{
+		delete[] m_name;
+		m_name = nullptr;
+	}
 
+	for (_uint i = 0; i < COL_END; ++i)
+		SafeRelease(m_texture[i]);
 }
 
 HRESULT CSphereCollider::Ready()
@@ -43,26 +70,52 @@ HRESULT CSphereCollider::Ready()
 
 		m_texture[i]->UnlockRect(0);
 	}
+
+	D3DXMatrixIdentity(&m_worldMat);
+
+	m_scale = 0.01f;
+	m_realRadius = m_scale * m_radius;
 	
 	return S_OK;
 }
 
-void CSphereCollider::UpdateByBone()
+_int CSphereCollider::Update(const _float & deltaTime)
 {
-	if (nullptr == m_attachBone) return;
+	if (m_isCollide)
+	{
+		m_accTime += deltaTime;
 
-	//m_localMat = *m_attachBone;
+		if (m_accTime >= 1.f)
+		{
+			m_accTime = 0.f;
+			m_isCollide = false;
+		}
+	}
+	return 0;
+}
 
+void CSphereCollider::UpdateByBone(const _matrix* worldMat)
+{
 	_matrix tmpMat;
 	D3DXMatrixIdentity(&tmpMat);
 	tmpMat._41 = m_offset.x;
 	tmpMat._42 = m_offset.y;
 	tmpMat._43 = m_offset.z;
 
-	m_localMat = tmpMat * *m_attachBone;
+	if (nullptr == m_attachBone)
+	{
+		m_worldMat = tmpMat * *worldMat;
+		return;
+	}
+
+	m_worldMat = tmpMat * *m_attachBone;
+
+	if (nullptr == worldMat) return;
+
+	m_worldMat *= *worldMat;
 }
 
-void CSphereCollider::Render(COLLTYPE type, _matrix * worldMat)
+void CSphereCollider::Render()
 {
 #ifdef _DEBUG
 
@@ -72,26 +125,37 @@ void CSphereCollider::Render(COLLTYPE type, _matrix * worldMat)
 
 	if (nullptr == tmpMesh) return;
 
-	m_localMat *= *worldMat;
-
-	m_device->SetTransform(D3DTS_WORLD, &m_localMat);
+	m_device->SetTransform(D3DTS_WORLD, &m_worldMat);
 	m_device->SetRenderState(D3DRS_LIGHTING, FALSE);
 	m_device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
-	m_device->SetTexture(0, m_texture[type]);
+	if(m_isCollide)
+		m_device->SetTexture(0, m_texture[1]);
+	else
+		m_device->SetTexture(0, m_texture[0]);
+	
 	tmpMesh->DrawSubset(0);
 
 	m_device->SetRenderState(D3DRS_LIGHTING, TRUE);
 	m_device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 
-#endif
-
 	tmpMesh->Release();
+#endif
 }
 
-CSphereCollider * CSphereCollider::Create(LPDIRECT3DDEVICE9 device, _matrix * boneMat, const _vec3 & offset, const _float & radius)
+CSphereCollider * CSphereCollider::Create(LPDIRECT3DDEVICE9 device, const _vec3 & pos, const _float & radius)
 {
-	CSphereCollider* instance = new CSphereCollider(device, boneMat, offset, radius);
+	CSphereCollider* instance = new CSphereCollider(device, pos, radius);
+
+	if (FAILED(instance->Ready()))
+		SafeRelease(instance);
+
+	return instance;
+}
+
+CSphereCollider * CSphereCollider::Create(LPDIRECT3DDEVICE9 device, _tchar* name, _matrix * boneMat, const _vec3 & offset, const _float & radius)
+{
+	CSphereCollider* instance = new CSphereCollider(device, name, boneMat, offset, radius);
 
 	if (FAILED(instance->Ready()))
 		SafeRelease(instance);
@@ -106,9 +170,6 @@ CComponent * CSphereCollider::Clone()
 
 void CSphereCollider::Free()
 {
-	for (_uint i = 0; i < COL_END; ++i)
-		SafeRelease(m_texture[i]);
-
 	SafeRelease(m_device);
 }
 

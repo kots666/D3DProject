@@ -64,6 +64,14 @@ void CTexture::RenderTexture(const _uint& index /*= 0*/)
 	m_device->SetTexture(0, m_texVec[index]);
 }
 
+void CTexture::SetTexture(LPD3DXEFFECT & effect, const char * constantName, const _uint & index)
+{
+	if (m_texVec.size() < index)
+		return;
+
+	effect->SetTexture(constantName, m_texVec[index]);
+}
+
 CTexture* CTexture::Create(LPDIRECT3DDEVICE9 device, const _tchar* path, TEXTURETYPE type, const _uint& cnt)
 {
 	CTexture* instance = new CTexture(device);

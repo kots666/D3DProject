@@ -121,6 +121,15 @@ _bool CAnimCtrl::IsAnimationSetEnd()
 	return false;
 }
 
+void CAnimCtrl::ResetAnimation()
+{
+	m_animCtrl->ResetTime();
+
+	m_accTime = 0.f;
+
+	m_animCtrl->SetTrackPosition(m_currentTrack, 0.0);
+}
+
 CAnimCtrl * CAnimCtrl::Create(LPD3DXANIMATIONCONTROLLER animCtrl)
 {
 	CAnimCtrl* instance = new CAnimCtrl(animCtrl);

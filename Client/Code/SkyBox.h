@@ -6,10 +6,10 @@
 
 BEGIN(Engine)
 
-class CCubeTex;
-class CTexture;
+class CStaticMesh;
 class CRenderer;
 class CTransform;
+class CShader;
 
 END
 
@@ -23,16 +23,18 @@ private:
 public:
 	virtual HRESULT Ready() override;
 	virtual _int Update(const _float& deltaTime) override;
+	virtual _int LateUpdate(const _float& deltaTime) override;
 	virtual void Render() override;
 
 private:
 	HRESULT AddComponent();
+	HRESULT SetUpConstantTable(LPD3DXEFFECT& effect);
 
 private:
-	Engine::CCubeTex* m_bufferCom = nullptr;
-	Engine::CTexture* m_texCom = nullptr;
+	Engine::CStaticMesh* m_meshCom = nullptr;
 	Engine::CRenderer* m_rendererCom = nullptr;
 	Engine::CTransform* m_transCom = nullptr;
+	Engine::CShader* m_shaderCom = nullptr;
 
 public:
 	static CSkyBox*	Create(LPDIRECT3DDEVICE9 device);

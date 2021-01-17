@@ -40,6 +40,7 @@ public:
 	void SetScale(const _float& xScale, const _float& yScale, const _float& zScale);
 	void SetRotation(const _float& xRot, const _float& yRot, const _float& zRot);
 	void SetRotation(ROTATION rotType, const _float& angle);
+	void AddRotation(ROTATION rotType, const _float& angle);
 	void SetParentMatrix(const _matrix* parentMat);
 
 public:

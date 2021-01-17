@@ -48,7 +48,10 @@ _int CLayer::LateUpdate(const _float & deltaTime)
 			iter = m_objMap.erase(iter);
 		}
 		else
+		{
+			iter->second->LateUpdate(deltaTime);
 			++iter;
+		}
 	}
 
 	return ret;

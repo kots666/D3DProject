@@ -9,6 +9,8 @@ BEGIN(Engine)
 class CRCTex;
 class CTexture;
 class CRenderer;
+class CShader;
+class CTransform;
 
 END
 
@@ -26,11 +28,14 @@ public:
 
 private:
 	HRESULT AddComponent();
+	HRESULT SetUpConstantTable(LPD3DXEFFECT& effect);
 
 private:
 	Engine::CRCTex* m_bufferCom = nullptr;
 	Engine::CTexture* m_texCom = nullptr;
 	Engine::CRenderer* m_rendererCom = nullptr;
+	Engine::CTransform* m_transCom = nullptr;
+	Engine::CShader* m_shaderCom = nullptr;
 	
 public:
 	static CBackGround*	Create(LPDIRECT3DDEVICE9 device);

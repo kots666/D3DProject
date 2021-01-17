@@ -24,7 +24,7 @@ public:
 
 public:
 	_bool ComparePoint(const _vec3* firstPoint, const _vec3* secondPoint, CNaviCell* cell);
-	MOVESTATE CompareCell(const _vec3* endPos, _ulong* cellIndex);
+	MOVESTATE CompareCell(const _vec3* endPos, _ulong* cellIndex, _vec3* normalVec);
 
 public:
 	// Getter

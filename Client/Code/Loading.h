@@ -27,6 +27,7 @@ public:
 public:
 	HRESULT Ready(LOADINGID loadID);
 	_uint LoadingForStage();
+	HRESULT LoadingForStaticMeshes();
 
 private:
 	HANDLE m_thread;

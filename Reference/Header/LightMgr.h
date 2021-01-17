@@ -16,6 +16,10 @@ private:
 
 public:
 	HRESULT ReadyLight(LPDIRECT3DDEVICE9 device, const D3DLIGHT9* lightInfo, const _uint& index);
+	void RenderLight(LPD3DXEFFECT& effect);
+
+public:
+	const D3DLIGHT9* GetLight(const _uint& index);
 
 private:
 	list<CLight*> m_lightList;

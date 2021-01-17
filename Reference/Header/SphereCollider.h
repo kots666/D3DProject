@@ -2,39 +2,61 @@
 #define SphereCollider_h__
 
 #include "Component.h"
+#include "GameObject.h"
 
 BEGIN(Engine)
 
 class ENGINE_DLL CSphereCollider : public CComponent
 {
 private:
-	explicit CSphereCollider(LPDIRECT3DDEVICE9 device, _matrix* boneMat, const _vec3& offset, const _float& radius);
+	explicit CSphereCollider(LPDIRECT3DDEVICE9 device, _tchar* name, _matrix* boneMat, const _vec3& offset, const _float& radius);
+	explicit CSphereCollider(LPDIRECT3DDEVICE9 device, const _vec3& pos, const _float& radius);
 	explicit CSphereCollider(const CSphereCollider& rhs);
 	virtual ~CSphereCollider();
 
 public:
+	_bool GetCanCollide() const { return m_canCollide; }
+	_bool GetIsCollide() const { return m_isCollide; }
 	_vec3 GetOffset() const { return m_offset; }
-	_float GetRadius() const { return m_radius; }
+	_float GetRadius() const { return m_realRadius; }
+	_matrix GetWorldMat() const { return m_worldMat; }
 
+	void SetCanCollide(const _bool& can) { m_canCollide = can; }
+	void SetIsCollide(const _bool& collide) { m_isCollide = collide; }
 	void SetOffset(const _vec3& offset) { m_offset = offset; }
 	void SetRadius(const _float& radius) { m_radius = radius; }
+	void SetScale(const _float& scale) { m_scale = scale; m_realRadius = m_radius * m_scale; }
 
 public:
 	HRESULT Ready();
-	void UpdateByBone();
-	void Render(COLLTYPE type, _matrix* worldMat);
+	virtual _int Update(const _float& deltaTime) override;
+	void UpdateByBone(const _matrix* worldMat);
+	void Render();
 
 private:
-	_matrix m_localMat;
+	CGameObject* m_obj;
 	_matrix* m_attachBone;
+	_tchar* m_name;
+
+	_matrix m_worldMat;
 	_vec3 m_offset;
+	_vec3 m_worldPos;
 	_float m_radius;
+
+	_float m_scale;
+	_float m_realRadius;
+
+	_float m_accTime;
+
+	_bool m_canCollide;
+	_bool m_isCollide;
 
 	LPDIRECT3DDEVICE9 m_device;
 	LPDIRECT3DTEXTURE9 m_texture[COL_END];
 
 public:
-	static CSphereCollider* Create(LPDIRECT3DDEVICE9 device, _matrix* boneMat, const _vec3& offset, const _float& radius);
+	static CSphereCollider* Create(LPDIRECT3DDEVICE9 device, const _vec3& pos, const _float& radius);
+	static CSphereCollider* Create(LPDIRECT3DDEVICE9 device, _tchar* name, _matrix* boneMat, const _vec3& offset, const _float& radius);
 	virtual CComponent* Clone();
 	virtual void Free();
 };

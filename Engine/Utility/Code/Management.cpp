@@ -1,6 +1,4 @@
-#include "Management.h"
-#include "Scene.h"
-#include "Renderer.h"
+#include "Export_Utility.h"
 
 USING(Engine)
 IMPLEMENT_SINGLETON(CManagement)
@@ -13,6 +11,99 @@ CManagement::CManagement() :
 CManagement::~CManagement()
 {
 	Free();
+}
+
+HRESULT CManagement::ReadyShader(LPDIRECT3DDEVICE9 & device)
+{
+	D3DVIEWPORT9 viewPort;
+	device->GetViewport(&viewPort);
+
+	FAILED_CHECK_RETURN(ReadyRenderTarget(device,
+		L"Target_Albedo",
+		viewPort.Width,
+		viewPort.Height,
+		D3DFMT_A16B16G16R16F,
+		D3DXCOLOR(0.f, 0.f, 0.f, 1.f)),
+		E_FAIL);
+
+	FAILED_CHECK_RETURN(ReadyDebugBuffer(L"Target_Albedo", 0.f, 0.f, 100.f, 100.f), E_FAIL);
+
+	FAILED_CHECK_RETURN(ReadyRenderTarget(device,
+		L"Target_Normal",
+		viewPort.Width,
+		viewPort.Height,
+		D3DFMT_A16B16G16R16F,
+		D3DXCOLOR(0.f, 0.f, 0.f, 1.f)),
+		E_FAIL);
+	FAILED_CHECK_RETURN(ReadyDebugBuffer(L"Target_Normal", 0.f, 100.f, 100.f, 100.f), E_FAIL);
+
+	FAILED_CHECK_RETURN(ReadyRenderTarget(device,
+		L"Target_Shade",
+		viewPort.Width,
+		viewPort.Height,
+		D3DFMT_A16B16G16R16F,
+		D3DXCOLOR(0.f, 0.f, 0.f, 1.f)),
+		E_FAIL);
+	FAILED_CHECK_RETURN(ReadyDebugBuffer(L"Target_Shade", 0.f, 200.f, 100.f, 100.f), E_FAIL);
+
+	FAILED_CHECK_RETURN(ReadyRenderTarget(device,
+		L"Target_Depth",
+		viewPort.Width,
+		viewPort.Height,
+		D3DFMT_A32B32G32R32F,
+		D3DXCOLOR(1.f, 1.f, 1.f, 1.f)),
+		E_FAIL);
+	FAILED_CHECK_RETURN(ReadyDebugBuffer(L"Target_Depth", 0.f, 300.f, 100.f, 100.f), E_FAIL);
+
+	FAILED_CHECK_RETURN(ReadyMRT(L"MRT_Deferred", L"Target_Albedo"), E_FAIL);
+	FAILED_CHECK_RETURN(ReadyMRT(L"MRT_Deferred", L"Target_Normal"), E_FAIL);
+	FAILED_CHECK_RETURN(ReadyMRT(L"MRT_Deferred", L"Target_Depth"), E_FAIL);
+
+	FAILED_CHECK_RETURN(ReadyMRT(L"MRT_LightAcc", L"Target_Shade"), E_FAIL);
+
+	CShader* shader = nullptr;
+
+	// Sample
+	shader = CShader::Create(device, L"../../Reference/Header/Shader_Sample.hpp");
+	NULL_CHECK_RETURN(shader, E_FAIL);
+	FAILED_CHECK_RETURN(ReadyProto(L"Proto_Shader_Sample", shader), E_FAIL);
+
+	// Terrain
+	shader = CShader::Create(device, L"../../Reference/Header/Shader_Terrain.hpp");
+	NULL_CHECK_RETURN(shader, E_FAIL);
+	FAILED_CHECK_RETURN(ReadyProto(L"Proto_Shader_Terrain", shader), E_FAIL);
+
+	// Mesh
+	shader = CShader::Create(device, L"../../Reference/Header/Shader_Mesh.hpp");
+	NULL_CHECK_RETURN(shader, E_FAIL);
+	FAILED_CHECK_RETURN(ReadyProto(L"Proto_Shader_Mesh", shader), E_FAIL);
+
+	// Shade
+	shader = CShader::Create(device, L"../../Reference/Header/Shader_Shade.hpp");
+	NULL_CHECK_RETURN(shader, E_FAIL);
+	FAILED_CHECK_RETURN(ReadyProto(L"Proto_Shader_Shade", shader), E_FAIL);
+
+	// Blend
+	shader = CShader::Create(device, L"../../Reference/Header/Shader_Blend.hpp");
+	NULL_CHECK_RETURN(shader, E_FAIL);
+	FAILED_CHECK_RETURN(ReadyProto(L"Proto_Shader_Blend", shader), E_FAIL);
+
+	// SkyBox
+	shader = CShader::Create(device, L"../../Reference/Header/Shader_SkyBox.hpp");
+	NULL_CHECK_RETURN(shader, E_FAIL);
+	FAILED_CHECK_RETURN(ReadyProto(L"Proto_Shader_SkyBox", shader), E_FAIL);
+
+	// UI
+	shader = CShader::Create(device, L"../../Reference/Header/Shader_UI.hpp");
+	NULL_CHECK_RETURN(shader, E_FAIL);
+	FAILED_CHECK_RETURN(ReadyProto(L"Proto_Shader_UI", shader), E_FAIL);
+
+	// SwordTrail
+	shader = CShader::Create(device, L"../../Reference/Header/Shader_SwordTrail.hpp");
+	NULL_CHECK_RETURN(shader, E_FAIL);
+	FAILED_CHECK_RETURN(ReadyProto(L"Proto_Shader_SwordTrail", shader), E_FAIL);
+
+	return S_OK;
 }
 
 HRESULT CManagement::SetUpScene(CScene * scene)
@@ -42,9 +133,9 @@ _int CManagement::LateUpdateScene(const _float & deltaTime)
 	return 0;
 }
 
-void CManagement::RenderScene()
+void CManagement::RenderScene(LPDIRECT3DDEVICE9& device)
 {
-	CRenderer::GetInstance()->Render();
+	CRenderer::GetInstance()->Render(device);
 
 	if (nullptr == m_scene) return;
 

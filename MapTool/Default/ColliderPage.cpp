@@ -229,8 +229,9 @@ void CColliderPage::ResetFrameList(const _int & index)
 	m_frameVec.reserve(100);
 	m_frameNameVec.reserve(100);
 
+	_int newIndex = m_spawnedObj.size() - 1;
 
-	D3DXFRAME_EX* root = (D3DXFRAME_EX*)(m_spawnedObj[index]->GetCloneFrame()->pFrameFirstChild);
+	D3DXFRAME_EX* root = (D3DXFRAME_EX*)(m_spawnedObj[newIndex]->GetCloneFrame()->pFrameFirstChild);
 
 	SetBoneFrame(root);
 
@@ -321,11 +322,9 @@ void CColliderPage::OnClickedAdd()
 
 	if (0 > selectedBone || selectedBone >= m_frameVec.size()) return;
 
-	_int selectedMesh = m_dynamicMeshListBox.GetCurSel();
+	/*_int selectedMesh = m_dynamicMeshListBox.GetCurSel();
 
-	if (0 > selectedMesh || selectedMesh >= m_spawnedObj.size()) return;
-
-	CSphereCollider* newSphere = CSphereCollider::Create(CGraphicDevice::GetInstance()->GetDevice(), m_frameVec[selectedBone], m_position, m_radius);
+	if (0 > selectedMesh || selectedMesh >= m_spawnedObj.size()) return;*/
 
 	_int num = m_colliderVec.size();
 	CString collNum;
@@ -335,7 +334,9 @@ void CColliderPage::OnClickedAdd()
 
 	swprintf(name, sizeof(_tchar) * 50, L"Com_SphereCollider%d", num);
 
-	m_spawnedObj[selectedMesh]->AddSphereCollider(newSphere, name);
+	CSphereCollider* newSphere = CSphereCollider::Create(CGraphicDevice::GetInstance()->GetDevice(), name, m_frameVec[selectedBone], m_position, m_radius);
+
+	m_spawnedObj[0]->AddSphereCollider(newSphere, name);
 	m_colliderVec.emplace_back(newSphere);
 	m_colliderListBox.AddString(collNum);
 	m_colliderNameVec.emplace_back(name);
@@ -362,11 +363,11 @@ void CColliderPage::OnClickedDelete()
 
 	if (0 > select || select >= m_colliderVec.size()) return;
 
-	_int objNum = m_dynamicMeshListBox.GetCurSel();
+	/*_int objNum = m_dynamicMeshListBox.GetCurSel();
 
-	if (0 > objNum || objNum >= m_dynamicMeshVec.size()) return;
+	if (0 > objNum || objNum >= m_dynamicMeshVec.size()) return;*/
 
-	m_spawnedObj[objNum]->DeleteSphereCollider(m_colliderVec[select], m_colliderNameVec[select]);
+	m_spawnedObj[0]->DeleteSphereCollider(m_colliderVec[select], m_colliderNameVec[select]);
 
 	m_colliderVec.erase(m_colliderVec.begin() + select);
 	m_colliderNameVec.erase(m_colliderNameVec.begin() + select);
@@ -538,14 +539,14 @@ void CColliderPage::OnClickedLoad()
 
 			D3DXFRAME_EX* findBone = const_cast<D3DXFRAME_EX*>(m_spawnedObj[0]->FindFrame(tmpName));
 
-			CSphereCollider* newSphere = CSphereCollider::Create(CGraphicDevice::GetInstance()->GetDevice(), &(findBone->combinedTransformationMatrix), offset, radius);
-
 			CString collNum;
 			collNum.Format(_T("%d"), cnt);
 
 			_tchar* name = new _tchar[50];
 
 			swprintf(name, sizeof(_tchar) * 50, L"Com_SphereCollider%d", cnt);
+
+			CSphereCollider* newSphere = CSphereCollider::Create(CGraphicDevice::GetInstance()->GetDevice(), name, &(findBone->combinedTransformationMatrix), offset, radius);
 
 			m_spawnedObj[0]->AddSphereCollider(newSphere, name);
 			m_colliderVec.emplace_back(newSphere);

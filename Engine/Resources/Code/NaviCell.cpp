@@ -44,6 +44,7 @@ HRESULT CNaviCell::Ready(const _ulong& index, const _vec3* pointA, const _vec3* 
 
 void CNaviCell::Render()
 {
+#ifdef _DEBUG
 	_vec3 point[4];
 
 	point[0] = m_point[POINT_A];
@@ -78,6 +79,7 @@ void CNaviCell::Render()
 	m_lineCom->DrawTransform(point, 4, D3DXMatrixIdentity(&matTemp), D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
 
 	m_lineCom->End();
+#endif
 }
 
 _bool CNaviCell::ComparePoint(const _vec3* firstPoint, const _vec3* secondPoint, CNaviCell* cell)
@@ -130,14 +132,17 @@ _bool CNaviCell::ComparePoint(const _vec3* firstPoint, const _vec3* secondPoint,
 	return false;
 }
 
-CNaviCell::MOVESTATE CNaviCell::CompareCell(const _vec3 * endPos, _ulong * cellIndex)
+CNaviCell::MOVESTATE CNaviCell::CompareCell(const _vec3 * endPos, _ulong * cellIndex, _vec3* normalVec)
 {
 	for (_ulong i = 0; i < LINE_END; ++i)
 	{
 		if (CNaviLine::COMPARE_LEFT == m_line[i]->Compare(&_vec2(endPos->x, endPos->z)))
 		{
 			if (nullptr == m_neighbor[i])
+			{
+				*normalVec = m_line[i]->GetNormal();
 				return CNaviCell::MOVESTATE_STOP;
+			}
 			else
 			{
 				*cellIndex = *m_neighbor[i]->GetIndex();

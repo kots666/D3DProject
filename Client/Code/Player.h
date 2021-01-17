@@ -6,18 +6,23 @@
 
 BEGIN(Engine)
 
+class CTrailRect;
+class CTexture;
 class CDynamicMesh;
+class CNaviMesh;
 class CTransform;
 class CRenderer;
 class CCalculator;
 class CCollider;
-class CNaviMesh;
+class CShader;
 
 END
 
 BEGIN(Client)
 
+class CDynamicCamera;
 class CTerrain;
+class CSwordTrail;
 
 class CPlayer : public Engine::CGameObject
 {
@@ -30,13 +35,24 @@ public:
 	virtual _int Update(const _float& deltaTime) override;
 	virtual void Render() override;
 
+public:
+	virtual _bool AttackColliderOverlapped(Engine::CGameObject* target) override;
+	virtual void HitColliderOverlapped(Engine::CGameObject* causer) override;
+
 private:
 	HRESULT AddComponent();
+	HRESULT SetUpConstantTable(LPD3DXEFFECT& effect);
+	HRESULT LoadCollider();
 	void KeyInput(const _float& deltaTime);
 	void SetUpOnTerrain();
 	_vec3 PickUpOnTerrain();
 
 	void UpdateAnimMatrices();
+	void CalcComboTime(const _float& deltaTime);
+
+public:
+	void DoIdle();
+	void DoAttack();
 
 private:
 	Engine::CDynamicMesh* m_meshCom = nullptr;
@@ -44,17 +60,29 @@ private:
 	Engine::CTransform* m_transCom = nullptr;
 	Engine::CCalculator* m_calcCom = nullptr;
 	Engine::CRenderer* m_rendererCom = nullptr;
-	Engine::CCollider* m_colliderCom = nullptr;
+	Engine::CTexture* m_trailTexCom = nullptr;
+	Engine::CShader* m_shaderCom = nullptr;
+
+	CDynamicCamera* m_camera = nullptr;
+
+	CSwordTrail* m_swordTrail = nullptr;
 
 	_vec3 m_dir;
-	_float m_speed = 5.f;
 	_float m_yRotAngle;
+	_float m_animationSpeed;
 	_matrix m_yRotMat;
 	_matrix m_yScaleRotMat;
 	_matrix m_reviseMat;
 
-	_int m_playIndex = 0;
+	_bool m_isCombo = false;
+	_int m_comboIndex = 0;
 	_float m_accTime = 0.f;
+	_float m_comboTime = 0.f;
+
+	_int m_state;
+
+private:
+	void RecordPos();
 
 public:
 	static CPlayer*	Create(LPDIRECT3DDEVICE9 device);

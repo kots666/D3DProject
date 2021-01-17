@@ -23,6 +23,8 @@ private:
 	HRESULT ReadyUILayer(const _tchar* layerTag);
 	HRESULT	ReadyLightInfo();
 
+	void ReadMapFile(const _tchar* layerTag);
+
 public:
 	static CStage* Create(LPDIRECT3DDEVICE9 device);
 

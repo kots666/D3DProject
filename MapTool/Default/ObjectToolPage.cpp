@@ -317,7 +317,9 @@ void CObjectToolPage::OnClickedPlace()
 
 	_tchar* key = new _tchar[10];
 
-	wsprintf(key, L"%d", placedIndex);
+	_int number = m_placedMeshVec.size();
+
+	wsprintf(key, L"%d", number);
 
 	CPlacedObject* newObj = CPlacedObject::Create(CGraphicDevice::GetInstance()->GetDevice(), key, m_loadedMeshVec[select]->GetBuffer());
 	if (nullptr == newObj)
@@ -332,7 +334,7 @@ void CObjectToolPage::OnClickedPlace()
 
 	TCHAR string[MAX_PATH];
 
-	wsprintf(string, L"%d - ", placedIndex);
+	wsprintf(string, L"%d - ", number);
 	lstrcat(string, *m_loadedMeshVec[select]);
 
 	m_placedListBox.AddString(string);
@@ -392,7 +394,7 @@ void CObjectToolPage::SetValueByVec()
 BOOL CObjectToolPage::PreTranslateMessage(MSG* pMsg)
 {
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
-	if (pMsg->message == WM_KEYDOWN)
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN)
 	{
 		if (nullptr == m_targetPos) return CPropertyPage::PreTranslateMessage(pMsg);
 		if (nullptr == m_targetScale) return CPropertyPage::PreTranslateMessage(pMsg);

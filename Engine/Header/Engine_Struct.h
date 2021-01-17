@@ -30,6 +30,22 @@ namespace Engine
 	
 	const _ulong		FVF_TEX = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1;
 
+	typedef struct tagVertexTrail
+	{
+		_vec3 pos;
+		_vec2 texUV;
+	}VTXTRAIL;
+
+	const _ulong FVF_TRAIL = D3DFVF_XYZ | D3DFVF_TEX1;
+
+	typedef struct tagVertexScreen
+	{
+		_vec4 pos;
+		_vec2 texUV;
+	}VTXSCREEN;
+
+	const _ulong FVF_SCREEN = D3DFVF_XYZRHW | D3DFVF_TEX1;
+
 	typedef	struct tagVertexCubeTexture
 	{
 		_vec3			pos;

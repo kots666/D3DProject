@@ -34,7 +34,7 @@ HRESULT CTerrainTex::Ready(const _ulong& xCnt, const _ulong& zCnt, const _ulong&
 
 	FAILED_CHECK_RETURN(CVIBuffer::Ready(), E_FAIL);
 
-	//LoadHeightMap();
+	LoadHeightMap();
 
 	m_vtxPos = new _vec3[m_vtxCnt];
 
@@ -50,7 +50,7 @@ HRESULT CTerrainTex::Ready(const _ulong& xCnt, const _ulong& zCnt, const _ulong&
 		{
 			index = i * xCnt + j;
 
-			vertices[index].pos = { _float(j * vtxItv), 0.f, _float(i * vtxItv) };
+			vertices[index].pos = { _float(j * vtxItv), -0.2f, _float(i * vtxItv) };
 			//vertices[index].pos = { _float(j * vtxItv), (_float)(m_heightMap[index] & 0x000000ff) / 20.f, _float(i * vtxItv) };
 			m_vtxPos[index] = vertices[index].pos; // 버텍스 위치정보만 따로 저장
 
@@ -122,7 +122,9 @@ void CTerrainTex::LoadHeightMap()
 	ReadFile(hFile, &m_FH, sizeof(BITMAPFILEHEADER), &byte, NULL);
 	ReadFile(hFile, &m_IH, sizeof(BITMAPINFOHEADER), &byte, NULL);
 
-	_ulong size = m_IH.biWidth * m_IH.biHeight;
+	CloseHandle(hFile);
+
+	/*_ulong size = m_IH.biWidth * m_IH.biHeight;
 
 	m_heightMap.reserve(size);
 
@@ -132,7 +134,7 @@ void CTerrainTex::LoadHeightMap()
 	{
 		ReadFile(hFile, &data, sizeof(_ulong), &byte, NULL);
 		m_heightMap.emplace_back(data);
-	}
+	}*/
 }
 
 CTerrainTex* CTerrainTex::Create(LPDIRECT3DDEVICE9 device, const _ulong& xCnt, const _ulong& zCnt, const _ulong& vtxItv)

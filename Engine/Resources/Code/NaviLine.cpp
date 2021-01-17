@@ -31,7 +31,7 @@ CNaviLine::COMPARE CNaviLine::Compare(const _vec2* pos)
 
 	_float dot = D3DXVec2Dot(D3DXVec2Normalize(&dst, &dst), &m_normal);
 
-	if (0.f <= dot)
+	if (0.f < dot)
 		return COMPARE_LEFT;
 	else
 		return COMPARE_RIGHT;

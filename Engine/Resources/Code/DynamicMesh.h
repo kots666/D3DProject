@@ -17,12 +17,14 @@ private:
 public:
 	HRESULT Ready(const _tchar* filePath, const _tchar* fileName);
 	void Render();
+	void Render(LPD3DXEFFECT& effect);
 
 public:
 	void UpdateFrameMatrices(const _float& deltaTime, const _matrix* parentMatrix = nullptr);
 	void SetAnimation(const _uint& index, const _float& transitionTime, const _float& endTimeOffset, const _bool& isRoot);
 	void PlayAnimation(const _float& deltaTime, const _float& playSpeed = 1.f);
-	
+	void ResetAnimation();
+
 	_bool CanCalcMovePos(const char* name, _vec3& outPos, const _matrix* parentMat = nullptr);
 
 public:
@@ -40,7 +42,7 @@ public:
 	void AddToAccMovePos(const _vec3& movePos) { m_accMovePos += movePos; }
 
 private:
-	_bool CanCalcBoneMove(const D3DXFRAME_EX* EXFrame, const D3DXFRAME_EX* originFrame, const char* name, const _matrix* parentMatrix, _matrix* combineMatrix, _vec3* out);
+	_bool CanCalcBoneMove(const D3DXFRAME_EX* EXFrame, const D3DXFRAME_EX* originFrame, const char* name, _matrix parentMatrix, _matrix combineMatrix, _vec3* out);
 	void UpdateFrameMatrices(D3DXFRAME_EX* EXFrame, D3DXFRAME_EX* originFrame, const _matrix* parentMatrix);
 	void SetUpFrameMatricesPointer(D3DXFRAME_EX* EXFrame);
 

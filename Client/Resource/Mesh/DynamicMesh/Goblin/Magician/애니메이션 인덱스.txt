@@ -1,0 +1,7 @@
+		INDEX	START	END
+ATK		0	0	44
+Spawn		1	45	109
+Dead		2	110	144
+KnockUp		3	145	161
+Idle		4	162	212
+Run		5	213	240

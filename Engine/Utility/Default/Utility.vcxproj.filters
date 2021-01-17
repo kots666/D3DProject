@@ -49,6 +49,18 @@
     <Filter Include="04. Component\03. Optimization\00. Frustum">
       <UniqueIdentifier>{885d0a26-075c-4b20-b73c-cdaa52bbbb77}</UniqueIdentifier>
     </Filter>
+    <Filter Include="08. Shader">
+      <UniqueIdentifier>{9a2bf4c3-a3f8-477f-a17a-01150c7349c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="09. Shader Hpp">
+      <UniqueIdentifier>{402a26dd-2613-4f00-bcc6-c19a943d1b9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="10. RenderTarget">
+      <UniqueIdentifier>{28b3cad0-7bbc-43f5-ba06-47412d3d7135}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="10. RenderTarget\Manager">
+      <UniqueIdentifier>{dd0ec224-39c6-49a4-8519-bb70d61d5a34}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Management.cpp">
@@ -98,6 +110,15 @@
     </ClCompile>
     <ClCompile Include="..\Code\SphereCollider.cpp">
       <Filter>04. Component\02. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Shader.cpp">
+      <Filter>08. Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RenderTarget.cpp">
+      <Filter>10. RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RenderTargetMgr.cpp">
+      <Filter>10. RenderTarget\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +172,42 @@
     </ClInclude>
     <ClInclude Include="..\Code\SphereCollider.h">
       <Filter>04. Component\02. Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Shader.h">
+      <Filter>08. Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Shader_Blend.hpp">
+      <Filter>09. Shader Hpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Shader_Effect.hpp">
+      <Filter>09. Shader Hpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Shader_Mesh.hpp">
+      <Filter>09. Shader Hpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Shader_Sample.hpp">
+      <Filter>09. Shader Hpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Shader_Shade.hpp">
+      <Filter>09. Shader Hpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Shader_SkyBox.hpp">
+      <Filter>09. Shader Hpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Shader_Terrain.hpp">
+      <Filter>09. Shader Hpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\RenderTarget.h">
+      <Filter>10. RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\RenderTargetMgr.h">
+      <Filter>10. RenderTarget\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Shader_UI.hpp">
+      <Filter>09. Shader Hpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Shader_SwordTrail.hpp">
+      <Filter>09. Shader Hpp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

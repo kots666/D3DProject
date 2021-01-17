@@ -22,6 +22,8 @@ public:
 public:
 	COMPARE Compare(const _vec2* pos);
 
+	_vec3 GetNormal() { return _vec3(m_normal.x, 0.f, m_normal.y); }
+
 private:
 	_vec2 m_point[POINT_END];
 	_vec2 m_direction;

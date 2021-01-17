@@ -18,10 +18,11 @@ private:
 	virtual ~CManagement();
 
 public:
+	HRESULT ReadyShader(LPDIRECT3DDEVICE9& device);
 	HRESULT	SetUpScene(CScene* scene);
 	_int UpdateScene(const _float& deltaTime);
 	_int LateUpdateScene(const _float& deltaTime);
-	void RenderScene();
+	void RenderScene(LPDIRECT3DDEVICE9& device);
 
 	// Getter
 	CScene* GetScene() { return m_scene; }

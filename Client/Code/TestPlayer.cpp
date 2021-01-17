@@ -97,7 +97,7 @@ HRESULT Client::CTestPlayer::Ready(void)
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	//m_pTransformCom->m_vScale = _vec3(4.f, 2.f, 1.f);
+	//m_transformCom->m_vScale = _vec3(4.f, 2.f, 1.f);
 
 	return S_OK;
 }

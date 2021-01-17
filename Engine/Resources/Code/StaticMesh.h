@@ -15,6 +15,7 @@ private:
 public:
 	HRESULT		Ready(const _tchar* filePath, const _tchar* fileName);
 	void		Render();
+	void Render(LPD3DXEFFECT& effect);
 
 public:
 	const _ulong& GetNumVtx() { return m_numVtx; }

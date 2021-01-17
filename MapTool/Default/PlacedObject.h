@@ -39,7 +39,7 @@ public:
 	void SetRotationY(const _float& y) { m_rotation.y = y; }
 	void SetRotationZ(const _float& z) { m_rotation.z = z; }
 
-	void AddSphereCollider(_matrix* boneMat, const _vec3& offset, const _float& radius);
+	void AddSphereCollider(_tchar* name, _matrix* boneMat, const _vec3& offset, const _float& radius);
 	void AddSphereCollider(Engine::CSphereCollider* newComp, _tchar* name);
 
 	void DeleteSphereCollider(Engine::CSphereCollider* comp, _tchar* name);

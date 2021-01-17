@@ -15,12 +15,27 @@ private:
 	virtual ~CRenderer();
 
 public:
+	HRESULT ReadyRenderer(LPDIRECT3DDEVICE9& device);
+
+public:
 	void AddObject(RENDERID group, CGameObject* gameObject);
-	void Render();
+	void Render(LPDIRECT3DDEVICE9& device);
 	void Clear();
 
 private:
+	void RenderPriority(LPDIRECT3DDEVICE9& device);
+	void RenderNonAlpha(LPDIRECT3DDEVICE9& device);
+	void RenderAlpha(LPDIRECT3DDEVICE9& device);
+	void RenderUI(LPDIRECT3DDEVICE9& device);
+
+	void RenderDeferred(LPDIRECT3DDEVICE9& device);
+	void RenderLightAcc(LPDIRECT3DDEVICE9& device);
+	void RenderBlend(LPDIRECT3DDEVICE9& device);
+
+private:
 	list<CGameObject*> m_renderGroup[RENDER_END];
+	LPDIRECT3DVERTEXBUFFER9 m_VB;
+	LPDIRECT3DINDEXBUFFER9 m_IB;
 
 private:
 	virtual CComponent* Clone() { return nullptr; }

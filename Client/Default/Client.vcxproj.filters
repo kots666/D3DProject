@@ -58,14 +58,56 @@
     <Filter Include="02. GameObject\01. Stage\03. Enemy">
       <UniqueIdentifier>{4ff09da5-0fc8-43bd-a228-e036a1d57eb9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. Stage\04. Stone">
-      <UniqueIdentifier>{3ff3a233-0afb-43cc-adae-146b81be418e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\01. Stage\00. SkyBox">
       <UniqueIdentifier>{60bc3fba-af4d-4264-a1bb-71e25ca6d926}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. Stage\05. Sword">
+    <Filter Include="02. GameObject\01. Stage\99. BackMesh">
+      <UniqueIdentifier>{3f30981b-f40a-48b7-bb33-1902be6a53f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\04. Boss">
+      <UniqueIdentifier>{4e177340-fd76-4cd8-971d-9e81435ba5e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\98. Sword">
       <UniqueIdentifier>{a950608b-c151-40cb-a1b7-93ac778e4f8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\97. Stone">
+      <UniqueIdentifier>{3ff3a233-0afb-43cc-adae-146b81be418e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\05. UI">
+      <UniqueIdentifier>{612c586d-dea3-4de0-96ad-345b0ae791f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\05. UI\HPUI">
+      <UniqueIdentifier>{8cc916ae-061a-4997-9089-a0c4c138cc4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\03. Enemy\00. Goblin_Sword">
+      <UniqueIdentifier>{40b8c7e5-1c99-4343-89e0-2e36eeee4778}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\03. Enemy\01. Goblin_Magician">
+      <UniqueIdentifier>{f4035ccd-c90f-419f-9fd9-556e588a3836}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\03. Enemy\02. Dog">
+      <UniqueIdentifier>{04e9e9f8-a178-47b6-8386-0e7c9dde9a38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\03. Enemy\03. Minotauros">
+      <UniqueIdentifier>{96ddcca8-6862-401c-9364-354ec7be6f22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\02. Public\02. ColliderManager">
+      <UniqueIdentifier>{2efc9910-4e73-414b-ad5c-fcb6d9aa956f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\02. Public\03. Spawn">
+      <UniqueIdentifier>{2f44cb6b-1fc6-4cc3-b022-85ca98d0d0cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\02. Public\03. Spawn\00. Spawner">
+      <UniqueIdentifier>{a080c192-fa6c-40b7-8086-0e613a7d2a03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\02. Public\03. Spawn\01. Manager">
+      <UniqueIdentifier>{4fdb8256-a715-4854-beee-ad02fe0e146f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\03. Enemy\01. Goblin_Magician\00. FireBall">
+      <UniqueIdentifier>{1f076bd5-233e-481d-a156-b334e1daf9ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\06. Trail">
+      <UniqueIdentifier>{fa46820b-bfe0-429d-82ba-2741effca167}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -132,14 +174,53 @@
     <ClInclude Include="..\Code\SkyBox.h">
       <Filter>02. GameObject\01. Stage\00. SkyBox</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\Enemy.h">
-      <Filter>02. GameObject\01. Stage\03. Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="..\Code\Stone.h">
-      <Filter>02. GameObject\01. Stage\04. Stone</Filter>
+      <Filter>02. GameObject\01. Stage\97. Stone</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\Sword.h">
-      <Filter>02. GameObject\01. Stage\05. Sword</Filter>
+      <Filter>02. GameObject\01. Stage\98. Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\BackMesh.h">
+      <Filter>02. GameObject\01. Stage\99. BackMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\ColliderManager.h">
+      <Filter>02. GameObject\02. Public\02. ColliderManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Enum.h">
+      <Filter>98. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Boss.h">
+      <Filter>02. GameObject\01. Stage\04. Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\UI.h">
+      <Filter>02. GameObject\01. Stage\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\HPUI.h">
+      <Filter>02. GameObject\01. Stage\05. UI\HPUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GoblinSword.h">
+      <Filter>02. GameObject\01. Stage\03. Enemy\00. Goblin_Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GoblinMagician.h">
+      <Filter>02. GameObject\01. Stage\03. Enemy\01. Goblin_Magician</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Dog.h">
+      <Filter>02. GameObject\01. Stage\03. Enemy\02. Dog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\SpawnManager.h">
+      <Filter>02. GameObject\02. Public\03. Spawn\01. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Spawner.h">
+      <Filter>02. GameObject\02. Public\03. Spawn\00. Spawner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Minotauros.h">
+      <Filter>02. GameObject\01. Stage\03. Enemy\03. Minotauros</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\FireBall.h">
+      <Filter>02. GameObject\01. Stage\03. Enemy\01. Goblin_Magician\00. FireBall</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\SwordTrail.h">
+      <Filter>02. GameObject\01. Stage\06. Trail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -185,14 +266,50 @@
     <ClCompile Include="..\Code\SkyBox.cpp">
       <Filter>02. GameObject\01. Stage\00. SkyBox</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Enemy.cpp">
-      <Filter>02. GameObject\01. Stage\03. Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\Stone.cpp">
-      <Filter>02. GameObject\01. Stage\04. Stone</Filter>
+      <Filter>02. GameObject\01. Stage\97. Stone</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Sword.cpp">
-      <Filter>02. GameObject\01. Stage\05. Sword</Filter>
+      <Filter>02. GameObject\01. Stage\98. Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\BackMesh.cpp">
+      <Filter>02. GameObject\01. Stage\99. BackMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ColliderManager.cpp">
+      <Filter>02. GameObject\02. Public\02. ColliderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Boss.cpp">
+      <Filter>02. GameObject\01. Stage\04. Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\UI.cpp">
+      <Filter>02. GameObject\01. Stage\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\HPUI.cpp">
+      <Filter>02. GameObject\01. Stage\05. UI\HPUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GoblinSword.cpp">
+      <Filter>02. GameObject\01. Stage\03. Enemy\00. Goblin_Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GoblinMagician.cpp">
+      <Filter>02. GameObject\01. Stage\03. Enemy\01. Goblin_Magician</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Dog.cpp">
+      <Filter>02. GameObject\01. Stage\03. Enemy\02. Dog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SpawnManager.cpp">
+      <Filter>02. GameObject\02. Public\03. Spawn\01. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Spawner.cpp">
+      <Filter>02. GameObject\02. Public\03. Spawn\00. Spawner</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Minotauros.cpp">
+      <Filter>02. GameObject\01. Stage\03. Enemy\03. Minotauros</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\FireBall.cpp">
+      <Filter>02. GameObject\01. Stage\03. Enemy\01. Goblin_Magician\00. FireBall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SwordTrail.cpp">
+      <Filter>02. GameObject\01. Stage\06. Trail</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

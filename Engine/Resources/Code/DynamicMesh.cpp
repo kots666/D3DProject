@@ -106,6 +106,48 @@ void CDynamicMesh::Render()
 	}
 }
 
+void CDynamicMesh::Render(LPD3DXEFFECT & effect)
+{
+	// 렌더 시 해당 애니메이션 프레임 값에 맞는 포지션 값을 적용하기 위한 단계
+	for (auto& iter : m_meshContainerList)
+	{
+		D3DXMESHCONTAINER_EX* EXMeshContainer = iter;
+
+		for (_ulong i = 0; i < EXMeshContainer->numBones; ++i)
+		{
+			EXMeshContainer->renderingMatrix[i] = EXMeshContainer->frameOffsetMatrix[i]
+				* (*EXMeshContainer->frameCombinedMatrix[i]);
+		}
+
+		void* srcVertices = nullptr;
+		void* dstVertices = nullptr;
+
+		EXMeshContainer->originMesh->LockVertexBuffer(0, &srcVertices);
+		EXMeshContainer->MeshData.pMesh->LockVertexBuffer(0, &dstVertices);
+
+		EXMeshContainer->pSkinInfo->UpdateSkinnedMesh(
+			EXMeshContainer->renderingMatrix,
+			nullptr,
+			srcVertices,
+			dstVertices);
+		// 소프트 웨어 스키닝을 수행하는 함수(스키닝 뿐 아니라 애니메이션 변경 시, 뼈대들의 정점 정보들의 변경도 동시에 수행)
+		// 1인자 : 뼈의 최종적인 변환 상태
+		// 2인자 : 원래대로 돌리기 위한 역행렬(굳이 안넣어줘도 된다)
+		// 3인자 : 변하지 않는 원본 메쉬의 정점 정보
+		// 4인자 : 변환된 정보를 담아두고 있는 메쉬의 정점 정보
+
+		for (_ulong i = 0; i < EXMeshContainer->NumMaterials; ++i)
+		{
+			effect->SetTexture("g_BaseTexture", EXMeshContainer->texture[i]);
+			effect->CommitChanges();
+			EXMeshContainer->MeshData.pMesh->DrawSubset(i);
+		}
+
+		EXMeshContainer->MeshData.pMesh->UnlockVertexBuffer();
+		EXMeshContainer->originMesh->UnlockVertexBuffer();
+	}
+}
+
 void CDynamicMesh::UpdateFrameMatrices(const _float& deltaTime, const _matrix * parentMatrix)
 {
 	if (m_isBlendTime)
@@ -147,20 +189,29 @@ void CDynamicMesh::PlayAnimation(const _float & deltaTime, const _float & playSp
 	m_animCtrl->PlayAnimation(deltaTime, playSpeed);
 }
 
+void CDynamicMesh::ResetAnimation()
+{
+	m_animCtrl->ResetAnimation();
+}
+
 _bool CDynamicMesh::CanCalcMovePos(const char * name, _vec3& outPos, const _matrix* parentMat)
 {
 	if (m_isRootMotion && !m_isBlendTime)
 	{
-		_matrix initMat;
+		_matrix initMat, combinedMat;
 		D3DXMatrixIdentity(&initMat);
+		D3DXMatrixIdentity(&combinedMat);
 
 		if (nullptr == parentMat)
 		{
 			parentMat = &initMat;
 		}
 
-		if (CanCalcBoneMove((D3DXFRAME_EX*)m_cloneFrame, (D3DXFRAME_EX*)m_rootFrame, name, parentMat, &initMat, &outPos))
+		if (CanCalcBoneMove((D3DXFRAME_EX*)m_cloneFrame, (D3DXFRAME_EX*)m_rootFrame, name, *parentMat, combinedMat, &outPos))
 		{
+			if (outPos.x < -30)
+				int i = 0;
+
 			m_prevPos = m_accMovePos;
 			m_accMovePos = outPos;
 
@@ -190,18 +241,18 @@ _bool CDynamicMesh::IsAnimationSetEnd()
 	return m_animCtrl->IsAnimationSetEnd();
 }
 
-_bool CDynamicMesh::CanCalcBoneMove(const D3DXFRAME_EX * EXframe, const D3DXFRAME_EX * originFrame, const char * name, const _matrix * parentMatrix, _matrix * combineMatrix, _vec3 * out)
+_bool CDynamicMesh::CanCalcBoneMove(const D3DXFRAME_EX * EXframe, const D3DXFRAME_EX * originFrame, const char * name, _matrix parentMatrix, _matrix combineMatrix, _vec3 * out)
 {
 	if (nullptr == EXframe)
 		return false;
 
-	*combineMatrix = originFrame->TransformationMatrix * *(parentMatrix);
+	combineMatrix = originFrame->TransformationMatrix * parentMatrix;
 
 	if (nullptr != EXframe->Name)
 	{
 		if (0 == strcmp(EXframe->Name, name))
 		{
-			*out = _vec3(combineMatrix->m[3][0], combineMatrix->m[3][1], combineMatrix->m[3][2]);
+			*out = _vec3(combineMatrix.m[3][0], combineMatrix.m[3][1], combineMatrix.m[3][2]);
 			return true;
 		}
 	}
@@ -210,7 +261,10 @@ _bool CDynamicMesh::CanCalcBoneMove(const D3DXFRAME_EX * EXframe, const D3DXFRAM
 		CanCalcBoneMove((D3DXFRAME_EX*)EXframe->pFrameSibling, (D3DXFRAME_EX*)originFrame->pFrameSibling, name, parentMatrix, combineMatrix, out);
 
 	if (nullptr != EXframe->pFrameFirstChild)
-		CanCalcBoneMove((D3DXFRAME_EX*)EXframe->pFrameFirstChild, (D3DXFRAME_EX*)originFrame->pFrameFirstChild, name, combineMatrix, combineMatrix, out);
+	{
+		parentMatrix = combineMatrix;
+		CanCalcBoneMove((D3DXFRAME_EX*)EXframe->pFrameFirstChild, (D3DXFRAME_EX*)originFrame->pFrameFirstChild, name, parentMatrix, combineMatrix, out);
+	}
 }
 
 void CDynamicMesh::UpdateFrameMatrices(D3DXFRAME_EX * EXFrame, D3DXFRAME_EX * originFrame, const _matrix * parentMatrix)

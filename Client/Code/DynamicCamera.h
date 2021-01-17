@@ -18,6 +18,12 @@ public:
 				const _float& nearZ, const _float& farZ);
 
 	virtual _int Update(const _float& deltaTime) override;
+	virtual _int LateUpdate(const _float& deltaTime) override;
+
+public:
+	_float GetXDegree() { return m_xDegree; }
+	_float GetYDegree() { return m_yDegree; }
+	_vec3 GetDirection() { m_direction; }
 
 private:
 	void KeyInput(const _float& deltaTime);
@@ -32,12 +38,17 @@ public:
 									const _vec3* up, 
 									const _float& fovY = D3DXToRadian(60.f),
 									const _float& aspect = _float(WINCX) / WINCY, 
-									const _float& nearZ = 1.f, 
+									const _float& nearZ = 0.1f, 
 									const _float& farZ = 1000.f);
 
 private:
 	_bool m_canClick = false;
 	_bool m_isFix = true;
+
+	_float m_xDegree = 30.f;
+	_float m_yDegree = 0.f;
+
+	_vec3 m_direction;
 
 private:
 	virtual void Free() override;

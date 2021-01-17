@@ -174,21 +174,34 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Code\BackGround.h" />
+    <ClInclude Include="..\Code\BackMesh.h" />
+    <ClInclude Include="..\Code\Boss.h" />
+    <ClInclude Include="..\Code\ColliderManager.h" />
+    <ClInclude Include="..\Code\Dog.h" />
     <ClInclude Include="..\Code\DynamicCamera.h" />
-    <ClInclude Include="..\Code\Enemy.h" />
+    <ClInclude Include="..\Code\FireBall.h" />
+    <ClInclude Include="..\Code\GoblinMagician.h" />
+    <ClInclude Include="..\Code\GoblinSword.h" />
+    <ClInclude Include="..\Code\HPUI.h" />
     <ClInclude Include="..\Code\Loading.h" />
     <ClInclude Include="..\Code\Logo.h" />
     <ClInclude Include="..\Code\MainApp.h" />
+    <ClInclude Include="..\Code\Minotauros.h" />
     <ClInclude Include="..\Code\Player.h" />
     <ClInclude Include="..\Code\SkyBox.h" />
+    <ClInclude Include="..\Code\Spawner.h" />
+    <ClInclude Include="..\Code\SpawnManager.h" />
     <ClInclude Include="..\Code\Stage.h" />
     <ClInclude Include="..\Code\StaticCamera.h" />
     <ClInclude Include="..\Code\Stone.h" />
     <ClInclude Include="..\Code\Sword.h" />
+    <ClInclude Include="..\Code\SwordTrail.h" />
     <ClInclude Include="..\Code\Terrain.h" />
     <ClInclude Include="..\Code\TestMonster.h" />
     <ClInclude Include="..\Code\TestPlayer.h" />
+    <ClInclude Include="..\Code\UI.h" />
     <ClInclude Include="..\Header\Define.h" />
+    <ClInclude Include="..\Header\Enum.h" />
     <ClInclude Include="..\Header\Function.h" />
     <ClInclude Include="..\Header\Macro.h" />
     <ClInclude Include="..\Header\Struct.h" />
@@ -200,20 +213,32 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\BackGround.cpp" />
+    <ClCompile Include="..\Code\BackMesh.cpp" />
+    <ClCompile Include="..\Code\Boss.cpp" />
+    <ClCompile Include="..\Code\ColliderManager.cpp" />
+    <ClCompile Include="..\Code\Dog.cpp" />
     <ClCompile Include="..\Code\DynamicCamera.cpp" />
-    <ClCompile Include="..\Code\Enemy.cpp" />
+    <ClCompile Include="..\Code\FireBall.cpp" />
+    <ClCompile Include="..\Code\GoblinMagician.cpp" />
+    <ClCompile Include="..\Code\GoblinSword.cpp" />
+    <ClCompile Include="..\Code\HPUI.cpp" />
     <ClCompile Include="..\Code\Loading.cpp" />
     <ClCompile Include="..\Code\Logo.cpp" />
     <ClCompile Include="..\Code\MainApp.cpp" />
+    <ClCompile Include="..\Code\Minotauros.cpp" />
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\SkyBox.cpp" />
+    <ClCompile Include="..\Code\Spawner.cpp" />
+    <ClCompile Include="..\Code\SpawnManager.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />
     <ClCompile Include="..\Code\StaticCamera.cpp" />
     <ClCompile Include="..\Code\Stone.cpp" />
     <ClCompile Include="..\Code\Sword.cpp" />
+    <ClCompile Include="..\Code\SwordTrail.cpp" />
     <ClCompile Include="..\Code\Terrain.cpp" />
     <ClCompile Include="..\Code\TestMonster.cpp" />
     <ClCompile Include="..\Code\TestPlayer.cpp" />
+    <ClCompile Include="..\Code\UI.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

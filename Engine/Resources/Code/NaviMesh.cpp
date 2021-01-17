@@ -27,6 +27,9 @@ HRESULT CNaviMesh::Ready()
 {
 	m_vecCell.reserve(4);
 
+	FAILED_CHECK_RETURN(LoadNaviMesh(), E_FAIL);
+
+	/*
 	CNaviCell* cell = nullptr;
 
 	// 0¹ø 
@@ -48,10 +51,38 @@ HRESULT CNaviMesh::Ready()
 	cell = CNaviCell::Create(m_device, m_vecCell.size(), &_vec3(2.f, 0.f, 2.f), &_vec3(4.f, 0.f, 0.f), &_vec3(2.f, 0.f, 0.f));
 	NULL_CHECK_RETURN(cell, E_FAIL);
 	m_vecCell.push_back(cell);
+	*/
 
 	FAILED_CHECK_RETURN(LinkCell(), E_FAIL);
 
 	return S_OK;
+}
+
+HRESULT CNaviMesh::LoadNaviMesh()
+{
+	CNaviCell* cell = nullptr;
+
+	HANDLE hFile = CreateFile(L"../Data/NaviMesh.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+
+	if (INVALID_HANDLE_VALUE == hFile) return E_FAIL;
+
+	DWORD dwByte = 0;
+
+	while (true)
+	{
+		_vec3 pos[3];
+
+		for (_int i = 0; i < 3; ++i)
+			ReadFile(hFile, &pos[i], sizeof(_vec3), &dwByte, nullptr);
+
+		if (0 == dwByte) break;
+
+		cell = CNaviCell::Create(m_device, m_vecCell.size(), &pos[0], &pos[1], &pos[2]);
+		NULL_CHECK_RETURN(cell, E_FAIL);
+		m_vecCell.emplace_back(cell);
+	}
+
+	CloseHandle(hFile);
 }
 
 void CNaviMesh::Render()
@@ -63,12 +94,30 @@ void CNaviMesh::Render()
 _vec3 CNaviMesh::MoveOnNaviMesh(const _vec3 * targetPos, const _vec3 * targetDir)
 {
 	_vec3 endPos = *targetPos + *targetDir;
+	_vec3 normalVec = { 0.f, 0.f, 0.f };
 
-	if (CNaviCell::MOVESTATE_MOVE == m_vecCell[m_index]->CompareCell(&endPos, &m_index))
+	if (CNaviCell::MOVESTATE_MOVE == m_vecCell[m_index]->CompareCell(&endPos, &m_index, &normalVec))
 		return endPos;
 
-	else if (CNaviCell::MOVESTATE_STOP == m_vecCell[m_index]->CompareCell(&endPos, &m_index))
-		return *targetPos;
+	else if (CNaviCell::MOVESTATE_STOP == m_vecCell[m_index]->CompareCell(&endPos, &m_index, &normalVec))
+	{
+		_vec3 speed = *targetDir;
+		_vec3 slidingVec = { 0.f, 0.f, 0.f };
+		normalVec *= -1.f;
+
+		D3DXVec3Normalize(&normalVec, &normalVec);
+		
+		slidingVec = speed - D3DXVec3Dot(&speed, &normalVec) * normalVec;
+
+		endPos = *targetPos + slidingVec;
+
+		if (CNaviCell::MOVESTATE_MOVE == m_vecCell[m_index]->CompareCell(&endPos, &m_index, &normalVec))
+			return endPos;
+		else if (CNaviCell::MOVESTATE_STOP == m_vecCell[m_index]->CompareCell(&endPos, &m_index, &normalVec))
+			return *targetPos;
+
+		//return endPos;
+	}
 }
 
 HRESULT CNaviMesh::LinkCell()

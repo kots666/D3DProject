@@ -96,7 +96,7 @@ HRESULT CMainApp::ReadyScene(LPDIRECT3DDEVICE9 device, Engine::CManagement ** ou
 	scene = CStage::Create(device);
 	NULL_CHECK_RETURN(scene, E_FAIL);
 
-	FAILED_CHECK_RETURN(Engine::CreateManagement(outerManagement), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::CreateManagement(outerManagement, m_device), E_FAIL);
 	Engine::SafeAddRef(*outerManagement);
 
 	FAILED_CHECK_RETURN((*outerManagement)->SetUpScene(scene), E_FAIL);

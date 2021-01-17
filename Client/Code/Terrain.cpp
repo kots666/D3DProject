@@ -35,11 +35,23 @@ _int CTerrain::Update(const _float& deltaTime)
 
 void CTerrain::Render()
 {
-	m_transCom->SetTransform(m_device);
+	LPD3DXEFFECT effect = m_shaderCom->GetEffectHandle();
+	if (nullptr == effect) return;
 
-	FAILED_CHECK_RETURN(SetUpMaterial());
-	m_texCom->RenderTexture(0);
+	Engine::SafeAddRef(effect);
+
+	_uint maxPass = 0;
+	effect->Begin(&maxPass, 0);
+	effect->BeginPass(0);
+
+	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
+
 	m_bufferCom->Render();
+
+	effect->EndPass();
+	effect->End();
+
+	Engine::SafeRelease(effect);
 }
 
 HRESULT CTerrain::AddComponent()
@@ -67,6 +79,11 @@ HRESULT CTerrain::AddComponent()
 	NULL_CHECK_RETURN(comp, E_FAIL);
 	m_compMap[Engine::ID_DYNAMIC].emplace(L"Com_Transform", comp);
 
+	// Shader
+	comp = m_shaderCom = dynamic_cast<Engine::CShader*>(Engine::CloneComp(L"Proto_Shader_Terrain"));
+	NULL_CHECK_RETURN(comp, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_Shader", comp);
+
 	return S_OK;
 }
 
@@ -82,6 +99,41 @@ HRESULT CTerrain::SetUpMaterial()
 	mtrlInfo.Power = 0.f;
 
 	m_device->SetMaterial(&mtrlInfo);
+
+	return S_OK;
+}
+
+HRESULT CTerrain::SetUpConstantTable(LPD3DXEFFECT & effect)
+{
+	_matrix worldMat, viewMat, projMat;
+
+	m_transCom->GetWorldMatrix(&worldMat);
+	m_device->GetTransform(D3DTS_VIEW, &viewMat);
+	m_device->GetTransform(D3DTS_PROJECTION, &projMat);
+
+	effect->SetMatrix("g_matWorld", &worldMat);
+	effect->SetMatrix("g_matView", &viewMat);
+	effect->SetMatrix("g_matProj", &projMat);
+
+	m_texCom->SetTexture(effect, "g_BaseTexture");
+
+	const D3DLIGHT9* lightInfo = Engine::GetLight(0);
+
+	effect->SetVector("g_vLightDir", &_vec4(lightInfo->Direction, 0.f));
+	effect->SetVector("g_LightDiffuse", (_vec4*)&lightInfo->Diffuse);
+	effect->SetVector("g_LightAmbient", (_vec4*)&lightInfo->Ambient);
+
+	D3DMATERIAL9 mtrlInfo;
+	ZeroMemory(&mtrlInfo, sizeof(D3DMATERIAL9));
+
+	mtrlInfo.Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	mtrlInfo.Specular = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	mtrlInfo.Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	mtrlInfo.Emissive = D3DXCOLOR(0.f, 0.f, 0.f, 1.f);
+	mtrlInfo.Power = 0.f;
+
+	effect->SetVector("g_MtrlDiffuse", (_vec4*)&mtrlInfo.Diffuse);
+	effect->SetVector("g_MtrlAmbient", (_vec4*)&mtrlInfo.Ambient);
 
 	return S_OK;
 }

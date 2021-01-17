@@ -188,6 +188,11 @@ void CTransform::SetRotation(const _float & xRot, const _float & yRot, const _fl
 
 void CTransform::SetRotation(ROTATION rotType, const _float & angle)
 {
+	*(((_float*)&m_angle) + rotType) = angle;
+}
+
+void CTransform::AddRotation(ROTATION rotType, const _float & angle)
+{
 	*(((_float*)&m_angle) + rotType) += angle;
 }
 

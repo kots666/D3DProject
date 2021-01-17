@@ -16,6 +16,7 @@ private:
 
 public:
 	HRESULT Ready();
+	HRESULT LoadNaviMesh();
 	void Render();
 
 public:

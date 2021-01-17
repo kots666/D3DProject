@@ -133,6 +133,16 @@ void CStaticMesh::Render()
 	}
 }
 
+void CStaticMesh::Render(LPD3DXEFFECT & effect)
+{
+	for (_ulong i = 0; i < m_subsetCnt; ++i)
+	{
+		effect->SetTexture("g_BaseTexture", m_textures[i]);
+		effect->CommitChanges();
+		m_mesh->DrawSubset(i);
+	}
+}
+
 
 CStaticMesh* CStaticMesh::Create(LPDIRECT3DDEVICE9 device, const _tchar* filePath, const _tchar* fileName)
 {
