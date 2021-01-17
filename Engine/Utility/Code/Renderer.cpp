@@ -125,16 +125,10 @@ _bool CompareViewZ(CGameObject * dst, CGameObject * src)
 
 void CRenderer::RenderAlpha(LPDIRECT3DDEVICE9 & device)
 {
-	device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-	device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
 	m_renderGroup[RENDER_ALPHA].sort(CompareViewZ);
 
 	for (auto& iter : m_renderGroup[RENDER_ALPHA])
 		iter->Render();
-
-	device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 }
 
 void CRenderer::RenderUI(LPDIRECT3DDEVICE9 & device)

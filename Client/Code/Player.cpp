@@ -602,9 +602,6 @@ void CPlayer::RecordPos()
 
 	auto frame = m_meshCom->GetCloneFrameByName("Bone_R_Weapon");
 	_matrix frameMat = frame->combinedTransformationMatrix;
-	_matrix worldMat;
-	m_transCom->GetWorldMatrix(&worldMat);
-	worldMat = frameMat * worldMat;
 
 	D3DXVec3TransformCoord(&endOffset, &endOffset, &frameMat);
 	D3DXVec3TransformCoord(&lowOffset, &lowOffset, &frameMat);

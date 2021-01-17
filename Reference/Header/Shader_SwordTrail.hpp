@@ -69,9 +69,9 @@ technique Default_Device
 		zenable = false;
 		zwriteenable = true;
 		
-		alphatestenable = true;
-		alpharef = 0;
-		alphafunc = greater;
+		//alphatestenable = true;
+		//alpharef = 0;
+		//alphafunc = greater;
 
 		alphablendenable = true;
 		srcblend = srcalpha;
