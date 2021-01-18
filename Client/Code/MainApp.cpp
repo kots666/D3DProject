@@ -46,7 +46,14 @@ _int CMainApp::Update(const _float & deltaTime)
 		m_frame = 0;
 	}
 
-	m_managementClass->UpdateScene(deltaTime);
+	CPlayTimeManager::GetInstance()->Update(deltaTime);
+
+	if (CPlayTimeManager::GetInstance()->GetIsStopNow())
+		m_managementClass->UpdateScene(0.f);
+	else if (CPlayTimeManager::GetInstance()->GetIsSlowNow())
+		m_managementClass->UpdateScene(deltaTime * 0.01f);
+	else
+		m_managementClass->UpdateScene(deltaTime);
 
 	CColliderManager::GetInstance()->CheckCollision(OBJ_PLAYER, OBJ_ENEMY);
 	CColliderManager::GetInstance()->CheckCollision(OBJ_ENEMY, OBJ_PLAYER);
@@ -125,6 +132,7 @@ void CMainApp::Free()
 	Engine::ReleaseResoures();
 	Engine::ReleaseUtility();
 
+	CPlayTimeManager::DestroyInstance();
 	CSpawnManager::DestroyInstance();
 	CColliderManager::DestroyInstance();
 

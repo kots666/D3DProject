@@ -31,7 +31,7 @@ HRESULT CPlayer::Ready()
 
 	D3DXMatrixRotationY(&m_reviseMat, D3DXToRadian(-90.f));
 
-	m_transCom->SetPos(12.f, 0.3f, 4.f);
+	m_transCom->SetPos(12.f, 0.25f, 4.f);
 	m_transCom->SetScale(0.01f, 0.01f, 0.01f);
 	m_transCom->Update(0.1f);
 	
@@ -149,7 +149,8 @@ _bool CPlayer::AttackColliderOverlapped(Engine::CGameObject * target)
 
 	m_collideList.emplace_back(target);
 
-	//cout << "Attack" << endl;
+	m_camera->ShakeCamera();
+	CPlayTimeManager::GetInstance()->SetHitSlow();
 
 	return true;
 }
@@ -598,7 +599,7 @@ void CPlayer::DoAttack()
 void CPlayer::RecordPos()
 {
 	_vec3 endOffset = { 0.f, -175.f, 0.f };
-	_vec3 lowOffset = { 0.f, -140.f, 0.f };
+	_vec3 lowOffset = { 0.f, -125.f, 0.f };
 
 	auto frame = m_meshCom->GetCloneFrameByName("Bone_R_Weapon");
 	_matrix frameMat = frame->combinedTransformationMatrix;
@@ -606,7 +607,18 @@ void CPlayer::RecordPos()
 	D3DXVec3TransformCoord(&endOffset, &endOffset, &frameMat);
 	D3DXVec3TransformCoord(&lowOffset, &lowOffset, &frameMat);
 
-	m_swordTrail->AddPos(endOffset, lowOffset);
+	m_swordTrail->AddPos(endOffset, lowOffset, 0);
+
+	endOffset = _vec3(0.f, -190.f, 0.f);
+	lowOffset = _vec3(0.f, -140.f, 0.f);
+
+	frame = m_meshCom->GetCloneFrameByName("Bone_L_Weapon");
+	frameMat = frame->combinedTransformationMatrix;
+
+	D3DXVec3TransformCoord(&endOffset, &endOffset, &frameMat);
+	D3DXVec3TransformCoord(&lowOffset, &lowOffset, &frameMat);
+
+	m_swordTrail->AddPos(endOffset, lowOffset, 1);
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 device)

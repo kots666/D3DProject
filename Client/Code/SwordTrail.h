@@ -28,7 +28,7 @@ public:
 	virtual void Render() override;
 
 public:
-	void AddPos(const _vec3& end, const _vec3& low);
+	void AddPos(const _vec3& end, const _vec3& low, const _int& type);
 
 	void SetWorldMat(const _matrix& worldMat) { m_worldMat = worldMat; }
 
@@ -36,7 +36,7 @@ private:
 	HRESULT AddComponent();
 	HRESULT SetUpConstantTable(LPD3DXEFFECT& effect);
 
-	void MakeTrail();
+	void MakeTrail(const _int& type);
 
 private:
 	Engine::CTexture* m_texCom = nullptr;
@@ -45,7 +45,7 @@ private:
 
 	_matrix m_worldMat;
 
-	vector<_vec3> m_trailPosVec;
+	vector<_vec3> m_trailPosVec[2];
 	list<Engine::CTrailRect*> m_trailList;
 
 public:

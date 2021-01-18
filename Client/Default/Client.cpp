@@ -80,7 +80,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			/*Engine::SetDeltaTime(L"Timer_FPS60");
 			_float deltaTime = Engine::GetDeltaTime(L"Timer_FPS60");
 
-			mainApp->CheckSpawnCondition(deltaTime);
+			mainApp->Update(deltaTime);
 			mainApp->LateUpdate(deltaTime);
 			mainApp->Render();*/
 

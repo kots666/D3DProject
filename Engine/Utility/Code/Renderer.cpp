@@ -106,6 +106,16 @@ void CRenderer::Clear()
 	}
 }
 
+_bool CompareViewZGreater(CGameObject * dst, CGameObject * src)
+{
+	return dst->GetViewZ() > src->GetViewZ();
+}
+
+_bool CompareViewZless(CGameObject * dst, CGameObject * src)
+{
+	return dst->GetViewZ() > src->GetViewZ();
+}
+
 void CRenderer::RenderPriority(LPDIRECT3DDEVICE9 & device)
 {
 	for (auto& iter : m_renderGroup[RENDER_PRIORITY])
@@ -114,18 +124,15 @@ void CRenderer::RenderPriority(LPDIRECT3DDEVICE9 & device)
 
 void CRenderer::RenderNonAlpha(LPDIRECT3DDEVICE9 & device)
 {
+	m_renderGroup[RENDER_NONALPHA].sort(CompareViewZless);
+
 	for (auto& iter : m_renderGroup[RENDER_NONALPHA])
 		iter->Render();
 }
 
-_bool CompareViewZ(CGameObject * dst, CGameObject * src)
-{
-	return dst->GetViewZ() > src->GetViewZ();
-}
-
 void CRenderer::RenderAlpha(LPDIRECT3DDEVICE9 & device)
 {
-	m_renderGroup[RENDER_ALPHA].sort(CompareViewZ);
+	m_renderGroup[RENDER_ALPHA].sort(CompareViewZGreater);
 
 	for (auto& iter : m_renderGroup[RENDER_ALPHA])
 		iter->Render();

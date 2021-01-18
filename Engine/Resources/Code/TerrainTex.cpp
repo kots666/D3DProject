@@ -50,7 +50,7 @@ HRESULT CTerrainTex::Ready(const _ulong& xCnt, const _ulong& zCnt, const _ulong&
 		{
 			index = i * xCnt + j;
 
-			vertices[index].pos = { _float(j * vtxItv), -0.2f, _float(i * vtxItv) };
+			vertices[index].pos = { _float(j * vtxItv), -0.3f, _float(i * vtxItv) };
 			//vertices[index].pos = { _float(j * vtxItv), (_float)(m_heightMap[index] & 0x000000ff) / 20.f, _float(i * vtxItv) };
 			m_vtxPos[index] = vertices[index].pos; // 버텍스 위치정보만 따로 저장
 

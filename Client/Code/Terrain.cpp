@@ -87,22 +87,6 @@ HRESULT CTerrain::AddComponent()
 	return S_OK;
 }
 
-HRESULT CTerrain::SetUpMaterial()
-{
-	D3DMATERIAL9 mtrlInfo;
-	ZeroMemory(&mtrlInfo, sizeof(D3DMATERIAL9));
-
-	mtrlInfo.Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-	mtrlInfo.Specular = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-	mtrlInfo.Ambient = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.f);
-	mtrlInfo.Emissive = D3DXCOLOR(0.f, 0.f, 0.f, 1.f);
-	mtrlInfo.Power = 0.f;
-
-	m_device->SetMaterial(&mtrlInfo);
-
-	return S_OK;
-}
-
 HRESULT CTerrain::SetUpConstantTable(LPD3DXEFFECT & effect)
 {
 	_matrix worldMat, viewMat, projMat;
@@ -115,25 +99,9 @@ HRESULT CTerrain::SetUpConstantTable(LPD3DXEFFECT & effect)
 	effect->SetMatrix("g_matView", &viewMat);
 	effect->SetMatrix("g_matProj", &projMat);
 
+	effect->SetFloat("g_detail", 129.f);
+
 	m_texCom->SetTexture(effect, "g_BaseTexture");
-
-	const D3DLIGHT9* lightInfo = Engine::GetLight(0);
-
-	effect->SetVector("g_vLightDir", &_vec4(lightInfo->Direction, 0.f));
-	effect->SetVector("g_LightDiffuse", (_vec4*)&lightInfo->Diffuse);
-	effect->SetVector("g_LightAmbient", (_vec4*)&lightInfo->Ambient);
-
-	D3DMATERIAL9 mtrlInfo;
-	ZeroMemory(&mtrlInfo, sizeof(D3DMATERIAL9));
-
-	mtrlInfo.Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-	mtrlInfo.Specular = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-	mtrlInfo.Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-	mtrlInfo.Emissive = D3DXCOLOR(0.f, 0.f, 0.f, 1.f);
-	mtrlInfo.Power = 0.f;
-
-	effect->SetVector("g_MtrlDiffuse", (_vec4*)&mtrlInfo.Diffuse);
-	effect->SetVector("g_MtrlAmbient", (_vec4*)&mtrlInfo.Ambient);
 
 	return S_OK;
 }

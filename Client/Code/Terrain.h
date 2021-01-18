@@ -28,7 +28,6 @@ public:
 
 private:
 	HRESULT AddComponent();
-	HRESULT	SetUpMaterial();
 	HRESULT SetUpConstantTable(LPD3DXEFFECT& effect);
 
 private:

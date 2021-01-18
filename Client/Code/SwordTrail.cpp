@@ -16,7 +16,8 @@ HRESULT CSwordTrail::Ready()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_trailPosVec.reserve(8);
+	m_trailPosVec[0].reserve(8);
+	m_trailPosVec[1].reserve(8);
 
 	return S_OK;
 }
@@ -64,13 +65,13 @@ void CSwordTrail::Render()
 	Engine::SafeRelease(effect);
 }
 
-void CSwordTrail::AddPos(const _vec3 & end, const _vec3 & low)
+void CSwordTrail::AddPos(const _vec3 & end, const _vec3 & low, const _int & type)
 {
-	m_trailPosVec.emplace_back(end);
-	m_trailPosVec.emplace_back(low);
+	m_trailPosVec[type].emplace_back(end);
+	m_trailPosVec[type].emplace_back(low);
 
-	if (8 <= m_trailPosVec.size())
-		MakeTrail();
+	if (8 <= m_trailPosVec[type].size())
+		MakeTrail(type);
 }
 
 HRESULT CSwordTrail::AddComponent()
@@ -113,7 +114,7 @@ HRESULT CSwordTrail::SetUpConstantTable(LPD3DXEFFECT & effect)
 	return S_OK;
 }
 
-void CSwordTrail::MakeTrail()
+void CSwordTrail::MakeTrail(const _int & type)
 {
 	_vec3 pos[4];
 	_vec2 texUV[4];
@@ -128,10 +129,10 @@ void CSwordTrail::MakeTrail()
 		_float beforeS = i * (1.f / cutCnt);
 		_float afterS = (i + 1) * (1.f / cutCnt);
 
-		D3DXVec3CatmullRom(&beforeEnd, &m_trailPosVec[0], &m_trailPosVec[2], &m_trailPosVec[4], &m_trailPosVec[6], beforeS);
-		D3DXVec3CatmullRom(&afterEnd, &m_trailPosVec[0], &m_trailPosVec[2], &m_trailPosVec[4], &m_trailPosVec[6], afterS);
-		D3DXVec3CatmullRom(&beforeLow, &m_trailPosVec[1], &m_trailPosVec[3], &m_trailPosVec[5], &m_trailPosVec[7], beforeS);
-		D3DXVec3CatmullRom(&afterLow, &m_trailPosVec[1], &m_trailPosVec[3], &m_trailPosVec[5], &m_trailPosVec[7], afterS);
+		D3DXVec3CatmullRom(&beforeEnd, &m_trailPosVec[type][0], &m_trailPosVec[type][2], &m_trailPosVec[type][4], &m_trailPosVec[type][6], beforeS);
+		D3DXVec3CatmullRom(&afterEnd, &m_trailPosVec[type][0], &m_trailPosVec[type][2], &m_trailPosVec[type][4], &m_trailPosVec[type][6], afterS);
+		D3DXVec3CatmullRom(&beforeLow, &m_trailPosVec[type][1], &m_trailPosVec[type][3], &m_trailPosVec[type][5], &m_trailPosVec[type][7], beforeS);
+		D3DXVec3CatmullRom(&afterLow, &m_trailPosVec[type][1], &m_trailPosVec[type][3], &m_trailPosVec[type][5], &m_trailPosVec[type][7], afterS);
 
 		pos[0] = beforeEnd;
 		pos[1] = afterEnd;
@@ -149,7 +150,7 @@ void CSwordTrail::MakeTrail()
 	}
 
 	for (_int i = 0; i < 2; ++i)
-		m_trailPosVec.erase(m_trailPosVec.begin());
+		m_trailPosVec[type].erase(m_trailPosVec[type].begin());
 }
 
 CSwordTrail * CSwordTrail::Create(LPDIRECT3DDEVICE9 device)

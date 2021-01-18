@@ -2,6 +2,8 @@ matrix			g_matWorld;		// 상수 테이블
 matrix			g_matView;
 float4x4		g_matProj;
 
+float g_detail;
+
 texture			g_BaseTexture;
 
 sampler BaseSampler = sampler_state
@@ -10,6 +12,9 @@ sampler BaseSampler = sampler_state
 
 	minfilter = linear;
 	magfilter = linear;
+
+	AddressU = Wrap;
+	AddressV = Wrap;
 };
 
 struct	VS_IN
@@ -65,7 +70,7 @@ PS_OUT		PS_MAIN(PS_IN In)
 {
 	PS_OUT		Out = (PS_OUT)0;
 
-	vector vColor = tex2D(BaseSampler, In.vTexUV);	// 2차원 텍스처로부터 uv좌표에 해당하는 색을 얻어오는 함수, 반환 타입이 vector 타입
+	vector vColor = tex2D(BaseSampler, In.vTexUV * g_detail);	// 2차원 텍스처로부터 uv좌표에 해당하는 색을 얻어오는 함수, 반환 타입이 vector 타입
 
 	Out.vColor = vColor;
 	Out.vColor.a = 1.f;

@@ -21,6 +21,10 @@ public:
 	virtual _int LateUpdate(const _float& deltaTime) override;
 
 public:
+	void ShakeCamera(const _float& duration = 0.2f, const _float& magnitude = 0.1f, const _bool& isForced = false);
+	void UpdateShake(const _float& deltaTime);
+
+public:
 	_float GetXDegree() { return m_xDegree; }
 	_float GetYDegree() { return m_yDegree; }
 	_vec3 GetDirection() { m_direction; }
@@ -47,6 +51,10 @@ private:
 
 	_float m_xDegree = 30.f;
 	_float m_yDegree = 0.f;
+
+	_float m_shakeDuration = 0.f;
+	_float m_shakeMagnitude = 0.f;
+	_bool m_isShake = false;
 
 	_vec3 m_direction;
 

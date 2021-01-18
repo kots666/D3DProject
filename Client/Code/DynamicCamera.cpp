@@ -55,7 +55,7 @@ _int CDynamicCamera::LateUpdate(const _float & deltaTime)
 	playerTransCom->GetInfo(Engine::INFO_POS, &playerPos);
 
 	_vec3 dir = { 0.f, 0.f, 1.f };
-	_float dist = 12.f;
+	_float dist = 9.5f;
 
 	_matrix rotXMat, rotYMat;
 	D3DXMatrixRotationX(&rotXMat, D3DXToRadian(m_xDegree));
@@ -70,60 +70,67 @@ _int CDynamicCamera::LateUpdate(const _float & deltaTime)
 
 	m_eye = playerPos - (dir * dist);
 
+	UpdateShake(deltaTime);
+
 	_int ret = Engine::CCamera::Update(deltaTime);
 
 	return ret;
 }
 
+void CDynamicCamera::ShakeCamera(const _float & duration, const _float & magnitude, const _bool& isForced)
+{
+	if (!m_isShake)
+	{
+		m_isShake = true;
+
+		m_shakeDuration = duration;
+		m_shakeMagnitude = magnitude;
+	}
+
+	if (isForced)
+	{
+		m_isShake = true;
+
+		m_shakeDuration = duration;
+		m_shakeMagnitude = magnitude;
+	}
+}
+
+void CDynamicCamera::UpdateShake(const _float& deltaTime)
+{
+	if (m_isShake)
+	{
+		m_shakeDuration -= deltaTime;
+
+		if (0 >= m_shakeDuration)
+		{
+			m_isShake = false;
+			m_shakeDuration = 0.f;
+			m_shakeMagnitude = 0.f;
+			return;
+		}
+
+		_vec3 dir = m_at - m_eye;
+		D3DXVec3Normalize(&dir, &dir);
+
+		_vec3 up = m_up;
+		D3DXVec3Normalize(&up, &up);
+
+		_vec3 right;
+		D3DXVec3Cross(&right, &up, &dir);
+
+		_vec3 randVec = right * (((rand() % 21) / 10.f) - 1.f);
+
+		m_eye += randVec * m_shakeMagnitude;
+
+		randVec = up * (((rand() % 21) / 10.f) - 1.f);
+
+		m_eye += randVec * m_shakeMagnitude;
+	}
+}
+
 void CDynamicCamera::KeyInput(const _float& deltaTime)
 {
-	/*_matrix matCamWorld;
-	D3DXMatrixInverse(&matCamWorld, NULL, &m_matView);
-
-	if (Engine::GetDIKeyState(DIK_W) & 0x80)
-	{
-		_vec3 look;
-		memcpy(look, &matCamWorld.m[2][0], sizeof(_vec3));
-
-		_vec3 length = *D3DXVec3Normalize(&look, &look) * 5.f * deltaTime;
-
-		m_eye += length;
-		m_at += length;
-	}
-
-	if (Engine::GetDIKeyState(DIK_S) & 0x80)
-	{
-		_vec3 look;
-		memcpy(look, &matCamWorld.m[2][0], sizeof(_vec3));
-
-		_vec3 length = *D3DXVec3Normalize(&look, &look) * 5.f * deltaTime;
-
-		m_eye -= length;
-		m_at -= length;
-	}
-
-	if (Engine::GetDIKeyState(DIK_A) & 0x80)
-	{
-		_vec3 right;
-		memcpy(right, &matCamWorld.m[0][0], sizeof(_vec3));
-
-		_vec3 length = *D3DXVec3Normalize(&right, &right) * 5.f * deltaTime;
-
-		m_eye -= length;
-		m_at -= length;
-	}
-
-	if (Engine::GetDIKeyState(DIK_D) & 0x80)
-	{
-		_vec3 right;
-		memcpy(right, &matCamWorld.m[0][0], sizeof(_vec3));
-
-		_vec3 length = *D3DXVec3Normalize(&right, &right) * 5.f * deltaTime;
-
-		m_eye += length;
-		m_at += length;
-	}*/
-
 	// 마우스 전환
 	if (Engine::GetDIKeyDownState(VK_LCONTROL))
 	{
