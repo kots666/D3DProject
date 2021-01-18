@@ -40,11 +40,11 @@ void CTerrain::Render()
 
 	Engine::SafeAddRef(effect);
 
+	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
+
 	_uint maxPass = 0;
 	effect->Begin(&maxPass, 0);
 	effect->BeginPass(0);
-
-	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
 
 	m_bufferCom->Render();
 

@@ -45,7 +45,7 @@ _int CFireBall::Update(const _float& deltaTime)
 
 	Engine::CGameObject::Update(deltaTime);
 
-	m_rendererCom->AddObject(Engine::RENDER_ALPHA, this);
+	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
 
 	for (auto& elem : m_attackCollider)
 	{
@@ -58,19 +58,23 @@ _int CFireBall::Update(const _float& deltaTime)
 
 void CFireBall::Render()
 {
-	m_transCom->SetTransform(m_device);
+	LPD3DXEFFECT effect = m_shaderCom->GetEffectHandle();
+	if (nullptr == effect) return;
 
-	m_device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
 
-	m_headMeshCom->Render();
-	m_tailMeshCom->Render();
+	Engine::SafeAddRef(effect);
 
-	m_device->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	effect->Begin(nullptr, 0);
+	effect->BeginPass(0);
 
-	for (auto& elem : m_attackCollider)
-	{
-		elem->Render();
-	}
+	m_headMeshCom->Render(effect);
+	m_tailMeshCom->Render(effect);
+	
+	effect->EndPass();
+	effect->End();
+
+	Engine::SafeRelease(effect);
 }
 
 _bool CFireBall::AttackColliderOverlapped(Engine::CGameObject * target)
@@ -104,6 +108,11 @@ HRESULT CFireBall::AddComponent()
 	Engine::SafeAddRef(component);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Renderer", component);
 
+	// Shader
+	component = m_shaderCom = dynamic_cast<Engine::CShader*>(Engine::CloneComp(L"Proto_Shader_Alpha"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_Shader", component);
+
 	return S_OK;
 }
 
@@ -113,6 +122,21 @@ HRESULT CFireBall::LoadCollider()
 	NULL_CHECK_RETURN(newSphere, E_FAIL);
 	newSphere->SetScale(0.05f);
 	m_attackCollider.emplace_back(newSphere);
+
+	return S_OK;
+}
+
+HRESULT CFireBall::SetUpConstantTable(LPD3DXEFFECT & effect)
+{
+	_matrix matWorld, matView, matProj;
+
+	m_transCom->GetWorldMatrix(&matWorld);
+	m_device->GetTransform(D3DTS_VIEW, &matView);
+	m_device->GetTransform(D3DTS_PROJECTION, &matProj);
+
+	effect->SetMatrix("g_matWorld", &matWorld);
+	effect->SetMatrix("g_matView", &matView);
+	effect->SetMatrix("g_matProj", &matProj);
 
 	return S_OK;
 }

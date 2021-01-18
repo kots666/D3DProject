@@ -209,6 +209,9 @@
     <ClInclude Include="..\Code\Shader_SwordTrail.hpp">
       <Filter>09. Shader Hpp</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\Shader_Alpha.hpp">
+      <Filter>09. Shader Hpp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Header\Export_Utility.inl">

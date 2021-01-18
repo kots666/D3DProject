@@ -9,6 +9,7 @@ BEGIN(Engine)
 class CStaticMesh;
 class CTransform;
 class CRenderer;
+class CShader;
 
 END
 
@@ -33,6 +34,7 @@ public:
 private:
 	HRESULT AddComponent();
 	HRESULT LoadCollider();
+	HRESULT SetUpConstantTable(LPD3DXEFFECT& effect);
 	void LookAtTarget();
 
 private:
@@ -40,6 +42,7 @@ private:
 	Engine::CStaticMesh* m_tailMeshCom = nullptr;
 	Engine::CTransform* m_transCom = nullptr;
 	Engine::CRenderer* m_rendererCom = nullptr;
+	Engine::CShader* m_shaderCom = nullptr;
 
 	_vec3 m_pos;
 	_vec3 m_target;
