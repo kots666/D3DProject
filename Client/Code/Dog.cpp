@@ -6,6 +6,7 @@
 #include "Calculator.h"
 #include "Collider.h"
 #include "HPUI.h"
+#include "Texture.h"
 
 CDog::CDog(LPDIRECT3DDEVICE9 device, const _vec3& pos, const _float& angle) :
 	Engine::CGameObject(device),
@@ -92,20 +93,22 @@ _int CDog::Update(const _float& deltaTime)
 
 void CDog::Render()
 {
-	m_transCom->SetTransform(m_device);
-	m_meshCom->Render();
+	LPD3DXEFFECT effect = m_shaderCom->GetEffectHandle();
+	if (nullptr == effect) return;
 
-//#ifdef _DEBUG
-//	for (auto& elem : m_hitCollider)
-//	{
-//		elem->Render();
-//	}
-//
-//	for (auto& elem : m_attackCollider)
-//	{
-//		elem->Render();
-//	}
-//#endif
+	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
+
+	Engine::SafeAddRef(effect);
+
+	effect->Begin(nullptr, 0);
+	effect->BeginPass(1);
+
+	m_meshCom->Render(effect);
+	
+	effect->EndPass();
+	effect->End();
+
+	Engine::SafeRelease(effect);
 }
 
 _bool CDog::AttackColliderOverlapped(Engine::CGameObject * target)
@@ -165,6 +168,15 @@ HRESULT CDog::AddComponent()
 	NULL_CHECK_RETURN(component, E_FAIL);
 	Engine::SafeAddRef(component);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Renderer", component);
+
+	// Shader
+	component = m_shaderCom = dynamic_cast<Engine::CShader*>(Engine::CloneComp(L"Proto_Shader_Mesh"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_Shader", component);
+
+	component = m_normalTex = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_NORMAL, L"Mesh_Dog"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_NormalTexture", component);
 
 	return S_OK;
 }
@@ -234,6 +246,23 @@ HRESULT CDog::LoadCollider()
 
 	for (auto& elem : m_attackCollider)
 		elem->UpdateByBone(m_transCom->GetWorldMatrix());
+
+	return S_OK;
+}
+
+HRESULT CDog::SetUpConstantTable(LPD3DXEFFECT & effect)
+{
+	_matrix matWorld, matView, matProj;
+
+	m_transCom->GetWorldMatrix(&matWorld);
+	m_device->GetTransform(D3DTS_VIEW, &matView);
+	m_device->GetTransform(D3DTS_PROJECTION, &matProj);
+
+	effect->SetMatrix("g_matWorld", &matWorld);
+	effect->SetMatrix("g_matView", &matView);
+	effect->SetMatrix("g_matProj", &matProj);
+
+	m_normalTex->SetTexture(effect, "g_NormalTexture");
 
 	return S_OK;
 }

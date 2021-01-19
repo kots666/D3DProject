@@ -10,6 +10,7 @@ class CStaticMesh;
 class CTransform;
 class CRenderer;
 class CShader;
+class CTexture;
 
 END
 
@@ -34,6 +35,7 @@ private:
 	Engine::CTransform* m_transCom = nullptr;
 	Engine::CRenderer* m_rendererCom = nullptr;
 	Engine::CShader* m_shaderCom = nullptr;
+	Engine::CTexture* m_normalTexCom = nullptr;
 
 	_tchar* m_name;
 	_tchar* m_key;

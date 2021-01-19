@@ -17,7 +17,7 @@ private:
 public:
 	void Update(const _float& deltaTime);
 	void SetHitStop(const _float& stopTime = 0.05f, const _bool& isForced = false);
-	void SetHitSlow(const _float& slowTime = 0.1f);
+	void SetHitSlow(const _float& slowTime = 0.05f);
 
 	_bool GetIsStopNow() const { return m_isCurStop; }
 	_bool GetIsSlowNow() const { return m_isCurSlow; }

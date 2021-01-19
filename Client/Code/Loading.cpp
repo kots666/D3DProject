@@ -129,6 +129,26 @@ _uint CLoading::LoadingForStage()
 		Engine::TEX_NORMAL,
 		L"../Resource/Texture/FixTrail3.png"), E_FAIL);
 	
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Mesh_Dog",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/DynamicMesh/Dog/CH_Mob_Dog_N.tga"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Mesh_CircleBlock01",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/StaticMesh/GargoyleCastle_CircleBlock_N_KSV.tga"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Mesh_CircleBlock02",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/StaticMesh/GargoyleCastle_CircleBlock_N_KSV.tga"), E_FAIL);
 	
 	lstrcpy(m_loadingStr, L"Mesh Loading.............................");
 
