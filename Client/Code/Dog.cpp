@@ -96,16 +96,13 @@ void CDog::Render()
 	LPD3DXEFFECT effect = m_shaderCom->GetEffectHandle();
 	if (nullptr == effect) return;
 
-	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
-
 	Engine::SafeAddRef(effect);
 
 	effect->Begin(nullptr, 0);
-	effect->BeginPass(1);
 
-	m_meshCom->Render(effect);
+	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
+	m_meshCom->Render(effect, 1);
 	
-	effect->EndPass();
 	effect->End();
 
 	Engine::SafeRelease(effect);
@@ -174,9 +171,12 @@ HRESULT CDog::AddComponent()
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Shader", component);
 
+	// NormalTexture
 	component = m_normalTex = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_NORMAL, L"Mesh_Dog"));
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_NormalTexture", component);
+
+	m_meshCom->AddNormalTexture(m_normalTex);
 
 	return S_OK;
 }
@@ -261,8 +261,6 @@ HRESULT CDog::SetUpConstantTable(LPD3DXEFFECT & effect)
 	effect->SetMatrix("g_matWorld", &matWorld);
 	effect->SetMatrix("g_matView", &matView);
 	effect->SetMatrix("g_matProj", &matProj);
-
-	m_normalTex->SetTexture(effect, "g_NormalTexture");
 
 	return S_OK;
 }

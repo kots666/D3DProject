@@ -27,6 +27,8 @@ public:
 public:
 	HRESULT Ready(LOADINGID loadID);
 	_uint LoadingForStage();
+	HRESULT LoadingForDynamicMeshNormalTextures();
+	HRESULT LoadingForStaticMeshNormalTextures();
 	HRESULT LoadingForStaticMeshes();
 
 private:

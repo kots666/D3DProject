@@ -7,6 +7,8 @@
 
 BEGIN(Engine)
 
+class CTexture;
+
 class ENGINE_DLL CDynamicMesh : public CMesh
 {
 private:
@@ -17,7 +19,7 @@ private:
 public:
 	HRESULT Ready(const _tchar* filePath, const _tchar* fileName);
 	void Render();
-	void Render(LPD3DXEFFECT& effect);
+	void Render(LPD3DXEFFECT& effect, _int passIndex);
 
 public:
 	void UpdateFrameMatrices(const _float& deltaTime, const _matrix* parentMatrix = nullptr);
@@ -41,6 +43,7 @@ public:
 	void SetBoneName(const char* name) { m_boneName = name; }
 	void AddToAccMovePos(const _vec3& movePos) { m_accMovePos += movePos; }
 
+	void AddNormalTexture(CTexture* tex) { m_normalTexList.emplace_back(tex); }
 private:
 	_bool CanCalcBoneMove(const D3DXFRAME_EX* EXFrame, const D3DXFRAME_EX* originFrame, const char* name, _matrix parentMatrix, _matrix combineMatrix, _vec3* out);
 	void UpdateFrameMatrices(D3DXFRAME_EX* EXFrame, D3DXFRAME_EX* originFrame, const _matrix* parentMatrix);
@@ -57,6 +60,7 @@ private:
 	CHierarchyLoader* m_loader;
 	CAnimCtrl* m_animCtrl;
 	list<D3DXMESHCONTAINER_EX*> m_meshContainerList;
+	vector<CTexture*> m_normalTexList;
 
 	const char* m_boneName;
 	_bool m_isRootMotion;

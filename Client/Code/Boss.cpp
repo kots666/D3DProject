@@ -4,7 +4,7 @@
 #include "NaviMesh.h"
 #include "Transform.h"
 #include "Calculator.h"
-#include "Collider.h"
+#include "Texture.h"
 
 CBoss::CBoss(LPDIRECT3DDEVICE9 device, const _vec3& pos, const _float& angle) :
 	Engine::CGameObject(device),
@@ -43,6 +43,8 @@ HRESULT CBoss::Ready()
 	m_maxHp = 200;
 
 	m_intervalTime = 0.f;
+
+	DoIdle();
 
 	return S_OK;
 }
@@ -99,20 +101,19 @@ _int CBoss::Update(const _float& deltaTime)
 
 void CBoss::Render()
 {
-	m_transCom->SetTransform(m_device);
-	m_meshCom->Render();
+	LPD3DXEFFECT effect = m_shaderCom->GetEffectHandle();
+	if (nullptr == effect) return;
 
-//#ifdef _DEBUG
-//	for (auto& elem : m_hitCollider)
-//	{
-//		elem->Render();
-//	}
-//
-	for (auto& elem : m_attackCollider)
-	{
-		elem->Render();
-	}
-//#endif
+	Engine::SafeAddRef(effect);
+
+	effect->Begin(nullptr, 0);
+
+	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
+	m_meshCom->Render(effect, 2);
+
+	effect->End();
+
+	Engine::SafeRelease(effect);
 }
 
 _bool CBoss::AttackColliderOverlapped(Engine::CGameObject * target)
@@ -175,6 +176,30 @@ HRESULT CBoss::AddComponent()
 	NULL_CHECK_RETURN(component, E_FAIL);
 	Engine::SafeAddRef(component);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Renderer", component);
+
+	// Shader
+	component = m_shaderCom = dynamic_cast<Engine::CShader*>(Engine::CloneComp(L"Proto_Shader_Mesh"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_Shader", component);
+
+	// weapon - body - hair
+	// weapon
+	component = m_normalCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_NORMAL, L"Texture_Boss_Weapon"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_WeaponNormal", component);
+	m_meshCom->AddNormalTexture(m_normalCom);
+
+	// body
+	component = m_normalCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_NORMAL, L"Texture_Boss_Body"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_BodyNormal", component);
+	m_meshCom->AddNormalTexture(m_normalCom);
+
+	// hair
+	component = m_normalCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_NORMAL, L"Texture_Boss_Hair"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_HairNormal", component);
+	m_meshCom->AddNormalTexture(m_normalCom);
 
 	return S_OK;
 }
@@ -248,6 +273,21 @@ HRESULT CBoss::LoadCollider()
 	return S_OK;
 }
 
+HRESULT CBoss::SetUpConstantTable(LPD3DXEFFECT & effect)
+{
+	_matrix matWorld, matView, matProj;
+
+	m_transCom->GetWorldMatrix(&matWorld);
+	m_device->GetTransform(D3DTS_VIEW, &matView);
+	m_device->GetTransform(D3DTS_PROJECTION, &matProj);
+
+	effect->SetMatrix("g_matWorld", &matWorld);
+	effect->SetMatrix("g_matView", &matView);
+	effect->SetMatrix("g_matProj", &matProj);
+
+	return S_OK;
+}
+
 void CBoss::CalcState(const _float & deltaTime)
 {
 	_bool isIdle = false;
@@ -314,11 +354,11 @@ void CBoss::MonsterAI(const _float& deltaTime)
 {
 	if (m_isInterval || m_isHit || m_isAttack || m_isDeadAnim) return;
 
-	switch (m_phase)
+	/*switch (m_phase)
 	{
 	case 1: DoPhase1(deltaTime); break;
 	case 2: DoPhase2(deltaTime); break;
-	}
+	}*/
 }
 
 void CBoss::DoPhase1(const _float & deltaTime)

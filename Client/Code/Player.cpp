@@ -93,19 +93,6 @@ _int CPlayer::Update(const _float& deltaTime)
 		elem->UpdateByBone(m_transCom->GetWorldMatrix());
 	}
 
-	/*for (auto iter = m_trailVec.begin(); iter != m_trailVec.end();)
-	{
-		(*iter)->DecreaseLifeTime(deltaTime);
-
-		if (0.f >= (*iter)->GetLifeTime())
-		{
-			Engine::SafeRelease(*iter);
-			iter = m_trailVec.erase(iter);
-		}
-		else
-			++iter;
-	}*/
-
 	if (m_state & STATE_ATTACK)
 	{
 		RecordPos();
@@ -113,11 +100,6 @@ _int CPlayer::Update(const _float& deltaTime)
 
 	m_swordTrail->Update(deltaTime);
 	m_swordTrail->SetWorldMat(*m_transCom->GetWorldMatrix());
-
-	/*_vec3 curPos;
-	m_transCom->GetInfo(Engine::INFO_POS, &curPos);
-
-	cout << curPos.x << "\t" << curPos.y << "\t" << curPos.z << endl;*/
 
 	return 0;
 }
@@ -131,13 +113,10 @@ void CPlayer::Render()
 	_uint maxPass = 0;
 
 	effect->Begin(&maxPass, 0);
-	effect->BeginPass(0);
 
 	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
+	m_meshCom->Render(effect, 1);
 
-	m_meshCom->Render(effect);
-
-	effect->EndPass();
 	effect->End();
 
 	Engine::SafeRelease(effect);
@@ -209,6 +188,31 @@ HRESULT CPlayer::AddComponent()
 
 	m_swordTrail = CSwordTrail::Create(m_device);
 	NULL_CHECK_RETURN(m_swordTrail, E_FAIL);
+
+	// hair - upper - weapon - face
+	// hair
+	component = m_normalCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_NORMAL, L"Texture_Player_Hair"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_HairNormal", component);
+	m_meshCom->AddNormalTexture(m_normalCom);
+
+	// upper
+	component = m_normalCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_NORMAL, L"Texture_Player_Upper"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_UpperNormal", component);
+	m_meshCom->AddNormalTexture(m_normalCom);
+
+	// weapon
+	component = m_normalCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_NORMAL, L"Texture_Player_Weapon"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_WeaponNormal", component);
+	m_meshCom->AddNormalTexture(m_normalCom);
+
+	// face
+	component = m_normalCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_NORMAL, L"Texture_Player_Face"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_FaceNormal", component);
+	m_meshCom->AddNormalTexture(m_normalCom);
 
 	return S_OK;
 }

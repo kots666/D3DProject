@@ -58,6 +58,17 @@ PS_OUT	PS_MAIN(PS_IN In)
 
 	Out.vColor = tex2D(BaseSampler, In.vTexUV);
 
+	float sum = Out.vColor.r + Out.vColor.g + Out.vColor.b;
+
+	if (1.f > sum)
+	{
+		Out.vColor.a = 0.f;
+	}
+
+	//Out.vColor.r = 1.f;
+	//Out.vColor.g = 0.f;
+	//Out.vColor.b = 0.f;
+
 	return Out;
 }
 
@@ -69,15 +80,15 @@ technique Default_Device
 		//zenable = true;
 		//zwriteenable = false;
 		
-		//alphatestenable = true;
-		//alpharef = 10;
-		//alphafunc = greater;
+		alphatestenable = true;
+		alpharef = 10;
+		alphafunc = greater;
 
-		alphablendenable = true;
-		srcblend = one;
-		destblend = one;
-		srcblendalpha = one;
-		destblendalpha = one;
+		//alphablendenable = true;
+		//srcblend = one;
+		//destblend = one;
+		//srcblendalpha = one;
+		//destblendalpha = one;
 
 		vertexshader = compile vs_3_0 VS_MAIN();
 		pixelshader = compile ps_3_0 PS_MAIN();

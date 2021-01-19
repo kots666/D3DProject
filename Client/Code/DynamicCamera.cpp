@@ -53,9 +53,10 @@ _int CDynamicCamera::LateUpdate(const _float & deltaTime)
 
 	_vec3 playerPos;
 	playerTransCom->GetInfo(Engine::INFO_POS, &playerPos);
+	playerPos.y += 1.f;
 
 	_vec3 dir = { 0.f, 0.f, 1.f };
-	_float dist = 9.5f;
+	_float dist = 3.5f;
 
 	_matrix rotXMat, rotYMat;
 	D3DXMatrixRotationX(&rotXMat, D3DXToRadian(m_xDegree));

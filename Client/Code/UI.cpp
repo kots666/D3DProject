@@ -60,36 +60,6 @@ void Client::CUI::Render()
 	effect->End();
 
 	Engine::SafeRelease(effect);
-
-	/*_matrix wolrdMat, viewMat, originViewMat, originProjMat;
-
-	m_device->GetTransform(D3DTS_VIEW, &originViewMat);
-	m_device->GetTransform(D3DTS_PROJECTION, &originProjMat);
-
-	D3DXMatrixIdentity(&wolrdMat);
-	D3DXMatrixIdentity(&viewMat);
-
-	wolrdMat._11 = m_sizeX;
-	wolrdMat._22 = m_sizeY;
-	wolrdMat._33 = 1.f;
-	wolrdMat._41 = m_left;
-	wolrdMat._42 = m_top;
-
-	m_device->SetTransform(D3DTS_WORLD, &wolrdMat);
-	m_device->SetTransform(D3DTS_VIEW, &viewMat);
-	m_device->SetTransform(D3DTS_PROJECTION, &m_projMat);
-	m_device->SetRenderState(D3DRS_LIGHTING, false);
-	m_device->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
-	m_device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	m_device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
-	m_textureCom->RenderTexture();
-	m_bufferCom->Render();
-
-	m_device->SetRenderState(D3DRS_LIGHTING, true);
-	m_device->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
-	m_device->SetTransform(D3DTS_VIEW, &originViewMat);
-	m_device->SetTransform(D3DTS_PROJECTION, &originProjMat);*/
 }
 
 HRESULT Client::CUI::AddComponent()

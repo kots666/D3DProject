@@ -167,6 +167,7 @@ PS_NORMAL_OUT PS_NORMALMAIN(PS_NORMAL_IN In)
 	float4 texNormal = tex2D(NormalSampler, In.vTexUV);
 	texNormal = (texNormal * 2.0f) - 1.0f;
 	float3 normal = (texNormal.x * In.T) + (texNormal.y * In.B) + (texNormal.z * In.N);
+
 	Out.vNormal = vector(normal.xyz * 0.5f + 0.5f, 1.f);
 
 	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w * 0.001f, 0.f, 0.f);
@@ -175,12 +176,36 @@ PS_NORMAL_OUT PS_NORMALMAIN(PS_NORMAL_IN In)
 	return Out;
 }
 
+PS_NORMAL_OUT PS_NORMALMAIN2(PS_NORMAL_IN In)
+{
+	PS_NORMAL_OUT Out2 = (PS_NORMAL_OUT)0;
+
+	Out2.vColor = tex2D(BaseSampler, In.vTexUV);
+
+	float4 texNormal = tex2D(NormalSampler, In.vTexUV);
+	
+	float3 unpackedNormal;
+	unpackedNormal.xy = texNormal.wy * 2 - 1;
+	unpackedNormal.z = sqrt(1 - saturate(dot(unpackedNormal.xy, unpackedNormal.xy)));
+
+	float3 normal = (unpackedNormal.x * In.T) + (unpackedNormal.y * In.B) + (unpackedNormal.z * In.N);
+
+	Out2.vNormal = vector(normal.xyz * 0.5f + 0.5f, 1.f);
+
+	Out2.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w * 0.001f, 0.f, 0.f);
+
+	return Out2;
+}
 
 technique Default_Device
 {
 	// ±â´ÉÀÇ Ä¸½¶È­
 	pass
 	{
+		alphatestenable = true;
+		alpharef = 0;
+		alphafunc = greaterequal;
+
 		vertexshader = compile vs_3_0 VS_MAIN();
 		pixelshader = compile ps_3_0 PS_MAIN();
 	}
@@ -189,5 +214,21 @@ technique Default_Device
 	{
 		vertexshader = compile vs_3_0 VS_NORMALMAIN();
 		pixelshader = compile ps_3_0 PS_NORMALMAIN();
+	}
+
+	pass
+	{
+		vertexshader = compile vs_3_0 VS_NORMALMAIN();
+		pixelshader = compile ps_3_0 PS_NORMALMAIN2();
+	}
+
+	pass
+	{
+		alphatestenable = true;
+		alpharef = 10;
+		alphafunc = greater;
+
+		vertexshader = compile vs_3_0 VS_NORMALMAIN();
+		pixelshader = compile ps_3_0 PS_NORMALMAIN2();
 	}
 };

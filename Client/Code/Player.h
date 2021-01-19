@@ -62,6 +62,7 @@ private:
 	Engine::CRenderer* m_rendererCom = nullptr;
 	Engine::CTexture* m_trailTexCom = nullptr;
 	Engine::CShader* m_shaderCom = nullptr;
+	Engine::CTexture* m_normalCom = nullptr;
 
 	CDynamicCamera* m_camera = nullptr;
 

@@ -1,7 +1,5 @@
 #include "DynamicMesh.h"
-#include <iostream>
-
-using namespace std;
+#include "Texture.h"
 
 USING(Engine)
 
@@ -106,8 +104,9 @@ void CDynamicMesh::Render()
 	}
 }
 
-void CDynamicMesh::Render(LPD3DXEFFECT & effect)
+void CDynamicMesh::Render(LPD3DXEFFECT & effect, _int passIndex)
 {
+	_int normalCnt = 0;
 	// 렌더 시 해당 애니메이션 프레임 값에 맞는 포지션 값을 적용하기 위한 단계
 	for (auto& iter : m_meshContainerList)
 	{
@@ -139,8 +138,12 @@ void CDynamicMesh::Render(LPD3DXEFFECT & effect)
 		for (_ulong i = 0; i < EXMeshContainer->NumMaterials; ++i)
 		{
 			effect->SetTexture("g_BaseTexture", EXMeshContainer->texture[i]);
+			if (m_normalTexList.size() > normalCnt)
+				m_normalTexList[normalCnt++]->SetTexture(effect, "g_NormalTexture");
 			effect->CommitChanges();
+			effect->BeginPass(passIndex);
 			EXMeshContainer->MeshData.pMesh->DrawSubset(i);
+			effect->EndPass();
 		}
 
 		EXMeshContainer->MeshData.pMesh->UnlockVertexBuffer();
@@ -415,5 +418,6 @@ void CDynamicMesh::Free()
 		}
 	}
 	m_meshContainerList.clear();
+	m_normalTexList.clear();
 }
 

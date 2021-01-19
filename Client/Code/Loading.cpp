@@ -128,27 +128,9 @@ _uint CLoading::LoadingForStage()
 		L"Texture_Trail",
 		Engine::TEX_NORMAL,
 		L"../Resource/Texture/FixTrail3.png"), E_FAIL);
-	
-	FAILED_CHECK_RETURN(Engine::ReadyTexture(
-		m_device,
-		Engine::RESOURCE_NORMAL,
-		L"Mesh_Dog",
-		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/DynamicMesh/Dog/CH_Mob_Dog_N.tga"), E_FAIL);
 
-	FAILED_CHECK_RETURN(Engine::ReadyTexture(
-		m_device,
-		Engine::RESOURCE_NORMAL,
-		L"Mesh_CircleBlock01",
-		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/GargoyleCastle_CircleBlock_N_KSV.tga"), E_FAIL);
-
-	FAILED_CHECK_RETURN(Engine::ReadyTexture(
-		m_device,
-		Engine::RESOURCE_NORMAL,
-		L"Mesh_CircleBlock02",
-		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/GargoyleCastle_CircleBlock_N_KSV.tga"), E_FAIL);
+	LoadingForDynamicMeshNormalTextures();
+	LoadingForStaticMeshNormalTextures();
 	
 	lstrcpy(m_loadingStr, L"Mesh Loading.............................");
 
@@ -219,6 +201,95 @@ _uint CLoading::LoadingForStage()
 	m_isFinish = true;
 
 	return 0;
+}
+
+HRESULT CLoading::LoadingForDynamicMeshNormalTextures()
+{
+	// Player
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Texture_Player_Hair",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/DynamicMesh/Gladiator/PC_Gl_Sargon_Hair_N.tga"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Texture_Player_Upper",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/DynamicMesh/Gladiator/PC_Gl_Sargon_Body_N.tga"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Texture_Player_Weapon",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/DynamicMesh/Gladiator/PC_Gl_Sargon_WP01_N.tga"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Texture_Player_Face",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/DynamicMesh/Gladiator/CH_PC_Gladiator_Face_N.tga"), E_FAIL);
+
+	// GoblinSword
+
+	// GoblinMagician
+
+	// Dog
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Mesh_Dog",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/DynamicMesh/Dog/CH_Mob_Dog_N.tga"), E_FAIL);
+
+	// Minotauros
+
+	// Boss
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Texture_Boss_Weapon",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/DynamicMesh/Boss/Boss_Apocalypse_Weapon_N.tga"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Texture_Boss_Body",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/DynamicMesh/Boss/Boss_Apocalypse_Body_N.tga"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Texture_Boss_Hair",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/DynamicMesh/Boss/Boss_Apocalypse_Hair_N.tga"), E_FAIL);
+
+	return S_OK;
+}
+
+HRESULT CLoading::LoadingForStaticMeshNormalTextures()
+{
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Mesh_CircleBlock01",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/StaticMesh/GargoyleCastle_CircleBlock_N_KSV.tga"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Mesh_CircleBlock02",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/StaticMesh/GargoyleCastle_CircleBlock_N_KSV.tga"), E_FAIL);
+
+	return S_OK;
 }
 
 HRESULT CLoading::LoadingForStaticMeshes()
