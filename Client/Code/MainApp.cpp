@@ -127,6 +127,7 @@ CMainApp * CMainApp::Create()
 
 void CMainApp::Free()
 {
+	CFontManager::DestroyInstance();
 	Client::SafeRelease(m_device);
 
 	Engine::ReleaseResoures();
@@ -136,6 +137,6 @@ void CMainApp::Free()
 	CPlayTimeManager::DestroyInstance();
 	CSpawnManager::DestroyInstance();
 	CColliderManager::DestroyInstance();
-
+	
 	Engine::ReleaseSystem();
 }

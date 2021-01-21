@@ -17,8 +17,7 @@ private:
 	virtual ~CFontManager();
 
 public:
-	void ActiveNumber(const _int& numIndex, const _vec3& pos, const _float& lifeTime = 2.f, const _float& xSize = 1.f, const _float& ySize = 1.f);
-	void Create(LPDIRECT3DDEVICE9 device, Engine::CGameObject* target, const _float& sizeX = 1.5f, const _float& sizeY = 0.15f, const _tchar* texName = L"Texture_HPBar2");
+	void ActiveNumber(const _int& inputNumber, const _vec3& pos, const _float& lifeTime = 2.f, const _float& xSize = 1.f, const _float& ySize = 1.f);
 
 private:
 	void ReadyFontUI();

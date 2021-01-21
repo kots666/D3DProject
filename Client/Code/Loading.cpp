@@ -104,16 +104,16 @@ _uint CLoading::LoadingForStage()
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(
 		m_device,
 		Engine::RESOURCE_STAGE,
-		L"Texture_HPFrame",
+		L"Texture_HPBar",
 		Engine::TEX_NORMAL,
-		L"../Resource/Texture/UI/HPFrame.png"), E_FAIL);
+		L"../Resource/Texture/UI/HPBar.png"), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(
 		m_device,
 		Engine::RESOURCE_STAGE,
-		L"Texture_HPBar",
+		L"Texture_HPFrame",
 		Engine::TEX_NORMAL,
-		L"../Resource/Texture/UI/HPBar3.png"), E_FAIL);
+		L"../Resource/Texture/UI/HPFrame.png"), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(
 		m_device,
@@ -142,6 +142,13 @@ _uint CLoading::LoadingForStage()
 		L"Texture_Dissolve",
 		Engine::TEX_NORMAL,
 		L"../Resource/Texture/Effect/Dissolve.tga"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Texture_Number",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/Combo/%d.tga", 10), E_FAIL);
 
 	LoadingForDynamicMeshNormalTextures();
 	LoadingForStaticMeshNormalTextures();

@@ -9,9 +9,10 @@ CFontUI::CFontUI(LPDIRECT3DDEVICE9 device) :
 
 }
 
-CFontUI::CFontUI(LPDIRECT3DDEVICE9 device, const _tchar * texName, const _float & sizeX, const _float & sizeY) :
+CFontUI::CFontUI(LPDIRECT3DDEVICE9 device, const _tchar * texName, const _int& index, const _float & sizeX, const _float & sizeY) :
 	Engine::CGameObject(device),
 	m_texName(texName),
+	m_index(index),
 	m_sizeX(sizeX),
 	m_sizeY(sizeY)
 {
@@ -50,8 +51,8 @@ Client::_int Client::CFontUI::Update(const _float& deltaTime)
 			m_accTime = 0.f;
 			m_lifeTime = 0.f;
 		}
-
-		m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
+		else
+			m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
 	}
 
 	return 0;
@@ -59,7 +60,8 @@ Client::_int Client::CFontUI::Update(const _float& deltaTime)
 
 void Client::CFontUI::Render()
 {
-	if (m_isActive) {
+	if (m_isActive)
+	{
 		LPD3DXEFFECT effect = m_shaderCom->GetEffectHandle();
 		if (nullptr == effect) return;
 		Engine::SafeAddRef(effect);
@@ -82,11 +84,12 @@ void Client::CFontUI::Render()
 	}
 }
 
-void CFontUI::Active(const _vec3 & pos, const _float & lifeTime, const _float & xSize, const _float & ySize)
+void CFontUI::Active(const _vec3 & pos, const _vec3 & offset, const _float & lifeTime, const _float & xSize, const _float & ySize)
 {
 	if (!m_isActive)
 	{
 		m_startPos = pos;
+		m_offset = offset;
 		m_lifeTime = lifeTime;
 		m_sizeX = xSize;
 		m_sizeY = ySize;
@@ -145,6 +148,12 @@ HRESULT CFontUI::SetUpConstantTable(LPD3DXEFFECT & effect)
 	viewMat._42 = 0;
 	viewMat._43 = 0;
 
+	D3DXMatrixIdentity(&worldMat);
+
+	worldMat._41 = m_offset.x;
+	worldMat._42 = m_offset.y;
+	worldMat._43 = m_offset.z;
+
 	D3DXMatrixInverse(&viewMat, 0, &viewMat);
 
 	viewMat._41 = m_startPos.x;
@@ -159,21 +168,21 @@ HRESULT CFontUI::SetUpConstantTable(LPD3DXEFFECT & effect)
 	viewMat._22 *= m_sizeY;
 	viewMat._23 *= m_sizeY;
 
-	worldMat = viewMat;
+	worldMat *= viewMat;
 
 	effect->SetMatrix("g_matWorld", &worldMat);
 	effect->SetMatrix("g_matView", &originViewMat);
 	effect->SetMatrix("g_matProj", &originProjMat);
 	effect->SetFloat("g_percent", m_percent);
 
-	m_textureCom->SetTexture(effect, "g_BaseTexture");
+	m_textureCom->SetTexture(effect, "g_BaseTexture", m_index);
 
 	return S_OK;
 }
 
-CFontUI * CFontUI::Create(LPDIRECT3DDEVICE9 device, const _tchar * texName, const _float & sizeX, const _float & sizeY)
+CFontUI * CFontUI::Create(LPDIRECT3DDEVICE9 device, const _tchar * texName, const _int& index, const _float & sizeX, const _float & sizeY)
 {
-	CFontUI* instance = new CFontUI(device, texName, sizeX, sizeY);
+	CFontUI* instance = new CFontUI(device, texName, index, sizeX, sizeY);
 
 	if (FAILED(instance->Ready()))
 		Client::SafeRelease(instance);

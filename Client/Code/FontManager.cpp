@@ -12,14 +12,58 @@ CFontManager::CFontManager()
 
 CFontManager::~CFontManager()
 {
+	for (_int i = 0; i < 10; ++i)
+	{
+		for (auto& elem : m_fontList[i])
+		{
+			Engine::SafeRelease(elem);
+		}
+		m_fontList[i].clear();
+	}
+
+	for (auto elem : m_fontNameList)
+	{
+		if (nullptr != elem)
+		{
+			delete[] elem;
+			elem = nullptr;
+		}
+	}
+	m_fontNameList.clear();
 }
 
-void CFontManager::ActiveNumber(const _int & numIndex, const _vec3 & pos, const _float & lifeTime, const _float & xSize, const _float & ySize)
+void CFontManager::ActiveNumber(const _int & inputNumber, const _vec3 & pos, const _float & lifeTime, const _float & xSize, const _float & ySize)
 {
-}
+	_int num = inputNumber;
+	list<_int> numList;
 
-void CFontManager::Create(LPDIRECT3DDEVICE9 device, Engine::CGameObject * target, const _float & sizeX, const _float & sizeY, const _tchar * texName)
-{
+	while (true)
+	{
+		if (10 > num)
+		{
+			numList.emplace_front(num);
+			break;
+		}
+
+		numList.emplace_front(num % 10);
+
+		num /= 10;
+	}
+
+	_vec3 offset = { numList.size() * -0.5f, 0.f, 0.f };
+
+	for (auto& num : numList)
+	{
+		for (auto elem : m_fontList[num])
+		{
+			if (!elem->GetActive())
+			{
+				elem->Active(pos, offset, lifeTime, xSize, ySize);
+				break;
+			}
+		}
+		offset.x += 1.f;
+	}
 }
 
 void CFontManager::ReadyFontUI()
@@ -31,9 +75,11 @@ void CFontManager::ReadyFontUI()
 		for (_int j = 0; j < 10; ++j)
 		{
 			_tchar name[20];
-			wsprintf(name, L"Texture_Number_%d", i);
+			wsprintf(name, L"Texture_Number", i);
 			
-			Engine::CGameObject* font = CFontUI::Create(Engine::CGraphicDevice::GetInstance()->GetDevice(), name, 1.f, 1.f);
+			CFontUI* font = CFontUI::Create(Engine::CGraphicDevice::GetInstance()->GetDevice(), name, i, 1.f, 1.f);
+			Engine::SafeAddRef(font);
+			m_fontList[i].emplace_back(font);
 
 			_tchar* fontName = new _tchar[20];
 			wsprintf(fontName, L"Font_%d_%d", i, j);

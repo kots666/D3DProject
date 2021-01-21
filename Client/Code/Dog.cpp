@@ -141,6 +141,8 @@ void CDog::HitColliderOverlapped(Engine::CGameObject * causer)
 	causerTrans->GetInfo(Engine::INFO_POS, &pos);
 
 	LookAtTarget(pos);
+
+	CFontManager::GetInstance()->ActiveNumber(20, pos);
 }
 
 HRESULT CDog::AddComponent()
