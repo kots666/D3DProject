@@ -202,33 +202,33 @@ technique Default_Device
 	// 기능의 캡슐화
 	pass
 	{
-		alphatestenable = true;
-		alpharef = 0;
-		alphafunc = greaterequal;
-
+		// 기본 디퍼드
 		vertexshader = compile vs_3_0 VS_MAIN();
 		pixelshader = compile ps_3_0 PS_MAIN();
 	}
 
 	pass
 	{
+		// 평범한 노말맵 노말맵핑
 		vertexshader = compile vs_3_0 VS_NORMALMAIN();
 		pixelshader = compile ps_3_0 PS_NORMALMAIN();
 	}
 
 	pass
 	{
+		// 노란색 노말맵 대비 노말맵핑
 		vertexshader = compile vs_3_0 VS_NORMALMAIN();
 		pixelshader = compile ps_3_0 PS_NORMALMAIN2();
 	}
 
 	pass
 	{
+		// 알파테스트 + 기본 디퍼드
 		alphatestenable = true;
 		alpharef = 10;
 		alphafunc = greater;
 
-		vertexshader = compile vs_3_0 VS_NORMALMAIN();
-		pixelshader = compile ps_3_0 PS_NORMALMAIN2();
+		vertexshader = compile vs_3_0 VS_MAIN();
+		pixelshader = compile ps_3_0 PS_MAIN();
 	}
 };

@@ -118,6 +118,13 @@ _uint CLoading::LoadingForStage()
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(
 		m_device,
 		Engine::RESOURCE_STAGE,
+		L"Texture_HPBar2",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/UI/HPBar2.png"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
 		L"Texture_PlayerIcon",
 		Engine::TEX_NORMAL,
 		L"../Resource/Texture/UI/PlayerIcon.png"), E_FAIL);
@@ -235,18 +242,36 @@ HRESULT CLoading::LoadingForDynamicMeshNormalTextures()
 		L"../Resource/Mesh/DynamicMesh/Gladiator/CH_PC_Gladiator_Face_N.tga"), E_FAIL);
 
 	// GoblinSword
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Texture_Goblin_Sword_Normal",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/DynamicMesh/Goblin/Sword/CH_Mob_Goblin_N.tga"), E_FAIL);
 
 	// GoblinMagician
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Texture_Goblin_Magician_Normal",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/DynamicMesh/Goblin/Magician/CH_Mob_Goblin_Magic_N.tga"), E_FAIL);
 
 	// Dog
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(
 		m_device,
 		Engine::RESOURCE_NORMAL,
-		L"Mesh_Dog",
+		L"Texture_Dog_Normal",
 		Engine::TEX_NORMAL,
 		L"../Resource/Mesh/DynamicMesh/Dog/CH_Mob_Dog_N.tga"), E_FAIL);
 
 	// Minotauros
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Texture_Minotauros_Normal",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/DynamicMesh/Minotauros/Mob_Minotaur_New_N.tga"), E_FAIL);
 
 	// Boss
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(

@@ -151,6 +151,48 @@ void CDynamicMesh::Render(LPD3DXEFFECT & effect, _int passIndex)
 	}
 }
 
+void CDynamicMesh::Render(LPD3DXEFFECT & effect, _int * passIndex)
+{
+	_int normalCnt = 0;
+
+	for (auto& iter : m_meshContainerList)
+	{
+		D3DXMESHCONTAINER_EX* EXMeshContainer = iter;
+
+		for (_ulong i = 0; i < EXMeshContainer->numBones; ++i)
+		{
+			EXMeshContainer->renderingMatrix[i] = EXMeshContainer->frameOffsetMatrix[i]
+				* (*EXMeshContainer->frameCombinedMatrix[i]);
+		}
+
+		void* srcVertices = nullptr;
+		void* dstVertices = nullptr;
+
+		EXMeshContainer->originMesh->LockVertexBuffer(0, &srcVertices);
+		EXMeshContainer->MeshData.pMesh->LockVertexBuffer(0, &dstVertices);
+
+		EXMeshContainer->pSkinInfo->UpdateSkinnedMesh(
+			EXMeshContainer->renderingMatrix,
+			nullptr,
+			srcVertices,
+			dstVertices);
+
+		for (_ulong i = 0; i < EXMeshContainer->NumMaterials; ++i)
+		{
+			effect->SetTexture("g_BaseTexture", EXMeshContainer->texture[i]);
+			if (m_normalTexList.size() > normalCnt)
+				m_normalTexList[normalCnt]->SetTexture(effect, "g_NormalTexture");
+			effect->CommitChanges();
+			effect->BeginPass(passIndex[normalCnt++]);
+			EXMeshContainer->MeshData.pMesh->DrawSubset(i);
+			effect->EndPass();
+		}
+
+		EXMeshContainer->MeshData.pMesh->UnlockVertexBuffer();
+		EXMeshContainer->originMesh->UnlockVertexBuffer();
+	}
+}
+
 void CDynamicMesh::UpdateFrameMatrices(const _float& deltaTime, const _matrix * parentMatrix)
 {
 	if (m_isBlendTime)

@@ -183,6 +183,7 @@
     <ClInclude Include="..\Code\GoblinMagician.h" />
     <ClInclude Include="..\Code\GoblinSword.h" />
     <ClInclude Include="..\Code\HPUI.h" />
+    <ClInclude Include="..\Code\HPUIManager.h" />
     <ClInclude Include="..\Code\Loading.h" />
     <ClInclude Include="..\Code\Logo.h" />
     <ClInclude Include="..\Code\MainApp.h" />
@@ -223,6 +224,7 @@
     <ClCompile Include="..\Code\GoblinMagician.cpp" />
     <ClCompile Include="..\Code\GoblinSword.cpp" />
     <ClCompile Include="..\Code\HPUI.cpp" />
+    <ClCompile Include="..\Code\HPUIManager.cpp" />
     <ClCompile Include="..\Code\Loading.cpp" />
     <ClCompile Include="..\Code\Logo.cpp" />
     <ClCompile Include="..\Code\MainApp.cpp" />

@@ -11,7 +11,8 @@ class CNaviMesh;
 class CTransform;
 class CRenderer;
 class CCalculator;
-class CCollider;
+class CShader;
+class CTexture;
 
 END
 
@@ -37,6 +38,7 @@ public:
 private:
 	HRESULT AddComponent();
 	HRESULT LoadCollider();
+	HRESULT SetUpConstantTable(LPD3DXEFFECT& effect);
 
 	void CalcState(const _float& deltaTime);
 	void MonsterAI(const _float& deltaTime);
@@ -53,6 +55,8 @@ private:
 	Engine::CTransform* m_transCom = nullptr;
 	Engine::CCalculator* m_calcCom = nullptr;
 	Engine::CRenderer* m_rendererCom = nullptr;
+	Engine::CShader* m_shaderCom = nullptr;
+	Engine::CTexture* m_normalTexCom = nullptr;
 
 	_float m_angle;
 	_vec3 m_startPosition;

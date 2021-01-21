@@ -111,7 +111,7 @@ void CSpawnManager::StartEvent()
 	switch (m_eventCount)
 	{
 	case 0:
-		Spawn(SPAWNTYPE::BOSS, { 4.f, 0.f, 16.f }, 150.f);
+		Spawn(SPAWNTYPE::DOG, { 4.f, 0.f, 16.f }, 150.f);
 		Spawn(SPAWNTYPE::DOG, { 12.f, 0.f, 23.f }, -150.f);
 		break;
 

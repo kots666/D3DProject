@@ -112,6 +112,9 @@
     <Filter Include="02. GameObject\02. Public\04. PlayTimeManager">
       <UniqueIdentifier>{330bf902-f619-41cd-bfec-fddf56d6f2b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\02. Public\05. HPUIManager">
+      <UniqueIdentifier>{e2fd82e8-3915-4f72-abfe-1265b49fb792}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -228,6 +231,9 @@
     <ClInclude Include="..\Code\PlayTimeManager.h">
       <Filter>02. GameObject\02. Public\04. PlayTimeManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\HPUIManager.h">
+      <Filter>02. GameObject\02. Public\05. HPUIManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -319,6 +325,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\PlayTimeManager.cpp">
       <Filter>02. GameObject\02. Public\04. PlayTimeManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\HPUIManager.cpp">
+      <Filter>02. GameObject\02. Public\05. HPUIManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

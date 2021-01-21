@@ -20,6 +20,7 @@ public:
 	HRESULT Ready(const _tchar* filePath, const _tchar* fileName);
 	void Render();
 	void Render(LPD3DXEFFECT& effect, _int passIndex);
+	void Render(LPD3DXEFFECT& effect, _int* passIndex);
 
 public:
 	void UpdateFrameMatrices(const _float& deltaTime, const _matrix* parentMatrix = nullptr);

@@ -102,4 +102,14 @@ technique Default_Device
 		vertexshader = compile vs_3_0 VS_MAIN();
 		pixelshader = compile ps_3_0 PS_MAIN2();
 	}
+
+	pass
+	{
+		alphatestenable = true;
+		alpharef = 0;
+		alphafunc = greater;
+
+		vertexshader = compile vs_3_0 VS_MAIN();
+		pixelshader = compile ps_3_0 PS_MAIN2();
+	}
 };

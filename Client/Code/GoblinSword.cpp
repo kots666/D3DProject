@@ -6,6 +6,7 @@
 #include "Calculator.h"
 #include "Collider.h"
 #include "HPUI.h"
+#include "Texture.h"
 
 CGoblinSword::CGoblinSword(LPDIRECT3DDEVICE9 device, const _vec3& pos, const _float& angle) :
 	Engine::CGameObject(device),
@@ -97,20 +98,21 @@ _int CGoblinSword::Update(const _float& deltaTime)
 
 void CGoblinSword::Render()
 {
-	m_transCom->SetTransform(m_device);
-	m_meshCom->Render();
+	LPD3DXEFFECT effect = m_shaderCom->GetEffectHandle();
+	if (nullptr == effect) return;
 
-//#ifdef _DEBUG
-//	for (auto& elem : m_hitCollider)
-//	{
-//		elem->Render();
-//	}
-//
-//	for (auto& elem : m_attackCollider)
-//	{
-//		elem->Render();
-//	}
-//#endif
+	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
+	Engine::SafeAddRef(effect);
+
+	effect->Begin(nullptr, 0);
+	effect->BeginPass(0);
+
+	m_meshCom->Render(effect, 1);
+
+	effect->EndPass();
+	effect->End();
+
+	Engine::SafeRelease(effect);
 }
 
 _bool CGoblinSword::AttackColliderOverlapped(Engine::CGameObject * target)
@@ -170,6 +172,17 @@ HRESULT CGoblinSword::AddComponent()
 	NULL_CHECK_RETURN(component, E_FAIL);
 	Engine::SafeAddRef(component);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Renderer", component);
+
+	// Shader
+	component = m_shaderCom = dynamic_cast<Engine::CShader*>(Engine::CloneComp(L"Proto_Shader_Mesh"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_Sahder", component);
+
+	// NormalTexture
+	component = m_normalTexCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_NORMAL, L"Texture_Goblin_Sword_Normal"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_NormalTexture", component);
+	m_meshCom->AddNormalTexture(m_normalTexCom);
 
 	return S_OK;
 }
@@ -239,6 +252,21 @@ HRESULT CGoblinSword::LoadCollider()
 
 	for (auto& elem : m_attackCollider)
 		elem->UpdateByBone(m_transCom->GetWorldMatrix());
+
+	return S_OK;
+}
+
+HRESULT CGoblinSword::SetUpConstantTable(LPD3DXEFFECT & effect)
+{
+	_matrix matWorld, matView, matProj;
+
+	m_transCom->GetWorldMatrix(&matWorld);
+	m_device->GetTransform(D3DTS_VIEW, &matView);
+	m_device->GetTransform(D3DTS_PROJECTION, &matProj);
+
+	effect->SetMatrix("g_matWorld", &matWorld);
+	effect->SetMatrix("g_matView", &matView);
+	effect->SetMatrix("g_matProj", &matProj);
 
 	return S_OK;
 }
@@ -368,6 +396,7 @@ void CGoblinSword::DoDeadAnim()
 		m_isDeadAnim = true;
 		m_isHit = false;
 		m_isAttack = false;
+		DisableHitCollider();
 
 		m_meshCom->SetAnimation(1, 0.015f, 0.1f, false);
 	}

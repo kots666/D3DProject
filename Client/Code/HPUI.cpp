@@ -36,11 +36,15 @@ HRESULT Client::CHPUI::Ready()
 
 	return S_OK;
 }
+
 Client::_int Client::CHPUI::Update(const _float& deltaTime)
 {
 	Engine::CGameObject::Update(deltaTime);
 
-	m_rendererCom->AddObject(Engine::RENDER_ALPHA, this);
+	if (m_isFixed)
+		m_rendererCom->AddObject(Engine::RENDER_ALPHA, this);
+	else
+		m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
 
 	D3DXMatrixOrthoLH(&m_projMat, WINCX, WINCY, 0.f, 1.f);
 
@@ -60,6 +64,7 @@ Client::_int Client::CHPUI::Update(const _float& deltaTime)
 
 	return 0;
 }
+
 void Client::CHPUI::Render()
 {
 	if (nullptr == m_target) return;
@@ -75,7 +80,10 @@ void Client::CHPUI::Render()
 	}
 
 	effect->Begin(nullptr, 0);
-	effect->BeginPass(1);
+	if (m_isFixed)
+		effect->BeginPass(1);
+	else
+		effect->BeginPass(2);
 
 	m_bufferCom->Render();
 

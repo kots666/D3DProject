@@ -132,6 +132,7 @@ void CMainApp::Free()
 	Engine::ReleaseResoures();
 	Engine::ReleaseUtility();
 
+	CHPUIManager::DestroyInstance();
 	CPlayTimeManager::DestroyInstance();
 	CSpawnManager::DestroyInstance();
 	CColliderManager::DestroyInstance();

@@ -42,6 +42,8 @@ HRESULT CDog::Ready()
 
 	m_intervalTime = 0.f;
 
+	CHPUIManager::GetInstance()->Create(m_device, this);
+
 	return S_OK;
 }
 
@@ -172,7 +174,7 @@ HRESULT CDog::AddComponent()
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Shader", component);
 
 	// NormalTexture
-	component = m_normalTex = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_NORMAL, L"Mesh_Dog"));
+	component = m_normalTex = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_NORMAL, L"Texture_Dog_Normal"));
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_NormalTexture", component);
 
@@ -389,6 +391,7 @@ void CDog::DoDeadAnim()
 {
 	if (!m_isDeadAnim)
 	{
+		DisableHitCollider();
 		m_isDeadAnim = true;
 		m_isHit = false;
 		m_isAttack = false;

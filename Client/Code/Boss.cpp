@@ -104,12 +104,14 @@ void CBoss::Render()
 	LPD3DXEFFECT effect = m_shaderCom->GetEffectHandle();
 	if (nullptr == effect) return;
 
+	_int passIndex[3] = { 0, 0, 3 };
+
 	Engine::SafeAddRef(effect);
 
 	effect->Begin(nullptr, 0);
 
 	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
-	m_meshCom->Render(effect, 2);
+	m_meshCom->Render(effect, passIndex);
 
 	effect->End();
 
@@ -354,11 +356,11 @@ void CBoss::MonsterAI(const _float& deltaTime)
 {
 	if (m_isInterval || m_isHit || m_isAttack || m_isDeadAnim) return;
 
-	/*switch (m_phase)
+	switch (m_phase)
 	{
 	case 1: DoPhase1(deltaTime); break;
 	case 2: DoPhase2(deltaTime); break;
-	}*/
+	}
 }
 
 void CBoss::DoPhase1(const _float & deltaTime)
@@ -625,6 +627,7 @@ void CBoss::DoDeadAnim()
 		m_isDeadAnim = true;
 		m_isHit = false;
 		m_isAttack = false;
+		DisableHitCollider();
 
 		m_meshCom->SetAnimation(6, 0.015f, 0.1f, false);
 	}
