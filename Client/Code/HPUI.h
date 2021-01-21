@@ -18,7 +18,7 @@ class CHPUI : public Engine::CGameObject
 {
 private:
 	explicit CHPUI(LPDIRECT3DDEVICE9 device);
-	explicit CHPUI(LPDIRECT3DDEVICE9 device, Engine::CGameObject* target, const _tchar* texName, const _float& x, const _float& y, const _float& sizeX, const _float& sizeY, const _bool& isFixed);
+	explicit CHPUI(LPDIRECT3DDEVICE9 device, Engine::CGameObject* target, const _tchar* texName, const _float& x, const _float& y, const _float& sizeX, const _float& sizeY, const _bool& isFixed, const _bool& isFloat);
 	virtual ~CHPUI();
 
 public:
@@ -48,12 +48,13 @@ private:
 	Engine::CGameObject* m_target;
 
 	_bool m_isFixed;
+	_bool m_isFloat;
 
 	_float m_hp;
 	_float m_maxHp;
 
 public:
-	static CHPUI* Create(LPDIRECT3DDEVICE9 device, Engine::CGameObject* target, const _tchar* texName, const _float& x, const _float& y, const _float& sizeX, const _float& sizeY, const _bool& isFixed = true);
+	static CHPUI* Create(LPDIRECT3DDEVICE9 device, Engine::CGameObject* target, const _tchar* texName, const _float& x, const _float& y, const _float& sizeX, const _float& sizeY, const _bool& isFixed = true, const _bool& isFloat = false);
 
 private:
 	virtual void Free() override;

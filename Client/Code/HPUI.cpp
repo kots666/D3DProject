@@ -9,13 +9,14 @@ CHPUI::CHPUI(LPDIRECT3DDEVICE9 device) :
 
 }
 
-CHPUI::CHPUI(LPDIRECT3DDEVICE9 device, Engine::CGameObject * target, const _tchar * texName, const _float & x, const _float & y, const _float & sizeX, const _float & sizeY, const _bool& isFixed) :
+CHPUI::CHPUI(LPDIRECT3DDEVICE9 device, Engine::CGameObject * target, const _tchar * texName, const _float & x, const _float & y, const _float & sizeX, const _float & sizeY, const _bool& isFixed, const _bool& isFloat) :
 	Engine::CGameObject(device),
 	m_target(target),
 	m_texName(texName),
 	m_wantedX(x), m_wantedY(y),
 	m_sizeX(sizeX), m_sizeY(sizeY),
-	m_isFixed(isFixed)
+	m_isFixed(isFixed),
+	m_isFloat(isFloat)
 {
 	Engine::SafeAddRef(m_target);
 }
@@ -80,7 +81,9 @@ void Client::CHPUI::Render()
 	}
 
 	effect->Begin(nullptr, 0);
-	if (m_isFixed)
+	if (m_isFloat)
+		effect->BeginPass(1);
+	else if (m_isFixed)
 		effect->BeginPass(1);
 	else
 		effect->BeginPass(2);
@@ -185,9 +188,9 @@ HRESULT CHPUI::SetUpConstantTable(LPD3DXEFFECT & effect)
 		viewMat._42 = targetPos.y + 2.f;
 		viewMat._43 = targetPos.z;
 
-		viewMat._11 *= m_sizeX * m_percent;
-		viewMat._12 *= m_sizeX * m_percent;
-		viewMat._13 *= m_sizeX * m_percent;
+		viewMat._11 *= m_sizeX;
+		viewMat._12 *= m_sizeX;
+		viewMat._13 *= m_sizeX;
 
 		viewMat._21 *= m_sizeY;
 		viewMat._22 *= m_sizeY;
@@ -210,9 +213,9 @@ HRESULT CHPUI::SetUpConstantTable(LPD3DXEFFECT & effect)
 	return S_OK;
 }
 
-CHPUI * CHPUI::Create(LPDIRECT3DDEVICE9 device, Engine::CGameObject * target, const _tchar * texName, const _float & x, const _float & y, const _float & sizeX, const _float & sizeY, const _bool & isFixed)
+CHPUI * CHPUI::Create(LPDIRECT3DDEVICE9 device, Engine::CGameObject * target, const _tchar * texName, const _float & x, const _float & y, const _float & sizeX, const _float & sizeY, const _bool & isFixed, const _bool & isFloat)
 {
-	CHPUI* instance = new CHPUI(device, target, texName, x, y, sizeX, sizeY, isFixed);
+	CHPUI* instance = new CHPUI(device, target, texName, x, y, sizeX, sizeY, isFixed, isFloat);
 
 	if (FAILED(instance->Ready()))
 		Client::SafeRelease(instance);

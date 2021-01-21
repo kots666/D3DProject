@@ -75,6 +75,17 @@ PS_OUT PS_MAIN2(PS_IN In2)
 	return Out2;
 }
 
+PS_OUT PS_MAIN3(PS_IN In3)
+{
+	PS_OUT		Out3 = (PS_OUT)0;
+
+	Out3.vColor = tex2D(BaseSampler, In3.vTexUV);
+
+	Out3.vColor.a *= g_percent;
+
+	return Out3;
+}
+
 technique Default_Device
 {
 	pass
@@ -106,10 +117,20 @@ technique Default_Device
 	pass
 	{
 		alphatestenable = true;
-		alpharef = 0;
+		alpharef = 100;
 		alphafunc = greater;
 
 		vertexshader = compile vs_3_0 VS_MAIN();
 		pixelshader = compile ps_3_0 PS_MAIN2();
+	}
+
+	pass
+	{
+		alphatestenable = true;
+		alpharef = 100;
+		alphafunc = greater;
+
+		vertexshader = compile vs_3_0 VS_MAIN();
+		pixelshader = compile ps_3_0 PS_MAIN3();
 	}
 };

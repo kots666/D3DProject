@@ -113,7 +113,7 @@ _uint CLoading::LoadingForStage()
 		Engine::RESOURCE_STAGE,
 		L"Texture_HPBar",
 		Engine::TEX_NORMAL,
-		L"../Resource/Texture/UI/HPBar.png"), E_FAIL);
+		L"../Resource/Texture/UI/HPBar3.png"), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(
 		m_device,
@@ -135,6 +135,13 @@ _uint CLoading::LoadingForStage()
 		L"Texture_Trail",
 		Engine::TEX_NORMAL,
 		L"../Resource/Texture/FixTrail3.png"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Texture_Dissolve",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/Effect/Dissolve.tga"), E_FAIL);
 
 	LoadingForDynamicMeshNormalTextures();
 	LoadingForStaticMeshNormalTextures();

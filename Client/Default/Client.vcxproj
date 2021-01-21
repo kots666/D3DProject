@@ -180,6 +180,8 @@
     <ClInclude Include="..\Code\Dog.h" />
     <ClInclude Include="..\Code\DynamicCamera.h" />
     <ClInclude Include="..\Code\FireBall.h" />
+    <ClInclude Include="..\Code\FontManager.h" />
+    <ClInclude Include="..\Code\FontUI.h" />
     <ClInclude Include="..\Code\GoblinMagician.h" />
     <ClInclude Include="..\Code\GoblinSword.h" />
     <ClInclude Include="..\Code\HPUI.h" />
@@ -221,6 +223,8 @@
     <ClCompile Include="..\Code\Dog.cpp" />
     <ClCompile Include="..\Code\DynamicCamera.cpp" />
     <ClCompile Include="..\Code\FireBall.cpp" />
+    <ClCompile Include="..\Code\FontManager.cpp" />
+    <ClCompile Include="..\Code\FontUI.cpp" />
     <ClCompile Include="..\Code\GoblinMagician.cpp" />
     <ClCompile Include="..\Code\GoblinSword.cpp" />
     <ClCompile Include="..\Code\HPUI.cpp" />

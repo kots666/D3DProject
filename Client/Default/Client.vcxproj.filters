@@ -76,9 +76,6 @@
     <Filter Include="02. GameObject\01. Stage\05. UI">
       <UniqueIdentifier>{612c586d-dea3-4de0-96ad-345b0ae791f1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\01. Stage\05. UI\HPUI">
-      <UniqueIdentifier>{8cc916ae-061a-4997-9089-a0c4c138cc4b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\01. Stage\03. Enemy\00. Goblin_Sword">
       <UniqueIdentifier>{40b8c7e5-1c99-4343-89e0-2e36eeee4778}</UniqueIdentifier>
     </Filter>
@@ -114,6 +111,15 @@
     </Filter>
     <Filter Include="02. GameObject\02. Public\05. HPUIManager">
       <UniqueIdentifier>{e2fd82e8-3915-4f72-abfe-1265b49fb792}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\02. Public\06. FontManager">
+      <UniqueIdentifier>{eee99628-1f26-4237-bfd8-812cb7b92657}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\05. UI\00. HPUI">
+      <UniqueIdentifier>{8cc916ae-061a-4997-9089-a0c4c138cc4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\05. UI\01. FontUI">
+      <UniqueIdentifier>{f1104c4d-97e6-464b-b714-bbddcebd49cc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -202,7 +208,7 @@
       <Filter>02. GameObject\01. Stage\05. UI</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\HPUI.h">
-      <Filter>02. GameObject\01. Stage\05. UI\HPUI</Filter>
+      <Filter>02. GameObject\01. Stage\05. UI\00. HPUI</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\GoblinSword.h">
       <Filter>02. GameObject\01. Stage\03. Enemy\00. Goblin_Sword</Filter>
@@ -233,6 +239,12 @@
     </ClInclude>
     <ClInclude Include="..\Code\HPUIManager.h">
       <Filter>02. GameObject\02. Public\05. HPUIManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\FontManager.h">
+      <Filter>02. GameObject\02. Public\06. FontManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\FontUI.h">
+      <Filter>02. GameObject\01. Stage\05. UI\01. FontUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -297,7 +309,7 @@
       <Filter>02. GameObject\01. Stage\05. UI</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\HPUI.cpp">
-      <Filter>02. GameObject\01. Stage\05. UI\HPUI</Filter>
+      <Filter>02. GameObject\01. Stage\05. UI\00. HPUI</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\GoblinSword.cpp">
       <Filter>02. GameObject\01. Stage\03. Enemy\00. Goblin_Sword</Filter>
@@ -328,6 +340,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\HPUIManager.cpp">
       <Filter>02. GameObject\02. Public\05. HPUIManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\FontManager.cpp">
+      <Filter>02. GameObject\02. Public\06. FontManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\FontUI.cpp">
+      <Filter>02. GameObject\01. Stage\05. UI\01. FontUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
