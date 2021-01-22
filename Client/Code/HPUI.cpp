@@ -43,7 +43,7 @@ Client::_int Client::CHPUI::Update(const _float& deltaTime)
 	Engine::CGameObject::Update(deltaTime);
 
 	if (m_isFixed)
-		m_rendererCom->AddObject(Engine::RENDER_ALPHA, this);
+		m_rendererCom->AddObject(Engine::RENDER_UI, this);
 	else
 		m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
 

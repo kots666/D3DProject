@@ -23,7 +23,7 @@ HRESULT CManagement::ReadyShader(LPDIRECT3DDEVICE9 & device)
 		viewPort.Width,
 		viewPort.Height,
 		D3DFMT_A16B16G16R16F,
-		D3DXCOLOR(0.f, 0.f, 0.f, 1.f)),
+		D3DXCOLOR(0.f, 0.f, 0.f, 0.f)),
 		E_FAIL);
 
 	FAILED_CHECK_RETURN(ReadyDebugBuffer(L"Target_Albedo", 0.f, 0.f, 100.f, 100.f), E_FAIL);

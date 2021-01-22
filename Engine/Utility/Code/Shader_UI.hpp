@@ -126,9 +126,16 @@ technique Default_Device
 
 	pass
 	{
+		zenable = false;
+		zwriteenable = true;
+
 		alphatestenable = true;
 		alpharef = 100;
 		alphafunc = greater;
+
+		alphablendenable = true;
+		srcblend = srcalpha;
+		destblend = invsrcalpha;
 
 		vertexshader = compile vs_3_0 VS_MAIN();
 		pixelshader = compile ps_3_0 PS_MAIN3();

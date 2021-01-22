@@ -44,8 +44,13 @@ technique Default_Device
 {
 	pass Blend
 	{
-	//zwriteenable = false;
-	vertexshader = NULL;
-	pixelshader = compile ps_3_0 PS_MAIN();
-}
+		zwriteenable = false;
+
+		alphablendenable = true;
+		srcblend = srcalpha;
+		destblend = invsrcalpha;
+
+		vertexshader = NULL;
+		pixelshader = compile ps_3_0 PS_MAIN();
+	}
 };

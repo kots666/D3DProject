@@ -83,11 +83,16 @@ void CRenderer::AddObject(RENDERID group, CGameObject* gameObject)
 
 void CRenderer::Render(LPDIRECT3DDEVICE9& device)
 {
-	//RenderPriority(device);
-	//RenderNonAlpha(device);
+	// SkyBox
+	RenderPriority(device);
+	
+	// Deferred Rendering
 	RenderDeferred(device);
 	RenderLightAcc(device);
+
 	RenderBlend(device);
+
+	// Forward Rendering for AlphaBlending
 	RenderAlpha(device);
 	RenderUI(device);
 
@@ -132,7 +137,7 @@ void CRenderer::RenderNonAlpha(LPDIRECT3DDEVICE9 & device)
 
 void CRenderer::RenderAlpha(LPDIRECT3DDEVICE9 & device)
 {
-	m_renderGroup[RENDER_ALPHA].sort(CompareViewZGreater);
+	//m_renderGroup[RENDER_ALPHA].sort(CompareViewZGreater);
 
 	for (auto& iter : m_renderGroup[RENDER_ALPHA])
 		iter->Render();
@@ -147,7 +152,6 @@ void CRenderer::RenderUI(LPDIRECT3DDEVICE9 & device)
 void CRenderer::RenderDeferred(LPDIRECT3DDEVICE9 & device)
 {
 	BeginMRT(L"MRT_Deferred");
-	RenderPriority(device);
 	RenderNonAlpha(device);
 	EndMRT(L"MRT_Deferred");
 }

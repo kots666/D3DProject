@@ -36,7 +36,7 @@ Client::_int Client::CUI::Update(const _float& deltaTime)
 {
 	Engine::CGameObject::Update(deltaTime);
 
-	m_rendererCom->AddObject(Engine::RENDER_ALPHA, this);
+	m_rendererCom->AddObject(Engine::RENDER_UI, this);
 
 	D3DXMatrixOrthoLH(&m_projMat, WINCX, WINCY, 0.f, 1.f);
 

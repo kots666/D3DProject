@@ -53,6 +53,10 @@ technique Default_Device
 	{
 		zwriteenable = false;
 
+		alphablendenable = true;
+		//srcblend = one;
+		//destblend = one;
+
 		vertexshader = NULL;
 		pixelshader = compile ps_3_0 PS_MAIN();
 	}

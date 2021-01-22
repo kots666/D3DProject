@@ -63,9 +63,8 @@ technique Default_Device
 {
 	pass
 	{
-		zenable = false;
+		//zenable = false;
 		zwriteenable = false;
-		//cullmode = none;
 
 		vertexshader = compile vs_3_0 VS_MAIN();
 		pixelshader = compile ps_3_0 PS_MAIN();

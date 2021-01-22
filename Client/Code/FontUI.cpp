@@ -41,7 +41,7 @@ Client::_int Client::CFontUI::Update(const _float& deltaTime)
 	{
 		Engine::CGameObject::Update(deltaTime);
 
-		m_startPos.y += deltaTime;
+		m_startPos.y += deltaTime * 2.f;
 
 		m_accTime += deltaTime;
 
@@ -52,7 +52,7 @@ Client::_int Client::CFontUI::Update(const _float& deltaTime)
 			m_lifeTime = 0.f;
 		}
 		else
-			m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
+			m_rendererCom->AddObject(Engine::RENDER_UI, this);
 	}
 
 	return 0;

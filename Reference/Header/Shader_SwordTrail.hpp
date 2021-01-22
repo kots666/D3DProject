@@ -66,12 +66,12 @@ technique Default_Device
 	pass
 	{
 		cullmode = none;
-		zenable = false;
-		zwriteenable = true;
+		zenable = true;
+		zwriteenable = false;
 		
-		//alphatestenable = true;
-		//alpharef = 0;
-		//alphafunc = greater;
+		alphatestenable = true;
+		alpharef = 10;
+		alphafunc = greater;
 
 		alphablendenable = true;
 		srcblend = srcalpha;

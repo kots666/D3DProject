@@ -51,9 +51,11 @@ void CBackMesh::Render()
 
 	_uint maxPass = 0;
 
-	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
 
 	effect->Begin(&maxPass, 0);
+
+	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
+
 	if (nullptr == m_normalTexCom)
 		effect->BeginPass(0);
 	else
