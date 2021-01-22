@@ -593,6 +593,8 @@ void CPlayer::DoAttack()
 		m_transCom->SetRotation(Engine::ROT_Y, D3DXToRadian(camYDegree));
 		m_yRotAngle = camYDegree;
 
+		ClearCollideList();
+
 		for (auto& elem : m_attackCollider)
 			elem->SetCanCollide(true);
 

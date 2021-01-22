@@ -39,6 +39,9 @@ HRESULT CDog::Ready()
 	m_isHit = false;
 	m_isAttack = false;
 	m_isDeadAnim = false;
+	m_isDissolve = false;
+
+	m_dissolveAmount = 0.f;
 
 	m_intervalTime = 0.f;
 
@@ -49,46 +52,55 @@ HRESULT CDog::Ready()
 
 _int CDog::Update(const _float& deltaTime)
 {
-	CalcState(deltaTime);
-	MonsterAI(deltaTime);
-
-	m_meshCom->PlayAnimation(deltaTime);
-	m_meshCom->UpdateFrameMatrices(deltaTime, &m_reviseMat);
-
-	_vec3 movePos;
-
-	if (m_meshCom->CanCalcMovePos("RootBone", movePos))
+	if (!m_isDissolve)
 	{
-		movePos.y = 0;
-		movePos.z = 0;
+		CalcState(deltaTime);
+		MonsterAI(deltaTime);
 
-		_vec3 nowPos;
-		_vec3 nowDir;
-		m_transCom->GetInfo(Engine::INFO_POS, &nowPos);
-		m_transCom->GetInfo(Engine::INFO_LOOK, &nowDir);
+		m_meshCom->PlayAnimation(deltaTime);
+		m_meshCom->UpdateFrameMatrices(deltaTime, &m_reviseMat);
 
-		nowDir *= movePos.x;
+		_vec3 movePos;
 
-		_vec3 moveDist = nowPos + nowDir;
+		if (m_meshCom->CanCalcMovePos("RootBone", movePos))
+		{
+			movePos.y = 0;
+			movePos.z = 0;
 
-		m_transCom->SetPos(moveDist);
+			_vec3 nowPos;
+			_vec3 nowDir;
+			m_transCom->GetInfo(Engine::INFO_POS, &nowPos);
+			m_transCom->GetInfo(Engine::INFO_LOOK, &nowDir);
+
+			nowDir *= movePos.x;
+
+			_vec3 moveDist = nowPos + nowDir;
+
+			m_transCom->SetPos(moveDist);
+		}
+
+		for (auto& elem : m_hitCollider)
+		{
+			elem->Update(deltaTime);
+			elem->UpdateByBone(m_transCom->GetWorldMatrix());
+		}
+
+		for (auto& elem : m_attackCollider)
+		{
+			elem->Update(deltaTime);
+			elem->UpdateByBone(m_transCom->GetWorldMatrix());
+		}
+	}
+	else if(m_isDissolve)
+	{
+		m_dissolveAmount += deltaTime;
+		if (1.f < m_dissolveAmount)
+			m_isDead = true;
 	}
 
 	Engine::CGameObject::Update(deltaTime);
 
 	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
-
-	for (auto& elem : m_hitCollider)
-	{
-		elem->Update(deltaTime);
-		elem->UpdateByBone(m_transCom->GetWorldMatrix());
-	}
-
-	for (auto& elem : m_attackCollider)
-	{
-		elem->Update(deltaTime);
-		elem->UpdateByBone(m_transCom->GetWorldMatrix());
-	}
 
 	return 0;
 }
@@ -103,7 +115,7 @@ void CDog::Render()
 	effect->Begin(nullptr, 0);
 
 	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
-	m_meshCom->Render(effect, 1);
+	m_meshCom->Render(effect, 2);
 	
 	effect->End();
 
@@ -182,6 +194,11 @@ HRESULT CDog::AddComponent()
 
 	m_meshCom->AddNormalTexture(m_normalTex);
 
+	// DissolveTexture
+	component = m_dissolveTex = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Texture_Dissolve"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_DissolveTexture", component);
+	
 	return S_OK;
 }
 
@@ -266,6 +283,10 @@ HRESULT CDog::SetUpConstantTable(LPD3DXEFFECT & effect)
 	effect->SetMatrix("g_matView", &matView);
 	effect->SetMatrix("g_matProj", &matProj);
 
+	m_dissolveTex->SetTexture(effect, "g_DissolveTexture");
+
+	effect->SetFloat("g_DissolveAmount", m_dissolveAmount);
+
 	return S_OK;
 }
 
@@ -297,7 +318,7 @@ void CDog::CalcState(const _float & deltaTime)
 	if (m_isDeadAnim)
 	{
 		if (m_meshCom->IsAnimationSetEnd())
-			m_isDead = true;
+			m_isDissolve = true;
 	}
 
 	if (m_isInterval)

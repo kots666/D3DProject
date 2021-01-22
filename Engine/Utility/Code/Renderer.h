@@ -25,11 +25,13 @@ public:
 private:
 	void RenderPriority(LPDIRECT3DDEVICE9& device);
 	void RenderNonAlpha(LPDIRECT3DDEVICE9& device);
+	void RenderDistort(LPDIRECT3DDEVICE9& device);
 	void RenderAlpha(LPDIRECT3DDEVICE9& device);
 	void RenderUI(LPDIRECT3DDEVICE9& device);
 
 	void RenderDeferred(LPDIRECT3DDEVICE9& device);
 	void RenderLightAcc(LPDIRECT3DDEVICE9& device);
+	void RenderDistortion(LPDIRECT3DDEVICE9& device);
 	void RenderBlend(LPDIRECT3DDEVICE9& device);
 
 private:

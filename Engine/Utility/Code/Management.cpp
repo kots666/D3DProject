@@ -53,13 +53,24 @@ HRESULT CManagement::ReadyShader(LPDIRECT3DDEVICE9 & device)
 		D3DFMT_A32B32G32R32F,
 		D3DXCOLOR(1.f, 1.f, 1.f, 1.f)),
 		E_FAIL);
-	FAILED_CHECK_RETURN(ReadyDebugBuffer(L"Target_Depth", 0.f, 300.f, 100.f, 100.f), E_FAIL);
+	FAILED_CHECK_RETURN(ReadyDebugBuffer(L"Target_Depth", 100.f, 0.f, 100.f, 100.f), E_FAIL);
+
+	FAILED_CHECK_RETURN(ReadyRenderTarget(device,
+		L"Target_Distortion",
+		viewPort.Width,
+		viewPort.Height,
+		D3DFMT_A32B32G32R32F,
+		D3DXCOLOR(0.f, 0.f, 0.f, 0.f)),
+		E_FAIL);
+	FAILED_CHECK_RETURN(ReadyDebugBuffer(L"Target_Distortion", 200.f, 0.f, 100.f, 100.f), E_FAIL);
 
 	FAILED_CHECK_RETURN(ReadyMRT(L"MRT_Deferred", L"Target_Albedo"), E_FAIL);
 	FAILED_CHECK_RETURN(ReadyMRT(L"MRT_Deferred", L"Target_Normal"), E_FAIL);
 	FAILED_CHECK_RETURN(ReadyMRT(L"MRT_Deferred", L"Target_Depth"), E_FAIL);
 
 	FAILED_CHECK_RETURN(ReadyMRT(L"MRT_LightAcc", L"Target_Shade"), E_FAIL);
+
+	FAILED_CHECK_RETURN(ReadyMRT(L"MRT_Distortion", L"Target_Distortion"), E_FAIL);
 
 	CShader* shader = nullptr;
 
@@ -107,6 +118,11 @@ HRESULT CManagement::ReadyShader(LPDIRECT3DDEVICE9 & device)
 	shader = CShader::Create(device, L"../../Reference/Header/Shader_Alpha.hpp");
 	NULL_CHECK_RETURN(shader, E_FAIL);
 	FAILED_CHECK_RETURN(ReadyProto(L"Proto_Shader_Alpha", shader), E_FAIL);
+
+	// Distortion
+	shader = CShader::Create(device, L"../../Reference/Header/Shader_Distortion.hpp");
+	NULL_CHECK_RETURN(shader, E_FAIL);
+	FAILED_CHECK_RETURN(ReadyProto(L"Proto_Shader_Distortion", shader), E_FAIL);
 
 	return S_OK;
 }

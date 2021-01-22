@@ -89,6 +89,7 @@ void CRenderer::Render(LPDIRECT3DDEVICE9& device)
 	// Deferred Rendering
 	RenderDeferred(device);
 	RenderLightAcc(device);
+	RenderDistortion(device);
 
 	RenderBlend(device);
 
@@ -98,6 +99,7 @@ void CRenderer::Render(LPDIRECT3DDEVICE9& device)
 
 	RenderDebugBuffer(L"MRT_Deferred");
 	RenderDebugBuffer(L"MRT_LightAcc");
+	RenderDebugBuffer(L"MRT_Distortion");
 
 	Clear();
 }
@@ -132,6 +134,12 @@ void CRenderer::RenderNonAlpha(LPDIRECT3DDEVICE9 & device)
 	m_renderGroup[RENDER_NONALPHA].sort(CompareViewZless);
 
 	for (auto& iter : m_renderGroup[RENDER_NONALPHA])
+		iter->Render();
+}
+
+void CRenderer::RenderDistort(LPDIRECT3DDEVICE9 & device)
+{
+	for (auto& iter : m_renderGroup[RENDER_DISTORT])
 		iter->Render();
 }
 
@@ -185,6 +193,13 @@ void CRenderer::RenderLightAcc(LPDIRECT3DDEVICE9 & device)
 	SafeRelease(shader);
 }
 
+void CRenderer::RenderDistortion(LPDIRECT3DDEVICE9 & device)
+{
+	BeginMRT(L"MRT_Distortion");
+	RenderDistort(device);
+	EndMRT(L"MRT_Distortion");
+}
+
 void CRenderer::RenderBlend(LPDIRECT3DDEVICE9 & device)
 {
 	CShader* shader = dynamic_cast<Engine::CShader*>(Engine::CloneComp(L"Proto_Shader_Blend"));
@@ -195,6 +210,7 @@ void CRenderer::RenderBlend(LPDIRECT3DDEVICE9 & device)
 
 	Engine::ThrowRenderTargetTexture(pEffect, L"Target_Albedo", "g_AlbedoTexture");
 	Engine::ThrowRenderTargetTexture(pEffect, L"Target_Shade", "g_ShadeTexture");
+	Engine::ThrowRenderTargetTexture(pEffect, L"Target_Distortion", "g_DistortionTexture");
 
 	pEffect->Begin(NULL, 0);
 	pEffect->BeginPass(0);

@@ -24,6 +24,20 @@ sampler NormalSampler = sampler_state
 	AddressV = wrap;
 };
 
+texture g_DissolveTexture;
+
+sampler DissolveSampler = sampler_state
+{
+	texture = g_DissolveTexture;
+
+	minfilter = linear;
+	magfilter = linear;
+};
+
+float g_DissolveAmount;
+
+// ============================================= 기본 디퍼드 =============================================
+
 struct	VS_IN
 {
 	vector		vPosition : POSITION;
@@ -89,6 +103,8 @@ PS_OUT		PS_MAIN(PS_IN In)
 
 	return Out;
 }
+
+// ============================================= 노말맵핑 =============================================
 
 struct	VS_NORMAL_IN
 {
@@ -178,25 +194,24 @@ PS_NORMAL_OUT PS_NORMALMAIN(PS_NORMAL_IN In)
 	return Out;
 }
 
-PS_NORMAL_OUT PS_NORMALMAIN2(PS_NORMAL_IN In)
+// ============================================= 디졸브 =============================================
+
+PS_OUT PS_DISSOLVEMAIN(PS_IN disIn)
 {
-	PS_NORMAL_OUT Out2 = (PS_NORMAL_OUT)0;
+	PS_OUT disOut = (PS_OUT)0;
 
-	Out2.vColor = tex2D(BaseSampler, In.vTexUV);
-
-	float4 texNormal = tex2D(NormalSampler, In.vTexUV);
+	disOut.vColor = tex2D(BaseSampler, disIn.vTexUV);	// 2차원 텍스처로부터 uv좌표에 해당하는 색을 얻어오는 함수, 반환 타입이 vector 타입
+	vector vDissolveColor = tex2D(DissolveSampler, disIn.vTexUV);
 	
-	float3 unpackedNormal;
-	unpackedNormal.xy = texNormal.wy * 2 - 1;
-	unpackedNormal.z = sqrt(1 - saturate(dot(unpackedNormal.xy, unpackedNormal.xy)));
+	if (g_DissolveAmount > vDissolveColor.r)
+		disOut.vColor.a = 0.f;
+	else
+		disOut.vColor.a = 1.f;
 
-	float3 normal = (unpackedNormal.x * In.T) + (unpackedNormal.y * In.B) + (unpackedNormal.z * In.N);
+	disOut.vNormal = vector(disIn.vNormal.xyz * 0.5f + 0.5f, 0.f);
+	disOut.vDepth = vector(disIn.vProjPos.z / disIn.vProjPos.w, disIn.vProjPos.w * 0.001f, 0.f, 0.f);
 
-	Out2.vNormal = vector(normal.xyz * 0.5f + 0.5f, 1.f);
-
-	Out2.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w * 0.001f, 0.f, 0.f);
-
-	return Out2;
+	return disOut;
 }
 
 technique Default_Device
@@ -218,9 +233,13 @@ technique Default_Device
 
 	pass
 	{
-		// 노란색 노말맵 대비 노말맵핑
-		vertexshader = compile vs_3_0 VS_NORMALMAIN();
-		pixelshader = compile ps_3_0 PS_NORMALMAIN2();
+		alphatestenable = true;
+		alpharef = 10;
+		alphafunc = greater;
+
+		// 기본 디퍼드 + 디졸브
+		vertexshader = compile vs_3_0 VS_MAIN();
+		pixelshader = compile ps_3_0 PS_DISSOLVEMAIN();
 	}
 
 	pass
@@ -234,3 +253,24 @@ technique Default_Device
 		pixelshader = compile ps_3_0 PS_MAIN();
 	}
 };
+
+//PS_NORMAL_OUT PS_NORMALMAIN2(PS_NORMAL_IN In)
+//{
+//	PS_NORMAL_OUT Out2 = (PS_NORMAL_OUT)0;
+//
+//	Out2.vColor = tex2D(BaseSampler, In.vTexUV);
+//
+//	float4 texNormal = tex2D(NormalSampler, In.vTexUV);
+//	
+//	float3 unpackedNormal;
+//	unpackedNormal.xy = texNormal.wy * 2 - 1;
+//	unpackedNormal.z = sqrt(1 - saturate(dot(unpackedNormal.xy, unpackedNormal.xy)));
+//
+//	float3 normal = (unpackedNormal.x * In.T) + (unpackedNormal.y * In.B) + (unpackedNormal.z * In.N);
+//
+//	Out2.vNormal = vector(normal.xyz * 0.5f + 0.5f, 1.f);
+//
+//	Out2.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w * 0.001f, 0.f, 0.f);
+//
+//	return Out2;
+//}

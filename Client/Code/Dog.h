@@ -59,6 +59,7 @@ private:
 	Engine::CCollider* m_colliderCom = nullptr;
 	Engine::CShader* m_shaderCom = nullptr;
 	Engine::CTexture* m_normalTex = nullptr;
+	Engine::CTexture* m_dissolveTex = nullptr;
 
 	_vec3 m_startPosition;
 	_float m_startAngle;
@@ -69,8 +70,10 @@ private:
 	_bool m_isHit;
 	_bool m_isAttack;
 	_bool m_isDeadAnim;
+	_bool m_isDissolve;
 
 	_float m_intervalTime;
+	_float m_dissolveAmount;
 
 public:
 	static CDog* Create(LPDIRECT3DDEVICE9 device, const _vec3& pos, const _float& angle = 0);

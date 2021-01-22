@@ -68,7 +68,7 @@ void CMainApp::Render()
 
 	Engine::RenderBegin(D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.f));
 
-	m_managementClass->RenderScene();
+	m_managementClass->RenderScene(m_device);
 	CNaviMesh::GetInstance()->Render();
 
 	Engine::RenderFont(L"Font_Jinji", m_fps, &_vec2(450.f, 10.f), D3DXCOLOR(1.f, 1.f, 0.f, 1.f));

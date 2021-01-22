@@ -37,6 +37,8 @@ _int CSwordTrail::Update(const _float& deltaTime)
 			++iter;
 	}
 
+	cout << "Size : " << m_trailList.size() << endl;
+
 	m_rendererCom->AddObject(Engine::RENDER_ALPHA, this);
 
 	return 0;
@@ -144,7 +146,7 @@ void CSwordTrail::MakeTrail(const _int & type)
 		texUV[2] = { afterS, 1 };
 		texUV[3] = { beforeS, 1 };
 
-		Engine::CTrailRect* newTrail = Engine::CTrailRect::Create(m_device, pos, texUV, 0.02f);
+		Engine::CTrailRect* newTrail = Engine::CTrailRect::Create(m_device, pos, texUV, 0.05f);
 
 		m_trailList.emplace_back(newTrail);
 	}

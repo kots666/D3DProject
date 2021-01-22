@@ -8,6 +8,16 @@ sampler AlbedoSampler = sampler_state
 	magfilter = linear;
 };
 
+texture g_DistortionTexture;
+
+sampler DistortSampler = sampler_state
+{
+	texture = g_DistortionTexture;
+
+	minfilter = linear;
+	magfilter = linear;
+};
+
 texture			g_ShadeTexture;
 
 sampler ShadeSampler = sampler_state
@@ -32,7 +42,8 @@ PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT		Out = (PS_OUT)0;
 
-	vector		vAlbedo = tex2D(AlbedoSampler, In.vTexUV);
+	vector		vDistort = tex2D(DistortSampler, In.vTexUV);
+	vector		vAlbedo = tex2D(AlbedoSampler, In.vTexUV + (vDistort.r * 0.1f));
 	vector		vShade = tex2D(ShadeSampler, In.vTexUV);
 
 	Out.vColor = vAlbedo * vShade;
