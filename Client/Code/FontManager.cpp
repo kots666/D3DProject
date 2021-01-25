@@ -50,7 +50,9 @@ void CFontManager::ActiveNumber(const _int & inputNumber, const _vec3 & pos, con
 		num /= 10;
 	}
 
-	_vec3 offset = { numList.size() * -0.5f, 0.f, 0.f };
+	_float sizeOffset = (1.f - xSize) * 0.5f;
+
+	_vec3 offset = { (numList.size() * 0.5f) * -(xSize + sizeOffset), 0.f, 0.f };
 
 	for (auto& num : numList)
 	{
@@ -58,11 +60,11 @@ void CFontManager::ActiveNumber(const _int & inputNumber, const _vec3 & pos, con
 		{
 			if (!elem->GetActive())
 			{
-				elem->Active(pos, offset, lifeTime, xSize, ySize);
+				elem->Active(pos, offset, xSize, ySize, lifeTime);
 				break;
 			}
 		}
-		offset.x += 1.f;
+		offset.x += xSize + sizeOffset;
 	}
 }
 

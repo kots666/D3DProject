@@ -163,11 +163,18 @@ _uint CLoading::LoadingForStage()
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(
 		m_device,
 		Engine::RESOURCE_STAGE,
-		L"Texture_HitSlash",
+		L"Texture_HitEffect",
 		Engine::TEX_NORMAL,
-		L"../Resource/Texture/Effect/HitSlash.png"), E_FAIL);
+		L"../Resource/Texture/Effect/HitEffect.png"), E_FAIL);
 
-	_int textureCnt = 12;
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Texture_NPC",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/NPC/NPC.tga"), E_FAIL);
+
+	_int textureCnt = 13;
 	m_nowLoad += textureCnt;
 
 	LoadingForDynamicMeshNormalTextures();
@@ -223,7 +230,14 @@ _uint CLoading::LoadingForStage()
 		L"../Resource/Mesh/DynamicMesh/Boss/",
 		L"Boss.X"), E_FAIL);
 
-	_int dynamicMeshLoad = 6;
+	// NPC
+	FAILED_CHECK_RETURN(Engine::ReadyMesh(m_device,
+		Engine::RESOURCE_STAGE,
+		L"Mesh_NPC",
+		Engine::TYPE_DYNAMIC,
+		L"../Resource/Mesh/DynamicMesh/NPC/",
+		L"Miracle.X"), E_FAIL);
+	_int dynamicMeshLoad = 7;
 
 	m_nowLoad += dynamicMeshLoad;
 
@@ -333,7 +347,29 @@ HRESULT CLoading::LoadingForDynamicMeshNormalTextures()
 		Engine::TEX_NORMAL,
 		L"../Resource/Mesh/DynamicMesh/Boss/Boss_Apocalypse_Hair_N.tga"), E_FAIL);
 
-	_int dynamicNormalTex = 11;
+	// NPC
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Texture_NPC_Body",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/DynamicMesh/NPC/CH_NPC_Miracle_Body_N.tga"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Texture_NPC_Hair",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/DynamicMesh/NPC/CH_NPC_Miracle_Hair_N.tga"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Texture_NPC_Cloth",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/DynamicMesh/NPC/CH_NPC_Miracle_Cloth_N.tga"), E_FAIL);
+
+	_int dynamicNormalTex = 14;
 
 	m_nowLoad += dynamicNormalTex;
 

@@ -14,6 +14,7 @@
 #include "UI.h"
 #include "HPUI.h"
 #include "Spawner.h"
+#include "NPC.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 device) :
 	Engine::CScene(device)
@@ -116,6 +117,10 @@ HRESULT CStage::ReadyGameLogicLayer(const _tchar * layerTag)
 	gameObject = CPlayer::Create(m_device);
 	NULL_CHECK_RETURN(gameObject, E_FAIL);
 	FAILED_CHECK_RETURN(layer->AddGameObject(L"Player", gameObject), E_FAIL);
+
+	gameObject = CNPC::Create(m_device, { 10.f, 0.25f, 10.f }, -90.f);
+	NULL_CHECK_RETURN(gameObject, E_FAIL);
+	FAILED_CHECK_RETURN(layer->AddGameObject(L"NPC", gameObject));
 
 	gameObject = CSpawner::Create(m_device, { 7.f, 0.f, 8.f }, 400);
 	NULL_CHECK_RETURN(gameObject, E_FAIL);

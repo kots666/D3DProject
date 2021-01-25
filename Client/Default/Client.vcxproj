@@ -192,6 +192,7 @@
     <ClInclude Include="..\Code\Logo.h" />
     <ClInclude Include="..\Code\MainApp.h" />
     <ClInclude Include="..\Code\Minotauros.h" />
+    <ClInclude Include="..\Code\NPC.h" />
     <ClInclude Include="..\Code\Player.h" />
     <ClInclude Include="..\Code\PlayTimeManager.h" />
     <ClInclude Include="..\Code\SkyBox.h" />
@@ -238,6 +239,7 @@
     <ClCompile Include="..\Code\Logo.cpp" />
     <ClCompile Include="..\Code\MainApp.cpp" />
     <ClCompile Include="..\Code\Minotauros.cpp" />
+    <ClCompile Include="..\Code\NPC.cpp" />
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\PlayTimeManager.cpp" />
     <ClCompile Include="..\Code\SkyBox.cpp" />

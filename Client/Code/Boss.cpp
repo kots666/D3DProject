@@ -145,13 +145,17 @@ void CBoss::HitColliderOverlapped(Engine::CGameObject * causer)
 		DoDeadAnim();
 	}
 
-	Engine::CTransform* causerTrans = dynamic_cast<Engine::CTransform*>(causer->GetComponent(L"Com_Transform", Engine::ID_DYNAMIC));
-	if (nullptr == causerTrans) return;
+	if (!m_isHit && !m_isAttack && !m_isDeadAnim)
+	{
 
-	_vec3 pos;
-	causerTrans->GetInfo(Engine::INFO_POS, &pos);
+		Engine::CTransform* causerTrans = dynamic_cast<Engine::CTransform*>(causer->GetComponent(L"Com_Transform", Engine::ID_DYNAMIC));
+		if (nullptr == causerTrans) return;
 
-	LookAtTarget(pos);
+		_vec3 pos;
+		causerTrans->GetInfo(Engine::INFO_POS, &pos);
+
+		LookAtTarget(pos);
+	}
 }
 
 HRESULT CBoss::AddComponent()

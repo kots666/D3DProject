@@ -27,11 +27,15 @@ public:
 	virtual void Render() override;
 
 public:
-	void Active(const _vec3& pos, const _vec3& offset, const _float& lifeTime = 2.f, const _float& xSize = 1.f, const _float& ySize = 1.f);
+	void Active(const _vec3& pos, const _vec3& offset, const _float& xSize = 1.f, const _float& ySize = 1.f, const _float& lifeTime = 2.f);
 
+	// Getter
 	_bool GetActive() const { return m_isActive; }
+	_float GetSize() const { return m_sizeX; }
 
+	// Setter
 	void SetActive(const _bool& isActive) { m_isActive = isActive; }
+	void SetSize(const _float& size) { m_sizeX = size; m_sizeY = size; }
 
 private:
 	HRESULT AddComponent();

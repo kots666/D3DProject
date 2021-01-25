@@ -17,7 +17,7 @@ private:
 	virtual ~CHitManager();
 
 public:
-	void Spawn(const _vec3& pos, const _float& lifeTime = 1.f);
+	void Spawn(const _vec3& pos, const _float& size, const _float& lifeTime = 0.1f);
 
 private:
 	void ReadyEffect();

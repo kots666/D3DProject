@@ -84,7 +84,7 @@ void Client::CFontUI::Render()
 	}
 }
 
-void CFontUI::Active(const _vec3 & pos, const _vec3 & offset, const _float & lifeTime, const _float & xSize, const _float & ySize)
+void CFontUI::Active(const _vec3 & pos, const _vec3 & offset, const _float & xSize, const _float & ySize, const _float & lifeTime)
 {
 	if (!m_isActive)
 	{

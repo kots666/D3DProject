@@ -28,7 +28,7 @@ HRESULT Client::CHitEffect::Ready()
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
 	m_offset = 1 / 3.f;
-
+	m_size = 1.f;
 	m_step = 0;
 
 	return S_OK;
@@ -41,6 +41,8 @@ Client::_int Client::CHitEffect::Update(const _float& deltaTime)
 		Engine::CGameObject::Update(deltaTime);
 
 		m_accTime += deltaTime;
+
+		m_step = (m_accTime / m_lifeTime) * 9.f;
 
 		if (m_accTime > m_lifeTime)
 		{
@@ -77,9 +79,10 @@ void Client::CHitEffect::Render()
 	}
 }
 
-void CHitEffect::SetActive(const _vec3 & pos, const _float & lifeTime)
+void CHitEffect::SetActive(const _vec3 & pos, const _float& size, const _float & lifeTime)
 {
 	m_pos = pos;
+	m_size = size;
 	m_lifeTime = lifeTime;
 	m_isActive = true;
 }
@@ -94,7 +97,7 @@ HRESULT Client::CHitEffect::AddComponent()
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Buffer", component);
 
 	// texture
-	component = m_textureCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Texture_HitSlash"));
+	component = m_textureCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Texture_HitEffect"));
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Texture", component);
 
@@ -125,6 +128,22 @@ HRESULT CHitEffect::SetUpConstantTable(LPD3DXEFFECT & effect)
 
 	m_device->GetTransform(D3DTS_VIEW, &matView);
 	m_device->GetTransform(D3DTS_PROJECTION, &matProj);
+
+	matWorld = matView;
+
+	matWorld._41 = 0.f;
+	matWorld._42 = 0.f;
+	matWorld._43 = 0.f;
+
+	D3DXMatrixInverse(&matWorld, nullptr, &matWorld);
+
+	for (_int i = 0; i < 3; ++i)
+	{
+		for (_int j = 0; j < 4; ++j)
+		{
+			matWorld.m[i][j] *= m_size;
+		}
+	}
 
 	matWorld._41 = m_pos.x;
 	matWorld._42 = m_pos.y;

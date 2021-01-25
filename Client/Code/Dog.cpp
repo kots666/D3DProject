@@ -154,15 +154,14 @@ void CDog::HitColliderOverlapped(Engine::CGameObject * causer)
 
 	LookAtTarget(pos);
 
-	CFontManager::GetInstance()->ActiveNumber(20, pos);
+	CFontManager::GetInstance()->ActiveNumber(2000, pos, 2.f, 0.3f, 0.3f);
 
 	_vec3 myPos;
 	m_transCom->GetInfo(Engine::INFO_POS, &myPos);
 
-	myPos.y += 1.5f;
-	myPos.z -= 0.2f;
+	myPos.y += 1.f;
 
-	CHitManager::GetInstance()->Spawn(myPos);
+	CHitManager::GetInstance()->Spawn(myPos, 2.f);
 }
 
 HRESULT CDog::AddComponent()
@@ -408,13 +407,14 @@ void CDog::DoHit()
 {
 	if (!m_isDeadAnim)
 	{
-		if (m_isHit)
-			m_meshCom->ResetAnimation();
+		m_meshCom->ResetAnimation();
 
 		m_isAttack = false;
 		m_isHit = true;
 
 		m_meshCom->SetAnimation(3, 0.015f, 0.1f, true);
+
+		cout << "Hit" << endl;
 	}
 }
 

@@ -44,7 +44,15 @@ VS_OUT VS_MAIN(VS_IN In)
 	matWVP = mul(matWV, g_matProj);
 	
 	Out.vPosition = mul(vector(In.vPosition.xyz, 1.f), matWVP);
-	Out.vTexUV = In.vTexUV;
+
+	int y = g_Step / 3;
+	int x = g_Step % 3;
+
+	float2 texUV = In.vTexUV;
+	texUV.x = (g_Offset * texUV.x) + x * g_Offset;
+	texUV.y = (g_Offset * texUV.y) + y * g_Offset;
+
+	Out.vTexUV = texUV;
 
 	return Out;
 }
@@ -66,10 +74,37 @@ PS_OUT		PS_MAIN(PS_IN In)
 
 	Out.vColor = tex2D(BaseSampler, In.vTexUV);	// 2차원 텍스처로부터 uv좌표에 해당하는 색을 얻어오는 함수, 반환 타입이 vector 타입
 
-	if (Out.vColor.r < 1.f)
-	{
-		Out.vColor.a = 0.f;
-	}
+	vector color = vector(1.f, 1.f, 0.83f, 1.f);
+
+	Out.vColor *= color;
+
+	Out.vColor.r *= 3.f;
+	Out.vColor.g *= 3.f;
+
+	return Out;
+}
+
+VS_OUT VS_TEST(VS_IN In)
+{
+	VS_OUT		Out = (VS_OUT)0;
+
+	matrix matWV, matWVP;
+
+	matWV = mul(g_matWorld, g_matView);
+	matWVP = mul(matWV, g_matProj);
+
+	Out.vPosition = mul(vector(In.vPosition.xyz, 1.f), matWVP);
+
+	Out.vTexUV = In.vTexUV;
+
+	return Out;
+}
+
+PS_OUT		PS_TEST(PS_IN In)
+{
+	PS_OUT		Out = (PS_OUT)0;
+
+	Out.vColor = tex2D(BaseSampler, In.vTexUV);	// 2차원 텍스처로부터 uv좌표에 해당하는 색을 얻어오는 함수, 반환 타입이 vector 타입
 
 	return Out;
 }
@@ -83,7 +118,7 @@ technique Default_Device
 	pass	
 	{
 		alphatestenable = true;
-		alpharef = 0;
+		alpharef = 10;
 		alphafunc = greater;
 
 		vertexshader = compile vs_3_0 VS_MAIN();
@@ -93,10 +128,10 @@ technique Default_Device
 	pass	
 	{
 		alphatestenable = true;
-		alpharef = 0;
+		alpharef = 100;
 		alphafunc = greater;
 
-		vertexshader = compile vs_3_0 VS_MAIN();
-		pixelshader = compile ps_3_0 PS_MAIN();
+		vertexshader = compile vs_3_0 VS_TEST();
+		pixelshader = compile ps_3_0 PS_TEST();
 	}
 };

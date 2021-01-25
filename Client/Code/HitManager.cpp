@@ -32,13 +32,13 @@ CHitManager::~CHitManager()
 	m_nameList.clear();
 }
 
-void CHitManager::Spawn(const _vec3 & pos, const _float & lifeTime)
+void CHitManager::Spawn(const _vec3 & pos, const _float& size, const _float & lifeTime)
 {
 	for (auto& elem : m_hitEffectList)
 	{
 		if (!elem->GetActive())
 		{
-			elem->SetActive(pos, lifeTime);
+			elem->SetActive(pos, size, lifeTime);
 			break;
 		}
 	}

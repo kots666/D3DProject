@@ -28,7 +28,7 @@ public:
 
 public:
 	_bool GetActive() const { return m_isActive; }
-	void SetActive(const _vec3& pos, const _float& lifeTime);
+	void SetActive(const _vec3& pos, const _float& size, const _float& lifeTime);
 
 private:
 	HRESULT AddComponent();
@@ -46,6 +46,7 @@ private:
 	_float m_lifeTime;
 	_float m_accTime;
 	_float m_offset;
+	_float m_size;
 	_int m_step;
 	_bool m_isActive;
 
