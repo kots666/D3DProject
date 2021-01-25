@@ -31,6 +31,8 @@ _int CLogo::Update(const _float& deltaTime)
 {
 	_int ret = Engine::CScene::Update(deltaTime);
 
+	m_backGround->SetPercent(m_loading->GetPercent());
+
 	if (true == m_loading->GetIsFinish())
 	{
 		if (GetAsyncKeyState(VK_RETURN) & 0x8000)
@@ -50,7 +52,7 @@ _int CLogo::Update(const _float& deltaTime)
 
 void CLogo::Render()
 {
-	Engine::RenderFont(L"Font_Jinji", m_loading->GetLoadString(), &_vec2(10.f, 10.f), D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
+	//Engine::RenderFont(L"Font_Jinji", m_loading->GetLoadString(), &_vec2(10.f, 10.f), D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
 }
 
 HRESULT CLogo::ReadyEnvironmentLayer(const _tchar * layerTag)
@@ -63,6 +65,8 @@ HRESULT CLogo::ReadyEnvironmentLayer(const _tchar * layerTag)
 	gameObject = CBackGround::Create(m_device);
 	NULL_CHECK_RETURN(gameObject, E_FAIL);
 	FAILED_CHECK_RETURN(layer->AddGameObject(L"BackGround", gameObject), E_FAIL);
+
+	m_backGround = dynamic_cast<CBackGround*>(gameObject);
 
 	m_layerMap.emplace(layerTag, layer);
 
@@ -83,7 +87,9 @@ HRESULT CLogo::InitResource(Engine::RESOURCETYPE type)
 {
 	FAILED_CHECK_RETURN(Engine::ReserveContainerSize(type), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::ReadyBuffer(m_device, Engine::RESOURCE_STATIC, L"Buffer_RCTex", Engine::BUFFER_RCTEX), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device, Engine::RESOURCE_LOGO, L"Texture_Logo", Engine::TEX_NORMAL, L"../Resource/Texture/Logo/Logo.jpg"), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device, Engine::RESOURCE_LOGO, L"Texture_MainTitle", Engine::TEX_NORMAL, L"../Resource/Texture/Loading/MainTitle.tga"), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device, Engine::RESOURCE_LOGO, L"Texture_ProgressiveBar", Engine::TEX_NORMAL, L"../Resource/Texture/Loading/progressive.png"), E_FAIL);
+	//FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device, Engine::RESOURCE_LOGO, L"Texture_Logo", Engine::TEX_NORMAL, L"../Resource/Texture/Logo/Logo.jpg"), E_FAIL);
 	
 	Engine::CComponent* comp = Engine::CTransform::Create();
 	NULL_CHECK_RETURN(comp, E_FAIL);

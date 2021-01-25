@@ -7,6 +7,7 @@
 BEGIN(Client)
 
 class CLoading;
+class CBackGround;
 
 class CLogo : public Engine::CScene
 {
@@ -28,6 +29,7 @@ private:
 
 private:
 	CLoading* m_loading;
+	CBackGround* m_backGround;
 
 public:
 	static CLogo* Create(LPDIRECT3DDEVICE9 device);

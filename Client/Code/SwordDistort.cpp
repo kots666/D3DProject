@@ -1,18 +1,18 @@
 #include "stdafx.h"
-#include "SwordTrail.h"
+#include "SwordDistort.h"
 #include "Texture.h"
 #include "TrailRect.h"
 
-CSwordTrail::CSwordTrail(LPDIRECT3DDEVICE9 device) :
+CSwordDistort::CSwordDistort(LPDIRECT3DDEVICE9 device) :
 	Engine::CGameObject(device)
 {
 }
 
-CSwordTrail::~CSwordTrail()
+CSwordDistort::~CSwordDistort()
 {
 }
 
-HRESULT CSwordTrail::Ready()
+HRESULT CSwordDistort::Ready()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
@@ -22,7 +22,7 @@ HRESULT CSwordTrail::Ready()
 	return S_OK;
 }
 
-_int CSwordTrail::Update(const _float& deltaTime)
+_int CSwordDistort::Update(const _float& deltaTime)
 {
 	for (auto iter = m_trailList.begin(); iter != m_trailList.end();)
 	{
@@ -37,12 +37,12 @@ _int CSwordTrail::Update(const _float& deltaTime)
 			++iter;
 	}
 
-	m_rendererCom->AddObject(Engine::RENDER_ALPHA, this);
+	m_rendererCom->AddObject(Engine::RENDER_DISTORT, this);
 
 	return 0;
 }
 
-void CSwordTrail::Render()
+void CSwordDistort::Render()
 {
 	LPD3DXEFFECT effect = m_shaderCom->GetEffectHandle();
 	if (nullptr == effect) return;
@@ -65,7 +65,7 @@ void CSwordTrail::Render()
 	Engine::SafeRelease(effect);
 }
 
-void CSwordTrail::AddPos(const _vec3 & end, const _vec3 & low, const _int & type)
+void CSwordDistort::AddPos(const _vec3 & end, const _vec3 & low, const _int & type)
 {
 	m_trailPosVec[type].emplace_back(end);
 	m_trailPosVec[type].emplace_back(low);
@@ -74,14 +74,18 @@ void CSwordTrail::AddPos(const _vec3 & end, const _vec3 & low, const _int & type
 		MakeTrail(type);
 }
 
-HRESULT CSwordTrail::AddComponent()
+HRESULT CSwordDistort::AddComponent()
 {
 	Engine::CComponent* component = nullptr;
 
 	// Texture
-	component = m_texCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Texture_Trail"));
+	component = m_noiseTexCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Texture_Distortion"));
 	NULL_CHECK_RETURN(component, E_FAIL);
-	m_compMap[Engine::ID_STATIC].emplace(L"Com_Texture", component);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_NoiseTexture", component);
+
+	component = m_maskTexCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Texture_CircleMask"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_MaskTexture", component);
 
 	// Renderer
 	component = m_rendererCom = Engine::GetRenderer();
@@ -90,14 +94,14 @@ HRESULT CSwordTrail::AddComponent()
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Renderer", component);
 
 	// Shader
-	component = m_shaderCom = dynamic_cast<Engine::CShader*>(Engine::CloneComp(L"Proto_Shader_SwordTrail"));
+	component = m_shaderCom = dynamic_cast<Engine::CShader*>(Engine::CloneComp(L"Proto_Shader_Distortion"));
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Shader", component);
 
 	return S_OK;
 }
 
-HRESULT CSwordTrail::SetUpConstantTable(LPD3DXEFFECT & effect)
+HRESULT CSwordDistort::SetUpConstantTable(LPD3DXEFFECT & effect)
 {
 	// view, proj
 	_matrix matView, matProj;
@@ -105,16 +109,41 @@ HRESULT CSwordTrail::SetUpConstantTable(LPD3DXEFFECT & effect)
 	m_device->GetTransform(D3DTS_VIEW, &matView);
 	m_device->GetTransform(D3DTS_PROJECTION, &matProj);
 
+	/*_matrix worldMat, viewMat;
+
+	viewMat = matView;
+	viewMat._41 = 0;
+	viewMat._42 = 0;
+	viewMat._43 = 0;
+
+	D3DXMatrixInverse(&viewMat, nullptr, &viewMat);
+
+	viewMat._41 = m_worldMat._41;
+	viewMat._42 = m_worldMat._42;
+	viewMat._43 = m_worldMat._43;
+
+	viewMat._11 *= 0.01f;
+	viewMat._12 *= 0.01f;
+	viewMat._13 *= 0.01f;
+
+	viewMat._21 *= 0.01f;
+	viewMat._22 *= 0.01f;
+	viewMat._23 *= 0.01f;
+
+	worldMat = viewMat;
+
+	effect->SetMatrix("g_matWorld", &worldMat);*/
 	effect->SetMatrix("g_matWorld", &m_worldMat);
 	effect->SetMatrix("g_matView", &matView);
 	effect->SetMatrix("g_matProj", &matProj);
 	
-	m_texCom->SetTexture(effect, "g_BaseTexture");
+	m_noiseTexCom->SetTexture(effect, "g_NoiseTexture");
+	m_maskTexCom->SetTexture(effect, "g_MaskTexture");
 
 	return S_OK;
 }
 
-void CSwordTrail::MakeTrail(const _int & type)
+void CSwordDistort::MakeTrail(const _int & type)
 {
 	_vec3 pos[4];
 	_vec2 texUV[4];
@@ -144,7 +173,7 @@ void CSwordTrail::MakeTrail(const _int & type)
 		texUV[2] = { afterS, 1 };
 		texUV[3] = { beforeS, 1 };
 
-		Engine::CTrailRect* newTrail = Engine::CTrailRect::Create(m_device, pos, texUV, 0.05f);
+		Engine::CTrailRect* newTrail = Engine::CTrailRect::Create(m_device, pos, texUV, 0.06f);
 
 		m_trailList.emplace_back(newTrail);
 	}
@@ -153,9 +182,9 @@ void CSwordTrail::MakeTrail(const _int & type)
 		m_trailPosVec[type].erase(m_trailPosVec[type].begin());
 }
 
-CSwordTrail * CSwordTrail::Create(LPDIRECT3DDEVICE9 device)
+CSwordDistort * CSwordDistort::Create(LPDIRECT3DDEVICE9 device)
 {
-	CSwordTrail* instance = new CSwordTrail(device);
+	CSwordDistort* instance = new CSwordDistort(device);
 
 	if (FAILED(instance->Ready()))
 		Client::SafeRelease(instance);
@@ -163,7 +192,7 @@ CSwordTrail * CSwordTrail::Create(LPDIRECT3DDEVICE9 device)
 	return instance;
 }
 
-void CSwordTrail::Free()
+void CSwordDistort::Free()
 {
 	for (auto& elem : m_trailList)
 	{

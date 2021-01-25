@@ -10,6 +10,7 @@
 #include "TrailRect.h"
 #include "Texture.h"
 #include "SwordTrail.h"
+#include "SwordDistort.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 device) :
 	Engine::CGameObject(device),
@@ -101,6 +102,9 @@ _int CPlayer::Update(const _float& deltaTime)
 	m_swordTrail->Update(deltaTime);
 	m_swordTrail->SetWorldMat(*m_transCom->GetWorldMatrix());
 
+	m_swordDistort->Update(deltaTime);
+	m_swordDistort->SetWorldMat(*m_transCom->GetWorldMatrix());
+
 	return 0;
 }
 
@@ -130,6 +134,8 @@ _bool CPlayer::AttackColliderOverlapped(Engine::CGameObject * target)
 
 	m_camera->ShakeCamera();
 	CPlayTimeManager::GetInstance()->SetHitSlow();
+
+	cout << "Hit" << endl;
 
 	return true;
 }
@@ -188,6 +194,9 @@ HRESULT CPlayer::AddComponent()
 
 	m_swordTrail = CSwordTrail::Create(m_device);
 	NULL_CHECK_RETURN(m_swordTrail, E_FAIL);
+
+	m_swordDistort = CSwordDistort::Create(m_device);
+	NULL_CHECK_RETURN(m_swordDistort, E_FAIL);
 
 	// hair - upper - weapon - face
 	// hair
@@ -461,9 +470,14 @@ void CPlayer::KeyInput(const _float& deltaTime)
 
 	if (Engine::GetDIKeyDownState(VK_RBUTTON))
 	{
-		CSpawnManager::GetInstance()->Spawn(SPAWNTYPE::DOG, { 10.f, 0.f, 10.f });
+		//CSpawnManager::GetInstance()->Spawn(SPAWNTYPE::DOG, { 10.f, 0.f, 10.f });
 		//_vec3 pickPos = PickUpOnTerrain();
 		//m_transCom->MoveToPickPos(&pickPos, m_speed, deltaTime);
+	}
+
+	if (Engine::GetDIKeyDownState('M'))
+	{
+		m_rendererCom->SwitchShowMRT();
 	}
 
 	if (!isAnyKeyDown && (m_state == STATE_IDLE))
@@ -535,7 +549,7 @@ void CPlayer::DoIdle()
 	for (auto& elem : m_attackCollider)
 		elem->SetCanCollide(false);
 
-	m_collideList.clear();
+	ClearCollideList();
 }
 
 void CPlayer::DoAttack()
@@ -574,10 +588,10 @@ void CPlayer::DoAttack()
 
 		case 4:
 			m_meshCom->SetAnimation(5, 0.01f, 0.04f, true);
-			m_isCombo = false;
+			m_isCombo = true;
 			m_animationSpeed = 1.5f;
 			m_accTime = 0.f;
-			m_comboTime = 0.f;
+			m_comboTime = 1.f;
 			break;
 		}
 
@@ -597,15 +611,13 @@ void CPlayer::DoAttack()
 
 		for (auto& elem : m_attackCollider)
 			elem->SetCanCollide(true);
-
-		m_collideList.clear();
 	}
 }
 
 void CPlayer::RecordPos()
 {
 	_vec3 endOffset = { 0.f, -175.f, 0.f };
-	_vec3 lowOffset = { 0.f, -125.f, 0.f };
+	_vec3 lowOffset = { 0.f, -50.f, 0.f };
 
 	auto frame = m_meshCom->GetCloneFrameByName("Bone_R_Weapon");
 	_matrix frameMat = frame->combinedTransformationMatrix;
@@ -614,9 +626,10 @@ void CPlayer::RecordPos()
 	D3DXVec3TransformCoord(&lowOffset, &lowOffset, &frameMat);
 
 	m_swordTrail->AddPos(endOffset, lowOffset, 0);
+	m_swordDistort->AddPos(endOffset, lowOffset, 0);
 
 	endOffset = _vec3(0.f, -190.f, 0.f);
-	lowOffset = _vec3(0.f, -140.f, 0.f);
+	lowOffset = _vec3(0.f, -65.f, 0.f);
 
 	frame = m_meshCom->GetCloneFrameByName("Bone_L_Weapon");
 	frameMat = frame->combinedTransformationMatrix;
@@ -625,6 +638,7 @@ void CPlayer::RecordPos()
 	D3DXVec3TransformCoord(&lowOffset, &lowOffset, &frameMat);
 
 	m_swordTrail->AddPos(endOffset, lowOffset, 1);
+	m_swordDistort->AddPos(endOffset, lowOffset, 1);
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 device)
@@ -640,6 +654,7 @@ CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 device)
 void CPlayer::Free()
 {
 	Engine::SafeRelease(m_swordTrail);
+	Engine::SafeRelease(m_swordDistort);
 
 	Engine::CGameObject::Free();
 }

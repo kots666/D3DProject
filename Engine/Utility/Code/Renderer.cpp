@@ -5,7 +5,8 @@ IMPLEMENT_SINGLETON(CRenderer)
 
 CRenderer::CRenderer() :
 	m_VB(nullptr),
-	m_IB(nullptr)
+	m_IB(nullptr),
+	m_isShowMRT(false)
 {
 
 }
@@ -97,9 +98,12 @@ void CRenderer::Render(LPDIRECT3DDEVICE9& device)
 	RenderAlpha(device);
 	RenderUI(device);
 
-	RenderDebugBuffer(L"MRT_Deferred");
-	RenderDebugBuffer(L"MRT_LightAcc");
-	RenderDebugBuffer(L"MRT_Distortion");
+	if (m_isShowMRT)
+	{
+		RenderDebugBuffer(L"MRT_Deferred");
+		RenderDebugBuffer(L"MRT_LightAcc");
+		RenderDebugBuffer(L"MRT_Distortion");
+	}
 
 	Clear();
 }

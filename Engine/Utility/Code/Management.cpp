@@ -124,6 +124,11 @@ HRESULT CManagement::ReadyShader(LPDIRECT3DDEVICE9 & device)
 	NULL_CHECK_RETURN(shader, E_FAIL);
 	FAILED_CHECK_RETURN(ReadyProto(L"Proto_Shader_Distortion", shader), E_FAIL);
 
+	// HitEffect
+	shader = CShader::Create(device, L"../../Reference/Header/Shader_HitEffect.hpp");
+	NULL_CHECK_RETURN(shader, E_FAIL);
+	FAILED_CHECK_RETURN(ReadyProto(L"Proto_Shader_HitEffect", shader), E_FAIL);
+
 	return S_OK;
 }
 

@@ -23,6 +23,7 @@ BEGIN(Client)
 class CDynamicCamera;
 class CTerrain;
 class CSwordTrail;
+class CSwordDistort;
 
 class CPlayer : public Engine::CGameObject
 {
@@ -67,6 +68,7 @@ private:
 	CDynamicCamera* m_camera = nullptr;
 
 	CSwordTrail* m_swordTrail = nullptr;
+	CSwordDistort* m_swordDistort = nullptr;
 
 	_vec3 m_dir;
 	_float m_yRotAngle;

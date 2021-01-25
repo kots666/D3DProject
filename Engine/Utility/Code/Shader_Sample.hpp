@@ -15,6 +15,8 @@ sampler BaseSampler = sampler_state
 	addressV = clamp;
 };
 
+float g_Percent;
+
 struct	VS_IN 
 {
 	vector		vPosition	: POSITION;
@@ -61,7 +63,10 @@ PS_OUT		PS_MAIN(PS_IN In)
 
 	Out.vColor = tex2D(BaseSampler, In.vTexUV);	// 2차원 텍스처로부터 uv좌표에 해당하는 색을 얻어오는 함수, 반환 타입이 vector 타입
 
-	Out.vColor.rb = 1.f;
+	if (g_Percent < In.vTexUV.x)
+	{
+		Out.vColor.a = 0.f;
+	}
 
 	return Out;
 }
@@ -82,9 +87,13 @@ technique Default_Device
 		pixelshader = compile ps_3_0 PS_MAIN();
 	}
 
-	/*pass	
+	pass	
 	{
-		vertexshader = compile vs_3_0 VS_TEMP();
-		pixelshader = compile ps_3_0 PS_TEMP();
-	}*/
+		alphatestenable = true;
+		alpharef = 0;
+		alphafunc = greater;
+
+		vertexshader = compile vs_3_0 VS_MAIN();
+		pixelshader = compile ps_3_0 PS_MAIN();
+	}
 };

@@ -5,7 +5,6 @@ CLoading::CLoading(LPDIRECT3DDEVICE9 device) :
 	m_device(device),
 	m_isFinish(false)
 {
-	ZeroMemory(m_loadingStr, sizeof(_tchar) * 256);
 	m_device->AddRef();
 }
 
@@ -50,9 +49,7 @@ HRESULT CLoading::Ready(LOADINGID loadID)
 
 _uint CLoading::LoadingForStage()
 {
-	lstrcpy(m_loadingStr, L"Buffer Loading.............................");
-
-	int i = 0;
+	m_nowLoad = 0;
 
 	Engine::CComponent* comp = nullptr;
 
@@ -81,11 +78,10 @@ _uint CLoading::LoadingForStage()
 												L"Buffer_CubeTex",
 												Engine::BUFFER_CUBETEX),
 												E_FAIL);*/
-
-
-	lstrcpy(m_loadingStr, L"Texture Loading.............................");
+	_int bufferCnt = 2;
+	m_nowLoad += bufferCnt;
 	
-	// 텍스쳐
+	// ===========================================텍스쳐============================
 
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(
 		m_device,
@@ -146,14 +142,38 @@ _uint CLoading::LoadingForStage()
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(
 		m_device,
 		Engine::RESOURCE_STAGE,
+		L"Texture_CircleMask",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/Effect/CircleMask.tga"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Texture_Distortion",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/Effect/Distortion.tga"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
 		L"Texture_Number",
 		Engine::TEX_NORMAL,
 		L"../Resource/Texture/Combo/%d.tga", 10), E_FAIL);
 
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Texture_HitSlash",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/Effect/HitSlash.png"), E_FAIL);
+
+	_int textureCnt = 12;
+	m_nowLoad += textureCnt;
+
 	LoadingForDynamicMeshNormalTextures();
 	LoadingForStaticMeshNormalTextures();
-	
-	lstrcpy(m_loadingStr, L"Mesh Loading.............................");
+
+	// ================================= DynamicMesh Load
 
 	// Gladiator
 	FAILED_CHECK_RETURN(Engine::ReadyMesh(m_device,
@@ -203,6 +223,10 @@ _uint CLoading::LoadingForStage()
 		L"../Resource/Mesh/DynamicMesh/Boss/",
 		L"Boss.X"), E_FAIL);
 
+	_int dynamicMeshLoad = 6;
+
+	m_nowLoad += dynamicMeshLoad;
+
 	// ================================================= Static Mesh ===================
 
 	if(FAILED(LoadingForStaticMeshes()))
@@ -216,8 +240,8 @@ _uint CLoading::LoadingForStage()
 		NULL,
 		NULL),
 		E_FAIL);
-	
-	lstrcpy(m_loadingStr, L"Loading Complete!!!");
+
+	m_nowLoad += 1;
 
 	m_isFinish = true;
 
@@ -309,6 +333,10 @@ HRESULT CLoading::LoadingForDynamicMeshNormalTextures()
 		Engine::TEX_NORMAL,
 		L"../Resource/Mesh/DynamicMesh/Boss/Boss_Apocalypse_Hair_N.tga"), E_FAIL);
 
+	_int dynamicNormalTex = 11;
+
+	m_nowLoad += dynamicNormalTex;
+
 	return S_OK;
 }
 
@@ -328,6 +356,10 @@ HRESULT CLoading::LoadingForStaticMeshNormalTextures()
 		Engine::TEX_NORMAL,
 		L"../Resource/Mesh/StaticMesh/GargoyleCastle_CircleBlock_N_KSV.tga"), E_FAIL);
 
+	_int staticNormalTex = 2;
+
+	m_nowLoad += staticNormalTex;
+
 	return S_OK;
 }
 
@@ -341,7 +373,7 @@ HRESULT CLoading::LoadingForStaticMeshes()
 		L"../Resource/Mesh/StaticMesh/",
 		L"SkyBox.X"), E_FAIL);
 
-	// SkyBox
+	// SkyBox2
 	FAILED_CHECK_RETURN(Engine::ReadyMesh(m_device,
 		Engine::RESOURCE_STAGE,
 		L"Mesh_SkyBox2",
@@ -924,6 +956,10 @@ HRESULT CLoading::LoadingForStaticMeshes()
 		Engine::TYPE_STATIC,
 		L"../Resource/Mesh/StaticMesh/",
 		L"Wheel.X"), E_FAIL);
+
+	_int staticMeshLoad = 74;
+
+	m_nowLoad += staticMeshLoad;
 }
 
 CLoading* CLoading::Create(LPDIRECT3DDEVICE9 device, LOADINGID loadID)

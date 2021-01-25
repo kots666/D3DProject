@@ -121,6 +121,15 @@
     <Filter Include="02. GameObject\01. Stage\05. UI\01. FontUI">
       <UniqueIdentifier>{f1104c4d-97e6-464b-b714-bbddcebd49cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. Stage\07. Distort">
+      <UniqueIdentifier>{0e14683f-b3a7-43e4-a8e7-a8eb5ab35dc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Stage\08. HitEffect">
+      <UniqueIdentifier>{dbaad075-89d8-4ccd-8c4b-f939fcf98af7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\02. Public\07. HitManager">
+      <UniqueIdentifier>{3285489f-4ffa-48bf-9d62-b84b7452a762}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -246,6 +255,15 @@
     <ClInclude Include="..\Code\FontUI.h">
       <Filter>02. GameObject\01. Stage\05. UI\01. FontUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\SwordDistort.h">
+      <Filter>02. GameObject\01. Stage\07. Distort</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\HitEffect.h">
+      <Filter>02. GameObject\01. Stage\08. HitEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\HitManager.h">
+      <Filter>02. GameObject\02. Public\07. HitManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -347,12 +365,24 @@
     <ClCompile Include="..\Code\FontUI.cpp">
       <Filter>02. GameObject\01. Stage\05. UI\01. FontUI</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\SwordDistort.cpp">
+      <Filter>02. GameObject\01. Stage\07. Distort</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\HitEffect.cpp">
+      <Filter>02. GameObject\01. Stage\08. HitEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\HitManager.cpp">
+      <Filter>02. GameObject\02. Public\07. HitManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
       <Filter>99. ETC</Filter>
     </Image>
     <Image Include="small.ico">
+      <Filter>99. ETC</Filter>
+    </Image>
+    <Image Include="Blade2.ico">
       <Filter>99. ETC</Filter>
     </Image>
   </ItemGroup>

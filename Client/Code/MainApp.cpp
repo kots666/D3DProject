@@ -79,7 +79,7 @@ void CMainApp::Render()
 	Engine::RenderBegin(D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.f));
 
 	m_managementClass->RenderScene(m_device);
-	Engine::RenderFont(L"Font_Jinji", m_fps, &_vec2(450.f, 10.f), D3DXCOLOR(1.f, 1.f, 0.f, 1.f));
+	Engine::RenderFont(L"Font_Jinji", m_fps, &_vec2(WINCX - 300, 10.f), D3DXCOLOR(1.f, 1.f, 0.f, 1.f));
 
 	Engine::RenderEnd();
 }
@@ -128,6 +128,8 @@ CMainApp * CMainApp::Create()
 void CMainApp::Free()
 {
 	CFontManager::DestroyInstance();
+	CHitManager::DestroyInstance();
+
 	Client::SafeRelease(m_device);
 
 	Engine::ReleaseResoures();

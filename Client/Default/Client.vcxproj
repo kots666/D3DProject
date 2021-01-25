@@ -184,6 +184,8 @@
     <ClInclude Include="..\Code\FontUI.h" />
     <ClInclude Include="..\Code\GoblinMagician.h" />
     <ClInclude Include="..\Code\GoblinSword.h" />
+    <ClInclude Include="..\Code\HitEffect.h" />
+    <ClInclude Include="..\Code\HitManager.h" />
     <ClInclude Include="..\Code\HPUI.h" />
     <ClInclude Include="..\Code\HPUIManager.h" />
     <ClInclude Include="..\Code\Loading.h" />
@@ -199,6 +201,7 @@
     <ClInclude Include="..\Code\StaticCamera.h" />
     <ClInclude Include="..\Code\Stone.h" />
     <ClInclude Include="..\Code\Sword.h" />
+    <ClInclude Include="..\Code\SwordDistort.h" />
     <ClInclude Include="..\Code\SwordTrail.h" />
     <ClInclude Include="..\Code\Terrain.h" />
     <ClInclude Include="..\Code\TestMonster.h" />
@@ -227,6 +230,8 @@
     <ClCompile Include="..\Code\FontUI.cpp" />
     <ClCompile Include="..\Code\GoblinMagician.cpp" />
     <ClCompile Include="..\Code\GoblinSword.cpp" />
+    <ClCompile Include="..\Code\HitEffect.cpp" />
+    <ClCompile Include="..\Code\HitManager.cpp" />
     <ClCompile Include="..\Code\HPUI.cpp" />
     <ClCompile Include="..\Code\HPUIManager.cpp" />
     <ClCompile Include="..\Code\Loading.cpp" />
@@ -242,6 +247,7 @@
     <ClCompile Include="..\Code\StaticCamera.cpp" />
     <ClCompile Include="..\Code\Stone.cpp" />
     <ClCompile Include="..\Code\Sword.cpp" />
+    <ClCompile Include="..\Code\SwordDistort.cpp" />
     <ClCompile Include="..\Code\SwordTrail.cpp" />
     <ClCompile Include="..\Code\Terrain.cpp" />
     <ClCompile Include="..\Code\TestMonster.cpp" />
@@ -259,6 +265,7 @@
     <ResourceCompile Include="Client.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Blade2.ico" />
     <Image Include="Client.ico" />
     <Image Include="small.ico" />
   </ItemGroup>

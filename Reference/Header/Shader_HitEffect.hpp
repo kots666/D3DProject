@@ -63,7 +63,7 @@ PS_OUT		PS_MAIN(PS_IN In)
 
 	Out.vColor = tex2D(BaseSampler, In.vTexUV);	// 2차원 텍스처로부터 uv좌표에 해당하는 색을 얻어오는 함수, 반환 타입이 vector 타입
 
-	if (g_Percent < In.vTexUV.x)
+	if (Out.vColor.r < 1.f)
 	{
 		Out.vColor.a = 0.f;
 	}
@@ -79,9 +79,9 @@ technique Default_Device
 	// 기능의 캡슐화
 	pass	
 	{
-		/*alphablendenable = true;
-		srcblend = srcalpha;
-		destblend = invsrcalpha;*/
+		alphatestenable = true;
+		alpharef = 0;
+		alphafunc = greater;
 
 		vertexshader = compile vs_3_0 VS_MAIN();
 		pixelshader = compile ps_3_0 PS_MAIN();

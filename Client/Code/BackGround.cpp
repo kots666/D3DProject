@@ -48,12 +48,18 @@ void CBackGround::Render()
 	m_bufferCom->Render();
 
 	effect->EndPass();
+
+	effect->BeginPass(1);
+
+	FAILED_CHECK_RETURN(SetUpConstantTableForProgressiveBar(effect), );
+
+	m_bufferCom->Render();
+
+	effect->EndPass();
+
 	effect->End();
 
 	Engine::SafeRelease(effect);
-
-	/*m_texCom->RenderTexture(0);
-	m_bufferCom->Render();*/
 }
 
 HRESULT CBackGround::AddComponent()
@@ -66,9 +72,14 @@ HRESULT CBackGround::AddComponent()
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Buffer", comp);
 
 	// texture
-	comp = m_texCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_LOGO, L"Texture_Logo"));
+	comp = m_texCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_LOGO, L"Texture_MainTitle"));
 	NULL_CHECK_RETURN(comp, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Texture", comp);
+
+	// texture
+	comp = m_progressiveTexCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_LOGO, L"Texture_ProgressiveBar"));
+	NULL_CHECK_RETURN(comp, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_ProgressiveTexture", comp);
 
 	// Renderer
 	comp = m_rendererCom = Engine::GetRenderer();
@@ -102,6 +113,35 @@ HRESULT CBackGround::SetUpConstantTable(LPD3DXEFFECT & effect)
 	effect->SetMatrix("g_matProj", &projMat);
 
 	m_texCom->SetTexture(effect, "g_BaseTexture");
+
+	effect->CommitChanges();
+
+	return S_OK;
+}
+
+HRESULT CBackGround::SetUpConstantTableForProgressiveBar(LPD3DXEFFECT & effect)
+{
+	_matrix worldMat, viewMat, projMat;
+
+	m_transCom->GetWorldMatrix(&worldMat);
+
+	worldMat._11 *= 0.9f;
+	worldMat._22 *= 12.f / WINCY;
+
+	worldMat._42 -= 0.8f;
+
+	m_device->GetTransform(D3DTS_VIEW, &viewMat);
+	m_device->GetTransform(D3DTS_PROJECTION, &projMat);
+
+	effect->SetMatrix("g_matWorld", &worldMat);
+	effect->SetMatrix("g_matView", &viewMat);
+	effect->SetMatrix("g_matProj", &projMat);
+
+	m_progressiveTexCom->SetTexture(effect, "g_BaseTexture");
+
+	effect->SetFloat("g_Percent", m_percent);
+
+	effect->CommitChanges();
 
 	return S_OK;
 }

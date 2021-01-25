@@ -19,7 +19,7 @@ public:
 	LOADINGID GetLoadingID() const { return m_loadingID; }
 	CRITICAL_SECTION* GetCRT() { return &m_crt; }
 	_bool GetIsFinish() const { return m_isFinish; }
-	const _tchar* GetLoadString() { return m_loadingStr; }
+	_float  GetPercent() const { return (_float)m_nowLoad / (_float)m_maxLoad; }
 
 public:
 	static _uint CALLBACK ThreadMain(void* arg);
@@ -38,7 +38,9 @@ private:
 	LOADINGID m_loadingID;
 	LPDIRECT3DDEVICE9 m_device;
 	_bool m_isFinish;
-	_tchar m_loadingStr[256];
+
+	_uint m_nowLoad = 0;
+	_uint m_maxLoad = 108;
 
 public:
 	static CLoading* Create(LPDIRECT3DDEVICE9 device, LOADINGID loadID);

@@ -22,6 +22,9 @@ public:
 	void Render(LPDIRECT3DDEVICE9& device);
 	void Clear();
 
+public:
+	void SwitchShowMRT() { m_isShowMRT ^= true; }
+
 private:
 	void RenderPriority(LPDIRECT3DDEVICE9& device);
 	void RenderNonAlpha(LPDIRECT3DDEVICE9& device);
@@ -38,6 +41,8 @@ private:
 	list<CGameObject*> m_renderGroup[RENDER_END];
 	LPDIRECT3DVERTEXBUFFER9 m_VB;
 	LPDIRECT3DINDEXBUFFER9 m_IB;
+
+	_bool m_isShowMRT;
 
 private:
 	virtual CComponent* Clone() { return nullptr; }
