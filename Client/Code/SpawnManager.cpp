@@ -106,8 +106,11 @@ void CSpawnManager::Spawn(SPAWNTYPE type, const _vec3 & pos, const _float& angle
 	++m_spawnCount[typeNum];
 }
 
-void CSpawnManager::StartEvent()
+_bool CSpawnManager::StartEvent()
 {
+	if (!CQuestManager::GetInstance()->GetIsProgress())
+		return false;
+
 	switch (m_eventCount)
 	{
 	case 0:
@@ -120,7 +123,7 @@ void CSpawnManager::StartEvent()
 		Spawn(SPAWNTYPE::DOG, { 14.f, 0.f, 36.f }, -150.f);
 		Spawn(SPAWNTYPE::MINOTAUROS, { 35.f, 0.f, 64.f }, -90.f);
 		break;
-		
+
 	case 2:
 		Spawn(SPAWNTYPE::GOBLIN_MAGICIAN, { 67.f, 0.f, 62.f }, -75.f);
 		Spawn(SPAWNTYPE::GOBLIN_MAGICIAN, { 70.f, 0.f, 73.f }, -90.f);
@@ -133,6 +136,9 @@ void CSpawnManager::StartEvent()
 	}
 
 	++m_eventCount;
+
+
+	return true;
 }
 
 void CSpawnManager::DeleteObject(SPAWNTYPE type, Engine::CGameObject* target)

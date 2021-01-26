@@ -31,6 +31,10 @@ public:
 	_bool CanCalcMovePos(const char* name, _vec3& outPos, const _matrix* parentMat = nullptr);
 
 public:
+	_uint GetAnimIndex() const { return m_animCtrl->GetAnimIdx(); }
+	_float GetAnimTime() const { return m_animCtrl->GetAccTime(); }
+
+public:
 	// Getter
 	const D3DXFRAME_EX* GetRootFrame() { return (D3DXFRAME_EX*)m_rootFrame; }
 	const D3DXFRAME_EX* GetCloneFrame() { return (D3DXFRAME_EX*)m_cloneFrame; }

@@ -81,6 +81,11 @@ private:
 	_int m_comboIndex = 0;
 	_float m_accTime = 0.f;
 	_float m_comboTime = 0.f;
+	_float m_attackStartTime = 0.f;
+	_float m_attackEndTime = 0.f;
+
+	_bool m_isStartAttack = false;
+	_bool m_isEndAttack = false;
 
 	_int m_state;
 

@@ -9,8 +9,8 @@ vector		g_vLightDir;	// 월드 스페이스 공간에 있는 방향
 vector		g_vLightDiffuse;
 vector		g_vLightAmbient;
 
-vector		g_vMtrlDiffuse = (vector)1.f;
-vector		g_vMtrlAmbient = (vector)1.f;
+vector		g_vMtrlDiffuse = (vector)(1.f, 1.f, 1.f, 1.f);
+vector		g_vMtrlAmbient = (vector)(0.2f, 0.2f, 0.2f, 1.f);
 
 texture		g_DepthTexture;
 

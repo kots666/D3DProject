@@ -31,6 +31,10 @@ public:
 	_bool CanCalcMovePos(const char* name, _vec3& outPos, const _matrix* parentMat = nullptr);
 
 public:
+	_uint GetAnimIndex() const { return m_animCtrl->GetAnimIdx(); }
+	_float GetAnimTime() const { return m_animCtrl->GetAccTime(); }
+
+public:
 	// Getter
 	const D3DXFRAME_EX* GetRootFrame() { return (D3DXFRAME_EX*)m_rootFrame; }
 	const D3DXFRAME_EX* GetCloneFrame() { return (D3DXFRAME_EX*)m_cloneFrame; }
@@ -44,7 +48,6 @@ public:
 	void SetBoneName(const char* name) { m_boneName = name; }
 	void AddToAccMovePos(const _vec3& movePos) { m_accMovePos += movePos; }
 
-	void AddTexture(CTexture* tex) { m_texList.emplace_back(tex); }
 	void AddNormalTexture(CTexture* tex) { m_normalTexList.emplace_back(tex); }
 private:
 	_bool CanCalcBoneMove(const D3DXFRAME_EX* EXFrame, const D3DXFRAME_EX* originFrame, const char* name, _matrix parentMatrix, _matrix combineMatrix, _vec3* out);
@@ -62,7 +65,6 @@ private:
 	CHierarchyLoader* m_loader;
 	CAnimCtrl* m_animCtrl;
 	list<D3DXMESHCONTAINER_EX*> m_meshContainerList;
-	vector<CTexture*> m_texList;
 	vector<CTexture*> m_normalTexList;
 
 	const char* m_boneName;

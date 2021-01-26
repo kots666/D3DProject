@@ -64,9 +64,8 @@ void CSpawner::Render()
 
 void CSpawner::HitColliderOverlapped(Engine::CGameObject * causer)
 {
-	CSpawnManager::GetInstance()->StartEvent();
-
-	m_isDead = true;
+	if (CSpawnManager::GetInstance()->StartEvent())
+		m_isDead = true;
 }
 
 HRESULT CSpawner::AddComponent()

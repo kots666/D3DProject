@@ -81,6 +81,17 @@ void CMainApp::Render()
 	m_managementClass->RenderScene(m_device);
 	Engine::RenderFont(L"Font_Jinji", m_fps, &_vec2(WINCX - 300, 10.f), D3DXCOLOR(1.f, 1.f, 0.f, 1.f));
 
+	_tchar questStep[40];
+	wsprintf(questStep, L"Quest : %d", CQuestManager::GetInstance()->GetStep());
+
+	D3DXCOLOR questColor;
+	if (CQuestManager::GetInstance()->GetIsProgress())
+		questColor = D3DXCOLOR(1.f, 1.f, 0.f, 1.f);
+	else
+		questColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+
+	Engine::RenderFont(L"Font_Jinji", questStep, &_vec2(WINCX - 300, 100.f), questColor);
+
 	Engine::RenderEnd();
 }
 
@@ -129,6 +140,7 @@ void CMainApp::Free()
 {
 	CFontManager::DestroyInstance();
 	CHitManager::DestroyInstance();
+	CQuestManager::DestroyInstance();
 
 	Client::SafeRelease(m_device);
 

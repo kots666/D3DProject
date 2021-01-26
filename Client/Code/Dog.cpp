@@ -139,12 +139,15 @@ void CDog::HitColliderOverlapped(Engine::CGameObject * causer)
 	{
 		for (auto& elem : m_hitCollider)
 			elem->SetIsCollide(true);
+
 		DoHit();
 	}
 	else
 	{
 		DoDeadAnim();
 	}
+
+	//cout << "Hit by Player" << endl;
 
 	Engine::CTransform* causerTrans = dynamic_cast<Engine::CTransform*>(causer->GetComponent(L"Com_Transform", Engine::ID_DYNAMIC));
 	if (nullptr == causerTrans) return;
@@ -413,8 +416,6 @@ void CDog::DoHit()
 		m_isHit = true;
 
 		m_meshCom->SetAnimation(3, 0.015f, 0.1f, true);
-
-		cout << "Hit" << endl;
 	}
 }
 

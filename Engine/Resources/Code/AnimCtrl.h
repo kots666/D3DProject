@@ -23,6 +23,10 @@ public:
 	_bool IsAnimationSetEnd();
 	void ResetAnimation();
 
+public:
+	_uint GetAnimIdx() const { return m_oldAnimIdx; }
+	_float GetAccTime() const { return m_accTime; }
+
 private:
 	LPD3DXANIMATIONCONTROLLER m_animCtrl;
 	_uint m_currentTrack;

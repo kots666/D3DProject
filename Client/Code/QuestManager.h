@@ -2,7 +2,6 @@
 #define QuestManager_h__
 
 #include "Define.h"
-#include "GameObject.h"
 
 BEGIN(Client)
 
@@ -15,10 +14,19 @@ private:
 	virtual ~CQuestManager();
 
 public:
+	void IncreaseQuestStep() { ++m_questStep; }
+	void QuestProgress();
 
+	void QuestCheat(const _int& step, const _bool& progrss, const _bool& complete);
+
+public:
+	_bool GetIsProgress() const { return m_isProgress; }
+	_int GetStep() const { return m_questStep; }
 
 private:
 	_int m_questStep;
+	_bool m_isProgress;
+	_bool m_isComplete;
 };
 
 END

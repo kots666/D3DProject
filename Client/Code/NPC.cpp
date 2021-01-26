@@ -19,6 +19,7 @@ CNPC::~CNPC()
 HRESULT CNPC::Ready()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
+	FAILED_CHECK_RETURN(LoadCollider(), E_FAIL);
 
 	D3DXMatrixRotationY(&m_reviseMat, D3DXToRadian(-90.f));
 
@@ -30,8 +31,7 @@ HRESULT CNPC::Ready()
 
 	m_meshCom->SetAnimation(0, 0.1f, 0.5f, false);
 
-	m_hp = 200;
-	m_maxHp = 200;
+	CColliderManager::GetInstance()->AddObject(OBJ_EVENT, this);
 
 	return S_OK;
 }
@@ -42,6 +42,12 @@ _int CNPC::Update(const _float& deltaTime)
 	m_meshCom->UpdateFrameMatrices(deltaTime, &m_reviseMat);
 
 	Engine::CGameObject::Update(deltaTime);
+
+	for (auto& elem : m_hitCollider)
+	{
+		elem->Update(deltaTime);
+		elem->UpdateByBone(m_transCom->GetWorldMatrix());
+	}
 
 	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
 
@@ -65,6 +71,19 @@ void CNPC::Render()
 	effect->End();
 
 	Engine::SafeRelease(effect);
+
+	for (auto& elem : m_hitCollider)
+	{
+		elem->Render();
+	}
+}
+
+void CNPC::HitColliderOverlapped(Engine::CGameObject * causer)
+{
+	if (Engine::GetDIKeyDownState('F'))
+	{
+		CQuestManager::GetInstance()->QuestProgress();
+	}
 }
 
 HRESULT CNPC::AddComponent()
@@ -110,6 +129,15 @@ HRESULT CNPC::AddComponent()
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_ClothNormal", component);
 	m_meshCom->AddNormalTexture(m_normalCom);
+
+	return S_OK;
+}
+
+HRESULT CNPC::LoadCollider()
+{
+	Engine::CSphereCollider* newSphere = Engine::CSphereCollider::Create(m_device, { 0.f, 100.f, 0.f }, 150.f);
+	NULL_CHECK_RETURN(newSphere, E_FAIL);
+	m_hitCollider.emplace_back(newSphere);
 
 	return S_OK;
 }
@@ -161,8 +189,7 @@ CNPC* CNPC::Create(LPDIRECT3DDEVICE9 device, const _vec3& pos, const _float& ang
 
 void CNPC::Free()
 {
-	CColliderManager::GetInstance()->DeleteObject(OBJ_ENEMY, this);
-	CSpawnManager::GetInstance()->DeleteObject(SPAWNTYPE::BOSS, this);
+	CColliderManager::GetInstance()->DeleteObject(OBJ_EVENT, this);
 
 	Engine::CGameObject::Free();
 }

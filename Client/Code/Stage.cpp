@@ -44,8 +44,7 @@ _int CStage::Update(const _float& deltaTime)
 
 void CStage::Render()
 {
-	Engine::CScene::Render();
-	//m_device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	//Engine::CScene::Render();
 }
 
 HRESULT CStage::ReadyEnvironmentLayer(const _tchar * layerTag)
@@ -118,7 +117,7 @@ HRESULT CStage::ReadyGameLogicLayer(const _tchar * layerTag)
 	NULL_CHECK_RETURN(gameObject, E_FAIL);
 	FAILED_CHECK_RETURN(layer->AddGameObject(L"Player", gameObject), E_FAIL);
 
-	gameObject = CNPC::Create(m_device, { 10.f, 0.25f, 10.f }, -90.f);
+	gameObject = CNPC::Create(m_device, { 12.f, 0.25f, 8.f }, -180.f);
 	NULL_CHECK_RETURN(gameObject, E_FAIL);
 	FAILED_CHECK_RETURN(layer->AddGameObject(L"NPC", gameObject));
 

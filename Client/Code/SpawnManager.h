@@ -31,7 +31,7 @@ public:
 
 public:
 	void Spawn(SPAWNTYPE type, const _vec3& pos, const _float& angle = 0.f, const _vec3* target = nullptr);
-	void StartEvent();
+	_bool StartEvent();
 	void DeleteObject(SPAWNTYPE type, Engine::CGameObject* target);
 
 private:

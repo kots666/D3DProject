@@ -135,7 +135,7 @@ _bool CPlayer::AttackColliderOverlapped(Engine::CGameObject * target)
 	m_camera->ShakeCamera();
 	CPlayTimeManager::GetInstance()->SetHitSlow();
 
-	cout << "Hit" << endl;
+	//cout << "Player Attack Something" << endl;
 
 	return true;
 }
@@ -149,8 +149,6 @@ void CPlayer::HitColliderOverlapped(Engine::CGameObject * causer)
 
 	for (auto& elem : m_hitCollider)
 		elem->SetIsCollide(true);
-
-	//cout << "Hit" << endl;
 }
 
 HRESULT CPlayer::AddComponent()
@@ -531,6 +529,27 @@ void CPlayer::CalcComboTime(const _float& deltaTime)
 	if (m_isCombo)
 	{
 		m_accTime += deltaTime;
+
+		if (!m_isStartAttack && m_accTime > m_attackStartTime)
+		{
+			m_isStartAttack = true;
+
+			for (auto& elem : m_attackCollider)
+				elem->SetCanCollide(true);
+
+			ClearCollideList();
+
+			cout << "Player Attack Start" << endl;
+		}
+		else if (!m_isEndAttack && m_accTime > m_attackEndTime)
+		{
+			m_isEndAttack = true;
+
+			for (auto& elem : m_attackCollider)
+				elem->SetCanCollide(false);
+
+			cout << "Player Attack End" << endl;
+		}
 	}
 }
 
@@ -548,8 +567,6 @@ void CPlayer::DoIdle()
 
 	for (auto& elem : m_attackCollider)
 		elem->SetCanCollide(false);
-
-	ClearCollideList();
 }
 
 void CPlayer::DoAttack()
@@ -560,6 +577,9 @@ void CPlayer::DoAttack()
 
 		++m_comboIndex;
 
+		m_isStartAttack = false;
+		m_isEndAttack = false;
+
 		switch (m_comboIndex)
 		{
 		case 1:
@@ -567,7 +587,9 @@ void CPlayer::DoAttack()
 			m_isCombo = true;
 			m_animationSpeed = 1.5f;
 			m_accTime = 0.f;
-			m_comboTime = 0.73f / m_animationSpeed;
+			m_comboTime = (22.f / 30.f) / m_animationSpeed;
+			m_attackStartTime = (2.f / 30.f) / m_animationSpeed;
+			m_attackEndTime = m_comboTime + 0.06f;
 			break;
 
 		case 2:
@@ -575,7 +597,9 @@ void CPlayer::DoAttack()
 			m_isCombo = true;
 			m_animationSpeed = 1.5f;
 			m_accTime = 0.f;
-			m_comboTime = 0.73f / m_animationSpeed;
+			m_comboTime = (22.f / 30.f) / m_animationSpeed;
+			m_attackStartTime = (2.f / 30.f) / m_animationSpeed;
+			m_attackEndTime = m_comboTime + 0.06f;
 			break;
 
 		case 3:
@@ -583,7 +607,9 @@ void CPlayer::DoAttack()
 			m_isCombo = true;
 			m_animationSpeed = 1.5f;
 			m_accTime = 0.f;
-			m_comboTime = 1.46f / m_animationSpeed;
+			m_comboTime = (44.f / 30.f) / m_animationSpeed;
+			m_attackStartTime = (15.f / 30.f) / m_animationSpeed;
+			m_attackEndTime = m_comboTime + 0.06f;
 			break;
 
 		case 4:
@@ -591,7 +617,9 @@ void CPlayer::DoAttack()
 			m_isCombo = true;
 			m_animationSpeed = 1.5f;
 			m_accTime = 0.f;
-			m_comboTime = 1.f;
+			m_comboTime = (34.f / 30.f) / m_animationSpeed;
+			m_attackStartTime = (12.f / 30.f) / m_animationSpeed;
+			m_attackEndTime = m_comboTime + 0.03f;
 			break;
 		}
 
@@ -606,11 +634,6 @@ void CPlayer::DoAttack()
 
 		m_transCom->SetRotation(Engine::ROT_Y, D3DXToRadian(camYDegree));
 		m_yRotAngle = camYDegree;
-
-		ClearCollideList();
-
-		for (auto& elem : m_attackCollider)
-			elem->SetCanCollide(true);
 	}
 }
 

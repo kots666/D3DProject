@@ -29,8 +29,12 @@ public:
 	virtual _int Update(const _float& deltaTime) override;
 	virtual void Render() override;
 
+public:
+	virtual void HitColliderOverlapped(Engine::CGameObject* causer) override;
+
 private:
 	HRESULT AddComponent();
+	HRESULT LoadCollider();
 	HRESULT SetUpConstantTable(LPD3DXEFFECT& effect);
 
 	void LookAtTarget(const _vec3& targetPos);
