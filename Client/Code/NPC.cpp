@@ -100,11 +100,6 @@ HRESULT CNPC::AddComponent()
 	m_meshCom->AddNormalTexture(m_normalCom);
 
 	// hair
-	component = m_normalCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Texture_NPC_Hair"));
-	NULL_CHECK_RETURN(component, E_FAIL);
-	m_compMap[Engine::ID_STATIC].emplace(L"Com_HairTex", component);
-	m_meshCom->AddNormalTexture(m_normalCom);
-
 	component = m_normalCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_NORMAL, L"Texture_NPC_Hair"));
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_HairNormal", component);

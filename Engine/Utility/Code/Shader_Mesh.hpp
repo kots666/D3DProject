@@ -246,7 +246,7 @@ technique Default_Device
 	{
 		// 알파테스트 + 기본 디퍼드
 		alphatestenable = true;
-		alpharef = 10;
+		alpharef = 100;
 		alphafunc = greater;
 
 		vertexshader = compile vs_3_0 VS_MAIN();

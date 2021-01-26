@@ -133,6 +133,9 @@
     <Filter Include="02. GameObject\01. Stage\09. NPC">
       <UniqueIdentifier>{85395d26-5885-44c8-8eff-8b660e9df9f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\02. Public\08. QuestManager">
+      <UniqueIdentifier>{8885e7bf-4bd1-4a80-b04a-1c3b986f80ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -270,6 +273,9 @@
     <ClInclude Include="..\Code\NPC.h">
       <Filter>02. GameObject\01. Stage\09. NPC</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\QuestManager.h">
+      <Filter>02. GameObject\02. Public\08. QuestManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -382,6 +388,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\NPC.cpp">
       <Filter>02. GameObject\01. Stage\09. NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\QuestManager.cpp">
+      <Filter>02. GameObject\02. Public\08. QuestManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

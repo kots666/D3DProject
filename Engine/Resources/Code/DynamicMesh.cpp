@@ -460,6 +460,7 @@ void CDynamicMesh::Free()
 		}
 	}
 	m_meshContainerList.clear();
+	m_texList.clear();
 	m_normalTexList.clear();
 }
 

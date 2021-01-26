@@ -195,6 +195,7 @@
     <ClInclude Include="..\Code\NPC.h" />
     <ClInclude Include="..\Code\Player.h" />
     <ClInclude Include="..\Code\PlayTimeManager.h" />
+    <ClInclude Include="..\Code\QuestManager.h" />
     <ClInclude Include="..\Code\SkyBox.h" />
     <ClInclude Include="..\Code\Spawner.h" />
     <ClInclude Include="..\Code\SpawnManager.h" />
@@ -242,6 +243,7 @@
     <ClCompile Include="..\Code\NPC.cpp" />
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\PlayTimeManager.cpp" />
+    <ClCompile Include="..\Code\QuestManager.cpp" />
     <ClCompile Include="..\Code\SkyBox.cpp" />
     <ClCompile Include="..\Code\Spawner.cpp" />
     <ClCompile Include="..\Code\SpawnManager.cpp" />
