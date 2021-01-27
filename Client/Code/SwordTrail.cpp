@@ -47,8 +47,6 @@ void CSwordTrail::Render()
 	LPD3DXEFFECT effect = m_shaderCom->GetEffectHandle();
 	if (nullptr == effect) return;
 
-	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
-
 	Engine::SafeAddRef(effect);
 
 	effect->Begin(nullptr, 0);
@@ -56,6 +54,7 @@ void CSwordTrail::Render()
 
 	for (auto& elem : m_trailList)
 	{
+		FAILED_CHECK_RETURN(SetUpConstantTable(effect, elem->GetLifeRatio()), );
 		elem->Render();
 	}
 
@@ -97,7 +96,7 @@ HRESULT CSwordTrail::AddComponent()
 	return S_OK;
 }
 
-HRESULT CSwordTrail::SetUpConstantTable(LPD3DXEFFECT & effect)
+HRESULT CSwordTrail::SetUpConstantTable(LPD3DXEFFECT & effect, const _float& ratio)
 {
 	// view, proj
 	_matrix matView, matProj;
@@ -109,7 +108,11 @@ HRESULT CSwordTrail::SetUpConstantTable(LPD3DXEFFECT & effect)
 	effect->SetMatrix("g_matView", &matView);
 	effect->SetMatrix("g_matProj", &matProj);
 	
+	effect->SetFloat("g_Offset", ratio * 0.9f);
+
 	m_texCom->SetTexture(effect, "g_BaseTexture");
+
+	effect->CommitChanges();
 
 	return S_OK;
 }
@@ -144,7 +147,7 @@ void CSwordTrail::MakeTrail(const _int & type)
 		texUV[2] = { afterS, 1 };
 		texUV[3] = { beforeS, 1 };
 
-		Engine::CTrailRect* newTrail = Engine::CTrailRect::Create(m_device, pos, texUV, 0.05f);
+		Engine::CTrailRect* newTrail = Engine::CTrailRect::Create(m_device, pos, texUV, 0.1f);
 
 		m_trailList.emplace_back(newTrail);
 	}

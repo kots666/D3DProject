@@ -20,13 +20,16 @@ public:
 public:
 	_float GetLifeTime() const { return m_lifeTime; }
 
+	_float GetLifeRatio() const { return m_lifeTime / m_maxLifeTime; }
+
 	void SetLifeTime(const _float& time) { m_lifeTime = time; }
 	void DecreaseLifeTime(const _float& time) { m_lifeTime -= time; }
 
 private:
 	_vec3 m_vtxPos[4];
 	_vec2 m_texUV[4];
-	_float m_lifeTime = 0.1f;
+	_float m_lifeTime;
+	_float m_maxLifeTime;
 
 public:
 	static CTrailRect* Create(LPDIRECT3DDEVICE9 device, const _vec3* vtxPos, const _vec2* texUV, const _float& lifeTime = 0.1f);

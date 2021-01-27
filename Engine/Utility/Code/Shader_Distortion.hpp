@@ -2,6 +2,8 @@ matrix		g_matWorld;
 matrix		g_matView;
 matrix		g_matProj;
 
+float g_Offset;
+
 texture		g_NoiseTexture;
 
 sampler NoiseSampler = sampler_state
@@ -64,7 +66,10 @@ PS_OUT	PS_MAIN(PS_IN In)
 {
 	PS_OUT		Out = (PS_OUT)0;
 
-	vector noiseColor = tex2D(NoiseSampler, In.vTexUV);
+	float3 texUV = In.vTexUV;
+	texUV.x = (texUV.x * 0.1f) + g_Offset;
+
+	vector noiseColor = tex2D(NoiseSampler, texUV);
 	vector maskColor = tex2D(MaskSampler, In.vTexUV);
 
 	Out.vColor = noiseColor * maskColor;

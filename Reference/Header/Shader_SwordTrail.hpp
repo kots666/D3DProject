@@ -13,7 +13,7 @@ sampler BaseSampler = sampler_state
 
 };
 
-float g_percent;
+float g_Offset;
 
 struct	VS_IN
 {
@@ -38,6 +38,7 @@ VS_OUT		VS_MAIN(VS_IN In)
 
 	Out.vPosition = mul(vector(In.vPosition.xyz, 1.f), matWVP);
 	Out.vTexUV = In.vTexUV;
+	Out.vTexUV.x = (Out.vTexUV.x * 0.1f) + g_Offset;
 
 	return Out;
 }

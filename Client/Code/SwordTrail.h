@@ -34,7 +34,7 @@ public:
 
 private:
 	HRESULT AddComponent();
-	HRESULT SetUpConstantTable(LPD3DXEFFECT& effect);
+	HRESULT SetUpConstantTable(LPD3DXEFFECT& effect, const _float& ratio);
 
 	void MakeTrail(const _int& type);
 

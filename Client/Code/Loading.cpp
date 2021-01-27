@@ -130,7 +130,7 @@ _uint CLoading::LoadingForStage()
 		Engine::RESOURCE_STAGE,
 		L"Texture_Trail",
 		Engine::TEX_NORMAL,
-		L"../Resource/Texture/FixTrail3.png"), E_FAIL);
+		L"../Resource/Texture/Effect/Trail.png"), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(
 		m_device,
@@ -237,6 +237,7 @@ _uint CLoading::LoadingForStage()
 		Engine::TYPE_DYNAMIC,
 		L"../Resource/Mesh/DynamicMesh/NPC/",
 		L"Miracle.X"), E_FAIL);
+
 	_int dynamicMeshLoad = 7;
 
 	m_nowLoad += dynamicMeshLoad;

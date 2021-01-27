@@ -47,8 +47,6 @@ void CSwordDistort::Render()
 	LPD3DXEFFECT effect = m_shaderCom->GetEffectHandle();
 	if (nullptr == effect) return;
 
-	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
-
 	Engine::SafeAddRef(effect);
 
 	effect->Begin(nullptr, 0);
@@ -56,6 +54,7 @@ void CSwordDistort::Render()
 
 	for (auto& elem : m_trailList)
 	{
+		FAILED_CHECK_RETURN(SetUpConstantTable(effect, elem->GetLifeRatio()), );
 		elem->Render();
 	}
 
@@ -101,7 +100,7 @@ HRESULT CSwordDistort::AddComponent()
 	return S_OK;
 }
 
-HRESULT CSwordDistort::SetUpConstantTable(LPD3DXEFFECT & effect)
+HRESULT CSwordDistort::SetUpConstantTable(LPD3DXEFFECT & effect, const _float& ratio)
 {
 	// view, proj
 	_matrix matView, matProj;
@@ -137,8 +136,12 @@ HRESULT CSwordDistort::SetUpConstantTable(LPD3DXEFFECT & effect)
 	effect->SetMatrix("g_matView", &matView);
 	effect->SetMatrix("g_matProj", &matProj);
 	
+	effect->SetFloat("g_Offset", ratio * 0.9f);
+
 	m_noiseTexCom->SetTexture(effect, "g_NoiseTexture");
 	m_maskTexCom->SetTexture(effect, "g_MaskTexture");
+
+	effect->CommitChanges();
 
 	return S_OK;
 }
@@ -173,7 +176,7 @@ void CSwordDistort::MakeTrail(const _int & type)
 		texUV[2] = { afterS, 1 };
 		texUV[3] = { beforeS, 1 };
 
-		Engine::CTrailRect* newTrail = Engine::CTrailRect::Create(m_device, pos, texUV, 0.06f);
+		Engine::CTrailRect* newTrail = Engine::CTrailRect::Create(m_device, pos, texUV, 0.11f);
 
 		m_trailList.emplace_back(newTrail);
 	}

@@ -4,7 +4,8 @@ USING(Engine)
 
 CTrailRect::CTrailRect(LPDIRECT3DDEVICE9 device, const _vec3* vtxPos, const _vec2* texUV, const _float& lifeTime) :
 	CVIBuffer(device),
-	m_lifeTime(lifeTime)
+	m_lifeTime(lifeTime),
+	m_maxLifeTime(lifeTime)
 {
 	memcpy(m_vtxPos, vtxPos, sizeof(_vec3) * 4);
 	memcpy(m_texUV, texUV, sizeof(_vec2) * 4);

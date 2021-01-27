@@ -50,6 +50,11 @@ private:
 
 	void UpdateAnimMatrices();
 	void CalcComboTime(const _float& deltaTime);
+	void CalcSkillTime(const _float& deltaTime);
+
+	void CalcFrameTime(_float& outTime, const _float& frame);
+
+	void LookAtMouseDirection();
 
 public:
 	void DoIdle();
@@ -91,7 +96,14 @@ private:
 	_bool m_isStartAttack = false;
 	_bool m_isEndAttack = false;
 
+	list<_float> m_skillStartTimeList;
+	list<_float> m_skillEndTimeList;
+
+	_bool m_isStartSkill = false;
+	_bool m_isEndSkill = false;
+
 	_int m_state;
+	_int m_selSkill = 0;
 
 private:
 	void RecordPos();
