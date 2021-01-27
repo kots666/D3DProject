@@ -28,6 +28,7 @@ private:
 public:
 	HRESULT Ready(LPDIRECT3DDEVICE9 device);
 	void CheckSpawnCondition();
+	void CheckQuestComplete();
 
 public:
 	void Spawn(SPAWNTYPE type, const _vec3& pos, const _float& angle = 0.f, const _vec3* target = nullptr);

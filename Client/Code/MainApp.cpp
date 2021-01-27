@@ -59,6 +59,7 @@ _int CMainApp::Update(const _float & deltaTime)
 	CColliderManager::GetInstance()->CheckCollision(OBJ_ENEMY, OBJ_PLAYER);
 	CColliderManager::GetInstance()->CheckEventCollision();
 	CSpawnManager::GetInstance()->CheckSpawnCondition();
+	CSpawnManager::GetInstance()->CheckQuestComplete();
 
 	return 0;
 }
@@ -83,14 +84,19 @@ void CMainApp::Render()
 
 	_tchar questStep[40];
 	wsprintf(questStep, L"Quest : %d", CQuestManager::GetInstance()->GetStep());
+	Engine::RenderFont(L"Font_Jinji", questStep, &_vec2(WINCX - 300, 100.f), D3DXCOLOR(1.f, 1.f, 0.f, 1.f));
 
-	D3DXCOLOR questColor;
-	if (CQuestManager::GetInstance()->GetIsProgress())
-		questColor = D3DXCOLOR(1.f, 1.f, 0.f, 1.f);
+	_tchar quest[40];
+	if (CQuestManager::GetInstance()->GetIsComplete())
+		wsprintf(quest, L"퀘스트 완료");
 	else
-		questColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
-
-	Engine::RenderFont(L"Font_Jinji", questStep, &_vec2(WINCX - 300, 100.f), questColor);
+	{
+		if (CQuestManager::GetInstance()->GetIsProgress())
+			wsprintf(quest, L"퀘스트 진행중");
+		else
+			wsprintf(quest, L"퀘스트 받아야함");
+	}
+	Engine::RenderFont(L"Font_Jinji", quest, &_vec2(WINCX - 300, 150.f), D3DXCOLOR(1.f, 1.f, 0.f, 1.f));
 
 	Engine::RenderEnd();
 }

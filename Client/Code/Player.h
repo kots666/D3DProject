@@ -54,6 +54,8 @@ private:
 public:
 	void DoIdle();
 	void DoAttack();
+	void DoSkill01();
+	void DoSkill02(); // ¿ø°Å¸®
 
 private:
 	Engine::CDynamicMesh* m_meshCom = nullptr;
@@ -77,6 +79,8 @@ private:
 	_matrix m_yScaleRotMat;
 	_matrix m_reviseMat;
 
+	_bool m_isSkill = false;
+	_bool m_isAttack = false;
 	_bool m_isCombo = false;
 	_int m_comboIndex = 0;
 	_float m_accTime = 0.f;

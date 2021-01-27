@@ -21,7 +21,11 @@ public:
 
 public:
 	_bool GetIsProgress() const { return m_isProgress; }
+	_bool GetIsComplete() const { return m_isComplete; }
 	_int GetStep() const { return m_questStep; }
+	
+public:
+	void CompleteQuest() { m_isComplete = true; }
 
 private:
 	_int m_questStep;

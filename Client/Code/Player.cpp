@@ -468,9 +468,7 @@ void CPlayer::KeyInput(const _float& deltaTime)
 
 	if (Engine::GetDIKeyDownState(VK_RBUTTON))
 	{
-		//CSpawnManager::GetInstance()->Spawn(SPAWNTYPE::DOG, { 10.f, 0.f, 10.f });
-		//_vec3 pickPos = PickUpOnTerrain();
-		//m_transCom->MoveToPickPos(&pickPos, m_speed, deltaTime);
+		DoSkill01();
 	}
 
 	if (Engine::GetDIKeyDownState('M'))
@@ -526,7 +524,7 @@ void CPlayer::UpdateAnimMatrices()
 
 void CPlayer::CalcComboTime(const _float& deltaTime)
 {
-	if (m_isCombo)
+	if (m_isAttack)
 	{
 		m_accTime += deltaTime;
 
@@ -538,8 +536,6 @@ void CPlayer::CalcComboTime(const _float& deltaTime)
 				elem->SetCanCollide(true);
 
 			ClearCollideList();
-
-			cout << "Player Attack Start" << endl;
 		}
 		else if (!m_isEndAttack && m_accTime > m_attackEndTime)
 		{
@@ -547,8 +543,6 @@ void CPlayer::CalcComboTime(const _float& deltaTime)
 
 			for (auto& elem : m_attackCollider)
 				elem->SetCanCollide(false);
-
-			cout << "Player Attack End" << endl;
 		}
 	}
 }
@@ -584,6 +578,7 @@ void CPlayer::DoAttack()
 		{
 		case 1:
 			m_meshCom->SetAnimation(2, 0.015f, 0.03f, true);
+			m_isAttack = true;
 			m_isCombo = true;
 			m_animationSpeed = 1.5f;
 			m_accTime = 0.f;
@@ -594,6 +589,7 @@ void CPlayer::DoAttack()
 
 		case 2:
 			m_meshCom->SetAnimation(3, 0.015f, 0.03f, true);
+			m_isAttack = true;
 			m_isCombo = true;
 			m_animationSpeed = 1.5f;
 			m_accTime = 0.f;
@@ -604,6 +600,7 @@ void CPlayer::DoAttack()
 
 		case 3:
 			m_meshCom->SetAnimation(4, 0.01f, 0.03f, true);
+			m_isAttack = true;
 			m_isCombo = true;
 			m_animationSpeed = 1.5f;
 			m_accTime = 0.f;
@@ -614,6 +611,7 @@ void CPlayer::DoAttack()
 
 		case 4:
 			m_meshCom->SetAnimation(5, 0.01f, 0.04f, true);
+			m_isAttack = true;
 			m_isCombo = true;
 			m_animationSpeed = 1.5f;
 			m_accTime = 0.f;
@@ -635,6 +633,26 @@ void CPlayer::DoAttack()
 		m_transCom->SetRotation(Engine::ROT_Y, D3DXToRadian(camYDegree));
 		m_yRotAngle = camYDegree;
 	}
+}
+
+void CPlayer::DoSkill01()
+{
+	if (!m_isSkill || !m_isDead)
+	{
+		m_state |= STATE_ATTACK;
+		m_isSkill = true;
+		m_isAttack = true;
+
+		m_animationSpeed = 1.5f;
+		m_attackStartTime = 0.f;
+		m_attackEndTime = 1.f;
+
+		m_meshCom->SetAnimation(11, 0.01f, 0.04f, true);
+	}
+}
+
+void CPlayer::DoSkill02()
+{
 }
 
 void CPlayer::RecordPos()

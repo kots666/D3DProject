@@ -29,6 +29,10 @@ void CQuestManager::QuestProgress()
 		if (m_isComplete)
 		{
 			// 퀘스트완료에 대한 진행
+
+			++m_questStep;
+			m_isComplete = false;
+			m_isProgress = false;
 		}
 		else
 		{
