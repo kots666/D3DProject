@@ -10,11 +10,12 @@ CTalkUI::CTalkUI(LPDIRECT3DDEVICE9 device) :
 
 }
 
-CTalkUI::CTalkUI(LPDIRECT3DDEVICE9 device, const _int& idx, const _float & x, const _float & y, const _float & sizeX, const _float & sizeY) :
+CTalkUI::CTalkUI(LPDIRECT3DDEVICE9 device, const _int& idx, const _float & x, const _float & y, const _float & sizeX, const _float & sizeY, const _bool& isIlust) :
 	Engine::CGameObject(device),
 	m_index(idx),
 	m_wantedX(x), m_wantedY(y),
-	m_sizeX(sizeX), m_sizeY(sizeY)
+	m_sizeX(sizeX), m_sizeY(sizeY),
+	m_isIlust(isIlust)
 {
 }
 
@@ -50,11 +51,10 @@ void Client::CTalkUI::Render()
 	if (nullptr == effect) return;
 	Engine::SafeAddRef(effect);
 
-	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
-
 	effect->Begin(nullptr, 0);
 	effect->BeginPass(4);
 
+	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
 	m_bufferCom->Render();
 
 	effect->EndPass();
@@ -73,7 +73,10 @@ HRESULT Client::CTalkUI::AddComponent()
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Buffer", component);
 
 	// texture
-	component = m_textureCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Texture_Talk"));
+	if(m_isIlust)
+		component = m_textureCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Texture_Ilust"));
+	else
+		component = m_textureCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Texture_Talk"));
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Texture", component);
 
@@ -120,9 +123,9 @@ HRESULT CTalkUI::SetUpConstantTable(LPD3DXEFFECT & effect)
 	return S_OK;
 }
 
-CTalkUI * CTalkUI::Create(LPDIRECT3DDEVICE9 device, const _int& idx, const _float & x, const _float & y, const _float & sizeX, const _float & sizeY)
+CTalkUI * CTalkUI::Create(LPDIRECT3DDEVICE9 device, const _int & idx, const _float & x, const _float & y, const _float & sizeX, const _float & sizeY, const _bool & isIlust)
 {
-	CTalkUI* instance = new CTalkUI(device, idx, x, y, sizeX, sizeY);
+	CTalkUI* instance = new CTalkUI(device, idx, x, y, sizeX, sizeY, isIlust);
 
 	if (FAILED(instance->Ready()))
 		Client::SafeRelease(instance);

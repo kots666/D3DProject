@@ -194,6 +194,28 @@ PS_NORMAL_OUT PS_NORMALMAIN(PS_NORMAL_IN In)
 	return Out;
 }
 
+PS_NORMAL_OUT PS_NORMALMAIN2(PS_NORMAL_IN In)
+{
+	PS_NORMAL_OUT Out = (PS_NORMAL_OUT)0;
+
+	Out.vColor = tex2D(BaseSampler, In.vTexUV);
+	Out.vColor.a = 1.f;
+
+	float4 texNormal = tex2D(NormalSampler, In.vTexUV);
+	
+	float3 unpackedNormal;
+	unpackedNormal.xy = texNormal.xy * 2 - 1;
+	unpackedNormal.z = sqrt(1 - saturate(dot(unpackedNormal.xy, unpackedNormal.xy)));
+
+	float3 normal = (unpackedNormal.x * In.T) + (unpackedNormal.y * In.B) + (unpackedNormal.z * In.N);
+
+	Out.vNormal = vector(normal.xyz * 0.5f + 0.5f, 1.f);
+
+	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w * 0.001f, 0.f, 0.f);
+
+	return Out;
+}
+
 // ============================================= 디졸브 =============================================
 
 PS_OUT PS_DISSOLVEMAIN(PS_IN disIn)
@@ -233,11 +255,11 @@ technique Default_Device
 
 	pass
 	{
+		// 기본 디퍼드 + 디졸브
 		alphatestenable = true;
 		alpharef = 10;
 		alphafunc = greater;
 
-		// 기본 디퍼드 + 디졸브
 		vertexshader = compile vs_3_0 VS_MAIN();
 		pixelshader = compile ps_3_0 PS_DISSOLVEMAIN();
 	}
@@ -246,11 +268,21 @@ technique Default_Device
 	{
 		// 알파테스트 + 기본 디퍼드
 		alphatestenable = true;
-		alpharef = 100;
+		alpharef = 0;
 		alphafunc = greater;
 
 		vertexshader = compile vs_3_0 VS_MAIN();
 		pixelshader = compile ps_3_0 PS_MAIN();
+	}
+
+	pass
+	{
+		// 모델 스페이스 노말맵 노말맵핑
+		// + 디졸브 이펙트
+		
+
+		vertexshader = compile vs_3_0 VS_NORMALMAIN();
+		pixelshader = compile ps_3_0 PS_NORMALMAIN2();
 	}
 };
 

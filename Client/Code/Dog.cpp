@@ -115,7 +115,7 @@ void CDog::Render()
 	effect->Begin(nullptr, 0);
 
 	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
-	m_meshCom->Render(effect, 2);
+	m_meshCom->Render(effect, 4);
 	
 	effect->End();
 

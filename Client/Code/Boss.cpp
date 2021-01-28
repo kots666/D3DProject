@@ -104,7 +104,7 @@ void CBoss::Render()
 	LPD3DXEFFECT effect = m_shaderCom->GetEffectHandle();
 	if (nullptr == effect) return;
 
-	_int passIndex[3] = { 0, 0, 3 };
+	_int passIndex[3] = { 4, 4, 4 };
 
 	Engine::SafeAddRef(effect);
 

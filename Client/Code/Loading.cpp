@@ -163,16 +163,9 @@ _uint CLoading::LoadingForStage()
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(
 		m_device,
 		Engine::RESOURCE_STAGE,
-		L"Texture_NPC",
+		L"Texture_Ilust",
 		Engine::TEX_NORMAL,
-		L"../Resource/Texture/Quest/NPC.tga"), E_FAIL);
-
-	FAILED_CHECK_RETURN(Engine::ReadyTexture(
-		m_device,
-		Engine::RESOURCE_STAGE,
-		L"Texture_Player",
-		Engine::TEX_NORMAL,
-		L"../Resource/Texture/Quest/Player.tga"), E_FAIL);
+		L"../Resource/Texture/Quest/Ilust%d.tga", 2), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(
 		m_device,
@@ -181,7 +174,7 @@ _uint CLoading::LoadingForStage()
 		Engine::TEX_NORMAL,
 		L"../Resource/Texture/Quest/%d.png", 5), E_FAIL);
 
-	_int textureCnt = 14;
+	_int textureCnt = 13;
 	m_nowLoad += textureCnt;
 
 	LoadingForDynamicMeshNormalTextures();

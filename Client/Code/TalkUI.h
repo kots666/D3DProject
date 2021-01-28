@@ -19,13 +19,16 @@ class CTalkUI : public Engine::CGameObject
 {
 private:
 	explicit CTalkUI(LPDIRECT3DDEVICE9 device);
-	explicit CTalkUI(LPDIRECT3DDEVICE9 device, const _int& idx, const _float& x, const _float& y, const _float& sizeX, const _float& sizeY);
+	explicit CTalkUI(LPDIRECT3DDEVICE9 device, const _int& idx, const _float& x, const _float& y, const _float& sizeX, const _float& sizeY, const _bool& isIlust);
 	virtual ~CTalkUI();
 
 public:
 	virtual HRESULT Ready() override;
 	virtual _int Update(const _float& deltaTime) override;
 	virtual void Render() override;
+
+public:
+	void SetIndex(const _int& idx) { m_index = idx; }
 
 private:
 	HRESULT AddComponent();
@@ -47,8 +50,10 @@ private:
 
 	_int m_index;
 
+	_bool m_isIlust;
+
 public:
-	static CTalkUI*	Create(LPDIRECT3DDEVICE9 device, const _int& idx, const _float& x, const _float& y, const _float& sizeX, const _float& sizeY);
+	static CTalkUI*	Create(LPDIRECT3DDEVICE9 device, const _int& idx, const _float& x, const _float& y, const _float& sizeX, const _float& sizeY, const _bool& isIlust = false);
 
 private:
 	virtual void Free() override;

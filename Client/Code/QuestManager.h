@@ -5,6 +5,9 @@
 
 BEGIN(Client)
 
+class CTalkUI;
+class CUI;
+
 class CQuestManager
 {
 	DECLARE_SINGLETON(CQuestManager)
@@ -16,11 +19,22 @@ private:
 public:
 	void IncreaseQuestStep() { ++m_questStep; }
 	void QuestProgress();
+
 	void CreateTalkUI(const _int& index);
+	void CreateIlustUI(const _int& index);
+	void CreateQuestUI();
+
+	void ChangeTalkUI(const _int& index);
+	void ChangeIlustUI(const _int& index);
+	void ChangeQuestUI(const _int& index);
+
+	void ClearTalkUI();
+	void ClearIlustUI();
+	void ClearQuestUI();
+	void ClearAll();
 
 	void QuestCheat(const _int& step, const _bool& progrss, const _bool& complete);
 
-	void ClearTalk();
 
 public:
 	_bool GetIsProgress() const { return m_isProgress; }
@@ -28,10 +42,13 @@ public:
 	_int GetStep() const { return m_questStep; }
 	
 public:
-	void CompleteQuest() { m_isComplete = true; }
+	void CompleteQuest();
 
 private:
-	list<Engine::CGameObject*> m_talkList;
+	CTalkUI* m_talkUI;
+	CTalkUI* m_ilustUI;
+	CTalkUI* m_questUI;
+
 	list<_tchar*> m_nameList;
 
 	_int m_questStep;

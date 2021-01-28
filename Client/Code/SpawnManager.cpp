@@ -147,11 +147,6 @@ _bool CSpawnManager::StartEvent()
 	{
 		switch (m_eventCount)
 		{
-		case 0:
-			Spawn(SPAWNTYPE::DOG, { 4.f, 0.f, 16.f }, 150.f);
-			Spawn(SPAWNTYPE::DOG, { 12.f, 0.f, 23.f }, -150.f);
-			break;
-
 		case 1:
 			Spawn(SPAWNTYPE::DOG, { 23.f, 0.f, 57.f }, -90.f);
 			Spawn(SPAWNTYPE::DOG, { 14.f, 0.f, 36.f }, -150.f);
