@@ -17,7 +17,6 @@ namespace Engine
 	#define ENGINE_DLL _declspec(dllimport)
 	#endif // ENGINE_EXPORTS
 
-
 	#define NULL_CHECK( _ptr)	\
 	{if( _ptr == nullptr){__asm { int 3 };return;}}
 
