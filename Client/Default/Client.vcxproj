@@ -205,6 +205,7 @@
     <ClInclude Include="..\Code\Sword.h" />
     <ClInclude Include="..\Code\SwordDistort.h" />
     <ClInclude Include="..\Code\SwordTrail.h" />
+    <ClInclude Include="..\Code\TalkUI.h" />
     <ClInclude Include="..\Code\Terrain.h" />
     <ClInclude Include="..\Code\TestMonster.h" />
     <ClInclude Include="..\Code\TestPlayer.h" />
@@ -253,6 +254,7 @@
     <ClCompile Include="..\Code\Sword.cpp" />
     <ClCompile Include="..\Code\SwordDistort.cpp" />
     <ClCompile Include="..\Code\SwordTrail.cpp" />
+    <ClCompile Include="..\Code\TalkUI.cpp" />
     <ClCompile Include="..\Code\Terrain.cpp" />
     <ClCompile Include="..\Code\TestMonster.cpp" />
     <ClCompile Include="..\Code\TestPlayer.cpp" />

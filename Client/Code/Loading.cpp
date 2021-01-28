@@ -93,13 +93,6 @@ _uint CLoading::LoadingForStage()
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(
 		m_device,
 		Engine::RESOURCE_STAGE,
-		L"Texture_SkyBox",
-		Engine::TEX_CUBE,
-		L"../Resource/Texture/SkyBox/burger%d.dds", 4), E_FAIL);
-
-	FAILED_CHECK_RETURN(Engine::ReadyTexture(
-		m_device,
-		Engine::RESOURCE_STAGE,
 		L"Texture_HPBar",
 		Engine::TEX_NORMAL,
 		L"../Resource/Texture/UI/HPBar.png"), E_FAIL);
@@ -172,9 +165,23 @@ _uint CLoading::LoadingForStage()
 		Engine::RESOURCE_STAGE,
 		L"Texture_NPC",
 		Engine::TEX_NORMAL,
-		L"../Resource/Texture/NPC/NPC.tga"), E_FAIL);
+		L"../Resource/Texture/Quest/NPC.tga"), E_FAIL);
 
-	_int textureCnt = 13;
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Texture_Player",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/Quest/Player.tga"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Texture_Talk",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/Quest/%d.png", 5), E_FAIL);
+
+	_int textureCnt = 14;
 	m_nowLoad += textureCnt;
 
 	LoadingForDynamicMeshNormalTextures();

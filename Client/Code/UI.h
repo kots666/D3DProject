@@ -10,6 +10,7 @@ class CRCTex;
 class CTexture;
 class CRenderer;
 class CTransform;
+class CShader;
 
 END
 

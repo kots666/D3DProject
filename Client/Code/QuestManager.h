@@ -16,8 +16,11 @@ private:
 public:
 	void IncreaseQuestStep() { ++m_questStep; }
 	void QuestProgress();
+	void CreateTalkUI(const _int& index);
 
 	void QuestCheat(const _int& step, const _bool& progrss, const _bool& complete);
+
+	void ClearTalk();
 
 public:
 	_bool GetIsProgress() const { return m_isProgress; }
@@ -28,9 +31,15 @@ public:
 	void CompleteQuest() { m_isComplete = true; }
 
 private:
+	list<Engine::CGameObject*> m_talkList;
+	list<_tchar*> m_nameList;
+
 	_int m_questStep;
+	_int m_talkStep;
+
 	_bool m_isProgress;
 	_bool m_isComplete;
+	_bool m_isTalking;
 };
 
 END
