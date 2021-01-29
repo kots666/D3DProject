@@ -1,4 +1,5 @@
 #include "StaticMesh.h"
+#include "Texture.h"
 
 USING(Engine)
 
@@ -34,6 +35,8 @@ CStaticMesh::~CStaticMesh()
 
 HRESULT CStaticMesh::Ready(const _tchar* filePath, const _tchar* fileName)
 {
+	m_normalTex = nullptr;
+
 	_tchar fullPath[MAX_PATH] = L"";
 
 	lstrcpy(fullPath, filePath);
@@ -135,11 +138,28 @@ void CStaticMesh::Render()
 
 void CStaticMesh::Render(LPD3DXEFFECT & effect)
 {
+	_int normalTexSize = 0;
+
+	if (nullptr != m_normalTex)
+		normalTexSize = m_normalTex->GetSize();
+
 	for (_ulong i = 0; i < m_subsetCnt; ++i)
 	{
 		effect->SetTexture("g_BaseTexture", m_textures[i]);
+
+		if (i < normalTexSize)
+			m_normalTex->SetTexture(effect, "g_NormalTexture", i);
+
 		effect->CommitChanges();
+
+		if (m_normalTex->IsBlue(i))
+			effect->BeginPass(1);
+		else
+			effect->BeginPass(4);
+
 		m_mesh->DrawSubset(i);
+
+		effect->EndPass();
 	}
 }
 

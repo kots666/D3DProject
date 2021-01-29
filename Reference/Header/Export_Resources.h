@@ -13,7 +13,7 @@ inline CComponent* CloneResource(const _ushort& containerIndex, const _tchar* re
 
 inline HRESULT ReserveContainerSize(const _ushort& size);
 inline HRESULT ReadyBuffer(LPDIRECT3DDEVICE9 device, const _ushort& containerIdx, const _tchar* bufferTag, BUFFERID ID, _ulong cntX = 1, _ulong cntZ = 1, _ulong interval = 1);
-inline HRESULT ReadyTexture(LPDIRECT3DDEVICE9 device, const _ushort& containerIdx, const _tchar* textureTag, TEXTURETYPE type, const _tchar* filePath, const _uint& cnt = 1);
+inline HRESULT ReadyTexture(LPDIRECT3DDEVICE9 device, const _ushort& containerIdx, const _tchar* textureTag, TEXTURETYPE type, const _tchar* filePath, const _uint& cnt = 1, const _bool* isBlue = nullptr);
 inline HRESULT ReadyMesh(LPDIRECT3DDEVICE9 device, const _ushort & containerIdx, const _tchar * meshTag, MESHTYPE type, const _tchar * filePath, const _tchar * fileName);
 
 inline void RenderBuffer(const _ushort& index, const _tchar* bufferTag);

@@ -29,7 +29,8 @@ public:
 		const _tchar* textureTag,
 		TEXTURETYPE type,
 		const _tchar* filePath,
-		const _uint& cnt = 1);
+		const _uint& cnt = 1,
+		const _bool* isBlue = nullptr);
 	HRESULT ReadyMesh(LPDIRECT3DDEVICE9 device,
 		const _ushort& containerIdx,
 		const _tchar* meshTag,

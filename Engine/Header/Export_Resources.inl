@@ -19,9 +19,9 @@ HRESULT ReadyBuffer(LPDIRECT3DDEVICE9 device, const _ushort& containerIdx, const
 	return CResourcesMgr::GetInstance()->ReadyBuffer(device, containerIdx, bufferTag, ID, cntX, cntZ, interval);
 }
 
-HRESULT ReadyTexture(LPDIRECT3DDEVICE9 device, const _ushort& containerIdx, const _tchar* textureTag, TEXTURETYPE type, const _tchar* filePath, const _uint& cnt)
+HRESULT ReadyTexture(LPDIRECT3DDEVICE9 device, const _ushort& containerIdx, const _tchar* textureTag, TEXTURETYPE type, const _tchar* filePath, const _uint& cnt, const _bool* isBlue)
 {
-	return CResourcesMgr::GetInstance()->ReadyTexture(device, containerIdx, textureTag, type, filePath, cnt);
+	return CResourcesMgr::GetInstance()->ReadyTexture(device, containerIdx, textureTag, type, filePath, cnt, isBlue);
 }
 
 inline HRESULT ReadyMesh(LPDIRECT3DDEVICE9 device, const _ushort & containerIdx, const _tchar * meshTag, MESHTYPE type, const _tchar * filePath, const _tchar * fileName)

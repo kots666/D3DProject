@@ -25,9 +25,10 @@ CTexture::~CTexture()
 
 }
 
-HRESULT CTexture::ReadyTexture(const _tchar* path, TEXTURETYPE type, const _uint& cnt)
+HRESULT CTexture::ReadyTexture(const _tchar* path, TEXTURETYPE type, const _uint& cnt, const _bool* isBlue)
 {
 	m_texVec.reserve(cnt);
+	m_blueVec.reserve(cnt);
 
 	LPDIRECT3DBASETEXTURE9 texture = nullptr;
 	
@@ -51,6 +52,11 @@ HRESULT CTexture::ReadyTexture(const _tchar* path, TEXTURETYPE type, const _uint
 		}
 
 		m_texVec.push_back(texture);
+
+		if (nullptr == isBlue)
+			m_blueVec.emplace_back(true);
+		else
+			m_blueVec.emplace_back(isBlue[i]);
 	}
 
 	return S_OK;
@@ -64,6 +70,13 @@ void CTexture::RenderTexture(const _uint& index /*= 0*/)
 	m_device->SetTexture(0, m_texVec[index]);
 }
 
+_bool CTexture::IsBlue(const _int & index)
+{
+	if (index >= m_blueVec.size()) return true;
+
+	return m_blueVec[index];
+}
+
 void CTexture::SetTexture(LPD3DXEFFECT & effect, const char * constantName, const _uint & index)
 {
 	if (m_texVec.size() < index)
@@ -72,11 +85,11 @@ void CTexture::SetTexture(LPD3DXEFFECT & effect, const char * constantName, cons
 	effect->SetTexture(constantName, m_texVec[index]);
 }
 
-CTexture* CTexture::Create(LPDIRECT3DDEVICE9 device, const _tchar* path, TEXTURETYPE type, const _uint& cnt)
+CTexture* CTexture::Create(LPDIRECT3DDEVICE9 device, const _tchar* path, TEXTURETYPE type, const _uint& cnt, const _bool* isBlue)
 {
 	CTexture* instance = new CTexture(device);
 
-	if (FAILED(instance->ReadyTexture(path, type, cnt)))
+	if (FAILED(instance->ReadyTexture(path, type, cnt, isBlue)))
 		SafeRelease(instance);
 
 	return instance;

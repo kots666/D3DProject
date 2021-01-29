@@ -71,7 +71,7 @@ HRESULT CResourcesMgr::ReadyBuffer(LPDIRECT3DDEVICE9 device, const _ushort& cont
 	return S_OK;
 }
 
-HRESULT CResourcesMgr::ReadyTexture(LPDIRECT3DDEVICE9 device, const _ushort & containerIdx, const _tchar * textureTag, TEXTURETYPE type, const _tchar * filePath, const _uint & cnt)
+HRESULT CResourcesMgr::ReadyTexture(LPDIRECT3DDEVICE9 device, const _ushort & containerIdx, const _tchar * textureTag, TEXTURETYPE type, const _tchar * filePath, const _uint & cnt, const _bool* isBlue)
 {
 	if (nullptr == m_resourceMap)
 	{
@@ -83,7 +83,7 @@ HRESULT CResourcesMgr::ReadyTexture(LPDIRECT3DDEVICE9 device, const _ushort & co
 	if (nullptr != resources)
 		return E_FAIL;
 
-	resources = CTexture::Create(device, filePath, type, cnt);
+	resources = CTexture::Create(device, filePath, type, cnt, isBlue);
 	NULL_CHECK_RETURN(resources, E_FAIL);
 
 	m_resourceMap[containerIdx].emplace(textureTag, resources);

@@ -51,19 +51,11 @@ void CBackMesh::Render()
 
 	_uint maxPass = 0;
 
-
 	effect->Begin(&maxPass, 0);
 
 	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
-
-	if (nullptr == m_normalTexCom)
-		effect->BeginPass(0);
-	else
-		effect->BeginPass(1);
-
 	m_meshCom->Render(effect);
 
-	effect->EndPass();
 	effect->End();
 
 	Engine::SafeRelease(effect);
@@ -99,6 +91,8 @@ HRESULT CBackMesh::AddComponent()
 	if (nullptr == component) return S_OK;
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_NormalTexture", component);
 
+	m_meshCom->AddNormalTexture(m_normalTexCom);
+
 	return S_OK;
 }
 
@@ -113,11 +107,6 @@ HRESULT CBackMesh::SetUpConstantTable(LPD3DXEFFECT & effect)
 	effect->SetMatrix("g_matWorld", &matWorld);
 	effect->SetMatrix("g_matView", &matView);
 	effect->SetMatrix("g_matProj", &matProj);
-
-	if (nullptr != m_normalTexCom)
-	{
-		m_normalTexCom->SetTexture(effect, "g_NormalTexture");
-	}
 
 	return S_OK;
 }
