@@ -6,7 +6,8 @@ IMPLEMENT_SINGLETON(CRenderer)
 CRenderer::CRenderer() :
 	m_VB(nullptr),
 	m_IB(nullptr),
-	m_isShowMRT(false)
+	m_isShowMRT(false),
+	m_fogDensity(0.f)
 {
 
 }
@@ -84,7 +85,7 @@ void CRenderer::AddObject(RENDERID group, CGameObject* gameObject)
 
 void CRenderer::Render(LPDIRECT3DDEVICE9& device)
 {
-	// SkyBox
+	// TitleLogo
 	RenderPriority(device);
 	
 	// Deferred Rendering
@@ -133,6 +134,12 @@ void CRenderer::RenderPriority(LPDIRECT3DDEVICE9 & device)
 		iter->Render();
 }
 
+void CRenderer::RenderSkyBox(LPDIRECT3DDEVICE9 & device)
+{
+	for (auto& iter : m_renderGroup[RENDER_SKYBOX])
+		iter->Render();
+}
+
 void CRenderer::RenderNonAlpha(LPDIRECT3DDEVICE9 & device)
 {
 	m_renderGroup[RENDER_NONALPHA].sort(CompareViewZless);
@@ -164,6 +171,7 @@ void CRenderer::RenderUI(LPDIRECT3DDEVICE9 & device)
 void CRenderer::RenderDeferred(LPDIRECT3DDEVICE9 & device)
 {
 	BeginMRT(L"MRT_Deferred");
+	RenderSkyBox(device);
 	RenderNonAlpha(device);
 	EndMRT(L"MRT_Deferred");
 }
@@ -209,25 +217,31 @@ void CRenderer::RenderBlend(LPDIRECT3DDEVICE9 & device)
 	CShader* shader = dynamic_cast<Engine::CShader*>(Engine::CloneComp(L"Proto_Shader_Blend"));
 	NULL_CHECK(shader);
 
-	LPD3DXEFFECT pEffect = shader->GetEffectHandle();
-	SafeAddRef(pEffect);
+	LPD3DXEFFECT effect = shader->GetEffectHandle();
+	SafeAddRef(effect);
 
-	Engine::ThrowRenderTargetTexture(pEffect, L"Target_Albedo", "g_AlbedoTexture");
-	Engine::ThrowRenderTargetTexture(pEffect, L"Target_Shade", "g_ShadeTexture");
-	Engine::ThrowRenderTargetTexture(pEffect, L"Target_Distortion", "g_DistortionTexture");
+	_vec4 fogColor = { 0.3f, 0.3f, 0.3f, 0.1f };
 
-	pEffect->Begin(NULL, 0);
-	pEffect->BeginPass(0);
+	Engine::ThrowRenderTargetTexture(effect, L"Target_Albedo", "g_AlbedoTexture");
+	Engine::ThrowRenderTargetTexture(effect, L"Target_Shade", "g_ShadeTexture");
+	Engine::ThrowRenderTargetTexture(effect, L"Target_Distortion", "g_DistortionTexture");
+	Engine::ThrowRenderTargetTexture(effect, L"Target_Depth", "g_DepthTexture");
+
+	effect->SetVector("g_FogColor", &fogColor);
+	effect->SetFloat("g_FogDensity", m_fogDensity);
+
+	effect->Begin(NULL, 0);
+	effect->BeginPass(0);
 
 	device->SetStreamSource(0, m_VB, 0, sizeof(VTXSCREEN));
 	device->SetFVF(FVF_SCREEN);
 	device->SetIndices(m_IB);
 	device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
+	
+	effect->EndPass();
+	effect->End();
 
-	pEffect->EndPass();
-	pEffect->End();
-
-	SafeRelease(pEffect);
+	SafeRelease(effect);
 	SafeRelease(shader);
 }
 

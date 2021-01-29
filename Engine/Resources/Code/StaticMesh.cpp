@@ -4,7 +4,8 @@
 USING(Engine)
 
 CStaticMesh::CStaticMesh(LPDIRECT3DDEVICE9 device) :
-	CMesh(device)
+	CMesh(device),
+	m_normalTex(nullptr)
 {
 }
 
@@ -13,7 +14,8 @@ CStaticMesh::CStaticMesh(const CStaticMesh& rhs) :
 	m_subset(rhs.m_subset), m_mesh(rhs.m_mesh),
 	m_originMesh(rhs.m_originMesh), m_mtrl(rhs.m_mtrl),
 	m_subsetCnt(rhs.m_subsetCnt), m_numVtx(rhs.m_numVtx),
-	m_vtxPos(rhs.m_vtxPos), m_stride(rhs.m_stride)
+	m_vtxPos(rhs.m_vtxPos), m_stride(rhs.m_stride),
+	m_normalTex(rhs.m_normalTex)
 {
 	m_textures = new LPDIRECT3DTEXTURE9[rhs.m_subsetCnt];
 
@@ -152,10 +154,15 @@ void CStaticMesh::Render(LPD3DXEFFECT & effect)
 
 		effect->CommitChanges();
 
-		if (m_normalTex->IsBlue(i))
-			effect->BeginPass(1);
+		if (nullptr == m_normalTex)
+			effect->BeginPass(0);
 		else
-			effect->BeginPass(4);
+		{
+			if (m_normalTex->IsBlue(i))
+				effect->BeginPass(1);
+			else
+				effect->BeginPass(4);
+		}
 
 		m_mesh->DrawSubset(i);
 

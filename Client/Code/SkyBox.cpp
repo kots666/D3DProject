@@ -27,7 +27,7 @@ HRESULT CSkyBox::Ready()
 _int CSkyBox::Update(const _float& deltaTime)
 {
 	Engine::CGameObject::Update(deltaTime);
-	m_rendererCom->AddObject(Engine::RENDER_PRIORITY, this);
+	m_rendererCom->AddObject(Engine::RENDER_SKYBOX, this);
 
 	return 0;
 }
@@ -51,14 +51,10 @@ void CSkyBox::Render()
 	if (nullptr == effect) return;
 	Engine::SafeAddRef(effect);
 
-	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
-
 	effect->Begin(nullptr, 0);
-	effect->BeginPass(0);
 
+	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
 	m_meshCom->Render(effect);
-
-	effect->EndPass();
 	effect->End();
 
 	Engine::SafeRelease(effect);
@@ -86,6 +82,8 @@ HRESULT CSkyBox::AddComponent()
 	component = m_shaderCom = dynamic_cast<Engine::CShader*>(Engine::CloneComp(L"Proto_Shader_SkyBox"));
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Shader", component);
+
+	m_rendererCom->SetFogDensity(0.02f);
 
 	return S_OK;
 }

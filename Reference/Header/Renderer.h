@@ -24,9 +24,11 @@ public:
 
 public:
 	void SwitchShowMRT() { m_isShowMRT ^= true; }
+	void SetFogDensity(const _float& density) { m_fogDensity = density; }
 
 private:
 	void RenderPriority(LPDIRECT3DDEVICE9& device);
+	void RenderSkyBox(LPDIRECT3DDEVICE9& device);
 	void RenderNonAlpha(LPDIRECT3DDEVICE9& device);
 	void RenderDistort(LPDIRECT3DDEVICE9& device);
 	void RenderAlpha(LPDIRECT3DDEVICE9& device);
@@ -43,6 +45,7 @@ private:
 	LPDIRECT3DINDEXBUFFER9 m_IB;
 
 	_bool m_isShowMRT;
+	_float m_fogDensity;
 
 private:
 	virtual CComponent* Clone() { return nullptr; }

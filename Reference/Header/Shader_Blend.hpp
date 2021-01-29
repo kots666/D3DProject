@@ -28,6 +28,19 @@ sampler ShadeSampler = sampler_state
 	magfilter = linear;
 };
 
+texture			g_DepthTexture;
+
+sampler DepthSampler = sampler_state
+{
+	texture = g_DepthTexture;
+
+	minfilter = linear;
+	magfilter = linear;
+};
+
+float g_FogDensity;
+vector g_FogColor;
+
 struct PS_IN
 {
 	float2			vTexUV : TEXCOORD0;
@@ -47,6 +60,13 @@ PS_OUT PS_MAIN(PS_IN In)
 	vector		vShade = tex2D(ShadeSampler, In.vTexUV);
 
 	Out.vColor = vAlbedo * vShade;
+
+	vector vDepth = tex2D(DepthSampler, In.vTexUV);
+
+	float viewZ = vDepth.y * 1000.f;
+	float fogFactor = exp(-viewZ * g_FogDensity);
+
+	Out.vColor = fogFactor * Out.vColor + (1 - fogFactor) * g_FogColor;
 
 	return Out;
 }

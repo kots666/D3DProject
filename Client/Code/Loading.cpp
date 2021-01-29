@@ -379,12 +379,32 @@ HRESULT CLoading::LoadingForDynamicMeshNormalTextures()
 
 HRESULT CLoading::LoadingForStaticMeshNormalTextures()
 {
+	/*
+	CartCrash - Y
+	CatFish - Y
+	Gate - Y, B
+	House - Y, B
+	Props - Y
+	Props2 - Y
+	Props3 - Y, Y
+	Tree(KHJ) - Y
+	Tree(n) - Y
+	Tree(CWH) - B
+	VillageFloor - B, Y
+	Well - Y, B, Y
+	*/
+	_bool singleYellow[1] = { false };
+	_bool yellowBlue[2] = { false, true };
+	_bool doubleYellow[2] = { false, false };
+	_bool blueYellow[2] = { true, false };
+	_bool yellowBlueYellow[3] = { false, true, true };
+
 	// Anvil
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Anvil",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// Blocks01
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
@@ -405,28 +425,28 @@ HRESULT CLoading::LoadingForStaticMeshNormalTextures()
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Brazier",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// Broom
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Broom",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// CartCrash01
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_CartCrash01",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/CartCrash/WoodenGate_N.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/CartCrash/WoodenGate_N.tga", 1, singleYellow), E_FAIL);
 
 	// CatFish01
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_CatFish01",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/CatFish/catfish_N.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/CatFish/catfish_N.tga", 1, singleYellow), E_FAIL);
 
 	// CircleBlock01
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
@@ -447,14 +467,14 @@ HRESULT CLoading::LoadingForStaticMeshNormalTextures()
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_DistantHouse01",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2, yellowBlue), E_FAIL);
 
 	// DistantHouse02
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_DistantHouse02",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2, yellowBlue), E_FAIL);
 
 	// EachBlock
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
@@ -468,28 +488,28 @@ HRESULT CLoading::LoadingForStaticMeshNormalTextures()
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Fence01",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// Fence02
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Fence02",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// Fence03
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Fence03",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// FishCart1
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_FishCart1",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// FloorCircle01
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
@@ -517,245 +537,245 @@ HRESULT CLoading::LoadingForStaticMeshNormalTextures()
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Fruit",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// Gate01
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Gate01",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Gate/Gate_N_0.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Gate/Gate_N_0.tga", 1, singleYellow), E_FAIL);
 
 	// Gate02 roof¸¸
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Gate02",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Gate/Gate_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Gate/Gate_N_%d.tga", 2, yellowBlue), E_FAIL);
 
 	// Gibbet
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Gibbet",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// House01
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_House01",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2, yellowBlue), E_FAIL);
 
 	// House02
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_House02",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2, yellowBlue), E_FAIL);
 
 	// House02b
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Houe02b",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2, yellowBlue), E_FAIL);
 
 	// House03
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_House03",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2, yellowBlue), E_FAIL);
 
 	// House03b
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_House03b",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2, yellowBlue), E_FAIL);
 
 	// House03c
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_House03c",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2, yellowBlue), E_FAIL);
 
 	// House04
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_House04",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2, yellowBlue), E_FAIL);
 
 	// House04b
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_House04b",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2, yellowBlue), E_FAIL);
 
 	// House05
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_House05",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2, yellowBlue), E_FAIL);
 
 	// House06
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_House06",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2, yellowBlue), E_FAIL);
 
 	// House07
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_House07",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2, yellowBlue), E_FAIL);
 
 	// House08
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_House08",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2, yellowBlue), E_FAIL);
 
 	// House09
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_House09",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/House/House_N_%d.tga", 2, yellowBlue), E_FAIL);
 
 	// HouseWall house¸¸
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_HouseWall",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/House/House_N_0.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/House/House_N_0.tga", 1, singleYellow), E_FAIL);
 
 	// Manger
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Manger",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props3/Props_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props3/Props_N_%d.tga", 2, doubleYellow), E_FAIL);
 
 	// NoticeBoard
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_NoticeBoard",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// OwlStatue
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_OwlStatue",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props2/FieldVillage_Props02_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props2/FieldVillage_Props02_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// Pack01
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Pack01",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props2/FieldVillage_Props02_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props2/FieldVillage_Props02_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// Pack02
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Pack02",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props2/FieldVillage_Props02_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props2/FieldVillage_Props02_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// Pumpkin
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Pumpkin",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props2/FieldVillage_Props02_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props2/FieldVillage_Props02_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// Ramp01
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Ramp01",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// Ramp02
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Ramp02",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// ShopStand01
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_ShopStand01",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props3/Props_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props3/Props_N_%d.tga", 2, doubleYellow), E_FAIL);
 
 	// ShopStand02
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_ShopStand02",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props3/Props_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props3/Props_N_%d.tga", 2, doubleYellow), E_FAIL);
 
 	// Sign01
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Sign01",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props2/FieldVillage_Props02_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props2/FieldVillage_Props02_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// Sign02
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Sign02",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props2/FieldVillage_Props02_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props2/FieldVillage_Props02_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// Table01
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Table01",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// Tree01 KHJ
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Tree01",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Tree/FieldVillage_Tree01_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Tree/FieldVillage_Tree01_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// Tree02
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Tree02",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Tree/FieldVillage_tree01_N.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Tree/FieldVillage_tree01_N.tga", 1, singleYellow), E_FAIL);
 
 	// Tree03
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Tree03",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Tree/FieldVillage_tree01_N.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Tree/FieldVillage_tree01_N.tga", 1, singleYellow), E_FAIL);
 
 	// Tree04 KHJ
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Tree04",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Tree/FieldVillage_Tree01_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Tree/FieldVillage_Tree01_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// Trees CWH
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
@@ -769,7 +789,7 @@ HRESULT CLoading::LoadingForStaticMeshNormalTextures()
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_VillageCircle01",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/VillageFloor/VillageFloor_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/VillageFloor/VillageFloor_N_%d.tga", 2, blueYellow), E_FAIL);
 
 	// VillageCircle02 ³«¿±±æ¸¸
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
@@ -783,7 +803,7 @@ HRESULT CLoading::LoadingForStaticMeshNormalTextures()
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_VillageCircle03",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/VillageFloor/VillageFloor_N_%d.tga", 2), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/VillageFloor/VillageFloor_N_%d.tga", 2, blueYellow), E_FAIL);
 
 	// VillageCircle04 µ¹´óÀÌ
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
@@ -853,14 +873,14 @@ HRESULT CLoading::LoadingForStaticMeshNormalTextures()
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Well",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Well/Well_N_%d.tga", 3), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Well/Well_N_%d.tga", 3, yellowBlueYellow), E_FAIL);
 
 	// Wheel
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
 		L"Mesh_Wheel",
 		Engine::TEX_NORMAL,
-		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga"), E_FAIL);
+		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	_int staticNormalTex = 69;
 

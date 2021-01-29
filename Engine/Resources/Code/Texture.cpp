@@ -18,6 +18,11 @@ CTexture::CTexture(const CTexture& rhs) :
 
 	for (_uint i = 0; i < size; ++i)
 		SafeAddRef(m_texVec[i]);
+
+	_uint boolSize = rhs.m_blueVec.size();
+	m_blueVec.reserve(boolSize);
+
+	m_blueVec = rhs.m_blueVec;
 }
 
 CTexture::~CTexture()

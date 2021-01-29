@@ -20,6 +20,7 @@ HRESULT CMainApp::Ready()
 
 	FAILED_CHECK_RETURN(Engine::ReadyFont(m_device, L"Font_Default", L"¹ÙÅÁ", 15, 20, FW_HEAVY), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::ReadyFont(m_device, L"Font_Jinji", L"±Ã¼­", 30, 30, FW_HEAVY), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::ReadyFont(m_device, L"Font_Square", L"³ª´®½ºÄù¾î", 20, 25, FW_REGULAR), E_FAIL);
 
 	Engine::ReadyDirectInput(g_hInst, g_hWnd);
 
@@ -78,8 +79,10 @@ void CMainApp::Render()
 	if (nullptr == m_managementClass) return;
 
 	Engine::RenderBegin(D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.f));
-
 	m_managementClass->RenderScene(m_device);
+
+	Engine::RenderFont(L"Font_Square", m_fps, &_vec2(WINCX - 300, 10.f), D3DXCOLOR(1.f, 1.f, 0.f, 1.f));
+	/*
 	Engine::RenderFont(L"Font_Jinji", m_fps, &_vec2(WINCX - 300, 10.f), D3DXCOLOR(1.f, 1.f, 0.f, 1.f));
 
 	_tchar questStep[40];
@@ -97,6 +100,7 @@ void CMainApp::Render()
 			wsprintf(quest, L"Äù½ºÆ® ¹Þ¾Æ¾ßÇÔ");
 	}
 	Engine::RenderFont(L"Font_Jinji", quest, &_vec2(WINCX - 300, 150.f), D3DXCOLOR(1.f, 1.f, 0.f, 1.f));
+	*/
 
 	Engine::RenderEnd();
 }
