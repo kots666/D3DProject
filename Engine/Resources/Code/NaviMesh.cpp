@@ -85,6 +85,20 @@ HRESULT CNaviMesh::LoadNaviMesh()
 	CloseHandle(hFile);
 }
 
+_bool CNaviMesh::UpdateCurrentIndex(const _vec3 * pos)
+{
+	_ulong size = m_vecCell.size();
+	for (_ulong i = 0; i < size; ++i)
+	{
+		if (m_vecCell[i]->IsInCell(pos))
+		{
+			m_index = i;
+			return true;
+		}
+	}
+	return false;
+}
+
 void CNaviMesh::Render()
 {
 	for (auto& iter : m_vecCell)

@@ -21,6 +21,8 @@ HRESULT CTerrain::Ready()
 	FAILED_CHECK_RETURN(Engine::ReadyBuffer(m_device, Engine::RESOURCE_STAGE, L"Buffer_TerrainTex", Engine::BUFFER_TERRAINTEX, 129, 129), E_FAIL);
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
+	m_transCom->SetPos(-30.f, 0.f, -30.f);
+
 	return S_OK;
 }
 
@@ -64,7 +66,7 @@ HRESULT CTerrain::AddComponent()
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Buffer", comp);
 
 	// texture
-	comp = m_texCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Texture_Terrain"));
+	comp = m_texCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Texture_TerrainFlat"));
 	NULL_CHECK_RETURN(comp, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Texture", comp);
 
@@ -99,9 +101,11 @@ HRESULT CTerrain::SetUpConstantTable(LPD3DXEFFECT & effect)
 	effect->SetMatrix("g_matView", &viewMat);
 	effect->SetMatrix("g_matProj", &projMat);
 
-	effect->SetFloat("g_detail", 129.f);
+	effect->SetFloat("g_detail", 16.f);
 
 	m_texCom->SetTexture(effect, "g_BaseTexture");
+
+	effect->CommitChanges();
 
 	return S_OK;
 }

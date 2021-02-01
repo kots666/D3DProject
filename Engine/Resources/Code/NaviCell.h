@@ -23,6 +23,7 @@ public:
 	void Render();
 
 public:
+	_bool IsInCell(const _vec3* pos);
 	_bool ComparePoint(const _vec3* firstPoint, const _vec3* secondPoint, CNaviCell* cell);
 	MOVESTATE CompareCell(const _vec3* endPos, _ulong* cellIndex, _vec3* normalVec);
 

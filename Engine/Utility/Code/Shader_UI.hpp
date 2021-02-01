@@ -117,7 +117,7 @@ technique Default_Device
 	pass
 	{
 		alphatestenable = true;
-		alpharef = 100;
+		alpharef = 150;
 		alphafunc = greater;
 
 		vertexshader = compile vs_3_0 VS_MAIN();

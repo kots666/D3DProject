@@ -16,8 +16,12 @@ sampler BaseSampler = sampler_state
 };
 
 float g_Percent;
-float g_Offset;
-int g_Step;
+float g_uOffset;
+float g_vOffset;
+int g_uStep;
+int g_vStep;
+
+vector g_Color;
 
 
 struct	VS_IN 
@@ -45,12 +49,9 @@ VS_OUT VS_MAIN(VS_IN In)
 	
 	Out.vPosition = mul(vector(In.vPosition.xyz, 1.f), matWVP);
 
-	int y = g_Step / 3;
-	int x = g_Step % 3;
-
 	float2 texUV = In.vTexUV;
-	texUV.x = (g_Offset * texUV.x) + x * g_Offset;
-	texUV.y = (g_Offset * texUV.y) + y * g_Offset;
+	texUV.x = (g_uOffset * texUV.x) + g_uStep * g_uOffset;
+	texUV.y = (g_vOffset * texUV.y) + g_vStep * g_vOffset;
 
 	Out.vTexUV = texUV;
 
@@ -74,12 +75,7 @@ PS_OUT		PS_MAIN(PS_IN In)
 
 	Out.vColor = tex2D(BaseSampler, In.vTexUV);	// 2차원 텍스처로부터 uv좌표에 해당하는 색을 얻어오는 함수, 반환 타입이 vector 타입
 
-	vector color = vector(1.f, 1.f, 0.83f, 1.f);
-
-	Out.vColor *= color;
-
-	Out.vColor.r *= 3.f;
-	Out.vColor.g *= 3.f;
+	Out.vColor *= g_Color;
 
 	return Out;
 }

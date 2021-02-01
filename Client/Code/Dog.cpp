@@ -47,6 +47,11 @@ HRESULT CDog::Ready()
 
 	CHPUIManager::GetInstance()->Create(m_device, this);
 
+	_vec3 pos;
+	m_transCom->GetInfo(Engine::INFO_POS, &pos);
+
+	m_naviMeshCom->UpdateCurrentIndex(&pos);
+
 	return S_OK;
 }
 
@@ -76,7 +81,9 @@ _int CDog::Update(const _float& deltaTime)
 
 			_vec3 moveDist = nowPos + nowDir;
 
-			m_transCom->SetPos(moveDist);
+			_vec3 movePos = m_naviMeshCom->MoveOnNaviMesh(&nowPos, &nowDir);
+
+			m_transCom->SetPos(movePos);
 		}
 
 		for (auto& elem : m_hitCollider)
@@ -101,6 +108,11 @@ _int CDog::Update(const _float& deltaTime)
 	Engine::CGameObject::Update(deltaTime);
 
 	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
+
+	_vec3 pos;
+	m_transCom->GetInfo(Engine::INFO_POS, &pos);
+
+	m_naviMeshCom->UpdateCurrentIndex(&pos);
 
 	return 0;
 }
@@ -147,8 +159,6 @@ void CDog::HitColliderOverlapped(Engine::CGameObject * causer)
 		DoDeadAnim();
 	}
 
-	//cout << "Hit by Player" << endl;
-
 	Engine::CTransform* causerTrans = dynamic_cast<Engine::CTransform*>(causer->GetComponent(L"Com_Transform", Engine::ID_DYNAMIC));
 	if (nullptr == causerTrans) return;
 
@@ -162,9 +172,15 @@ void CDog::HitColliderOverlapped(Engine::CGameObject * causer)
 	_vec3 myPos;
 	m_transCom->GetInfo(Engine::INFO_POS, &myPos);
 
-	myPos.y += 1.f;
+	_vec3 spawnPos = pos - myPos;
+	spawnPos *= 0.6f;
 
-	CHitManager::GetInstance()->Spawn(myPos, 2.f);
+	spawnPos.y += 1.f;
+
+	spawnPos += myPos;
+
+	CHitManager::GetInstance()->SpawnHitEffect(spawnPos);
+	CHitManager::GetInstance()->SpawnHitSlash(spawnPos, 1.6f, 8.f);
 }
 
 HRESULT CDog::AddComponent()
@@ -379,9 +395,13 @@ void CDog::DoChase(const _vec3 & target, const _vec3 & myPos, const _float & del
 		_vec3 dir = target - myPos;
 		D3DXVec3Normalize(&dir, &dir);
 
-		dir *= deltaTime * m_speed;
+		//dir *= deltaTime * m_speed;
 
-		m_transCom->MovePos(&dir);
+		_vec3 finalPos = m_naviMeshCom->MoveOnNaviMesh(&myPos, &(dir * deltaTime * m_speed));
+
+		m_transCom->SetPos(finalPos);
+
+		cout << finalPos.x << "\t" << finalPos.y << "\t" << finalPos.z << endl;
 
 		m_meshCom->SetAnimation(4, 0.15f, 0.01f, false);
 	}

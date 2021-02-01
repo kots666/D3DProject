@@ -16,6 +16,12 @@
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
+
+#include <io.h>
+
+#include "fmod.h"
+#pragma comment(lib, "fmodex_vc.lib")
+
 #include "Export_Function.h"
 #include "ColliderManager.h"
 #include "SpawnManager.h"
@@ -24,6 +30,7 @@
 #include "FontManager.h"
 #include "HitManager.h"
 #include "QuestManager.h"
+#include "SoundManager.h"
 
 // TODO: 프로그램에 필요한 추가 헤더는 여기에서 참조합니다.
 #include <d3d9.h>

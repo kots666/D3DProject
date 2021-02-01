@@ -45,7 +45,7 @@ Client::_int Client::CHPUI::Update(const _float& deltaTime)
 	if (m_isFixed)
 		m_rendererCom->AddObject(Engine::RENDER_UI, this);
 	else
-		m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
+		m_rendererCom->AddObject(Engine::RENDER_ALPHA, this);
 
 	D3DXMatrixOrthoLH(&m_projMat, WINCX, WINCY, 0.f, 1.f);
 
@@ -85,7 +85,7 @@ void Client::CHPUI::Render()
 		effect->BeginPass(1);
 	else if (m_isFixed)
 		effect->BeginPass(1);
-	else
+	else if (!m_isFixed)
 		effect->BeginPass(2);
 
 	m_bufferCom->Render();
@@ -209,6 +209,8 @@ HRESULT CHPUI::SetUpConstantTable(LPD3DXEFFECT & effect)
 
 		m_textureCom->SetTexture(effect, "g_BaseTexture");
 	}
+
+	effect->CommitChanges();
 
 	return S_OK;
 }

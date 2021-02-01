@@ -3,6 +3,7 @@
 #include "DynamicMesh.h"
 #include "Transform.h"
 #include "Texture.h"
+#include "InteractionUI.h"
 
 CNPC::CNPC(LPDIRECT3DDEVICE9 device, const _vec3& pos, const _float& angle) :
 	Engine::CGameObject(device),
@@ -49,6 +50,14 @@ _int CNPC::Update(const _float& deltaTime)
 		elem->UpdateByBone(m_transCom->GetWorldMatrix());
 	}
 
+	if (nullptr != m_interactionUI)
+	{
+		if (m_interactionUI->GetActive())
+		{
+			m_interactionUI->SetActive(false);
+		}
+	}
+
 	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
 
 	return 0;
@@ -71,11 +80,6 @@ void CNPC::Render()
 	effect->End();
 
 	Engine::SafeRelease(effect);
-
-	for (auto& elem : m_hitCollider)
-	{
-		elem->Render();
-	}
 }
 
 void CNPC::HitColliderOverlapped(Engine::CGameObject * causer)
@@ -84,6 +88,20 @@ void CNPC::HitColliderOverlapped(Engine::CGameObject * causer)
 	{
 		CQuestManager::GetInstance()->QuestProgress();
 	}
+
+	if (nullptr == m_interactionUI)
+	{
+		m_interactionUI = CInteractionUI::Create(m_device, L"Texture_Interaction");
+		
+		Engine::GetCurScene()->GetLayer(L"Environment")->AddGameObject(L"NPC_InterActionUI", m_interactionUI);
+	}
+
+	_vec3 pos;
+	m_transCom->GetInfo(Engine::INFO_POS, &pos);
+
+	pos.y += 2.5f;
+
+	m_interactionUI->SetActive(pos, 2.2f, 0.36f);
 }
 
 HRESULT CNPC::AddComponent()

@@ -93,9 +93,9 @@ void CQuestManager::CreateTalkUI(const _int& index)
 		Engine::CGraphicDevice::GetInstance()->GetDevice(),
 		index,
 		0,
-		WINCY - 200,
+		WINCY - 300,
 		WINCX,
-		200
+		300
 	);
 
 	_tchar* name = new _tchar[10];
@@ -118,9 +118,9 @@ void CQuestManager::CreateIlustUI(const _int & index)
 		Engine::CGraphicDevice::GetInstance()->GetDevice(),
 		0,
 		0,
-		WINCY - 400,
-		200,
-		200,
+		WINCY - 812,
+		512,
+		512,
 		true
 	);
 

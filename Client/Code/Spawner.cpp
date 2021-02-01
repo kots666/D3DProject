@@ -50,10 +50,10 @@ _int CSpawner::Update(const _float& deltaTime)
 void CSpawner::Render()
 {
 #ifdef _DEBUG
-	for (auto& elem : m_hitCollider)
-	{
-		elem->Render();
-	}
+	//for (auto& elem : m_hitCollider)
+	//{
+	//	elem->Render();
+	//}
 //
 //	for (auto& elem : m_attackCollider)
 //	{

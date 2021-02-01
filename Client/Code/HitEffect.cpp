@@ -9,9 +9,13 @@ CHitEffect::CHitEffect(LPDIRECT3DDEVICE9 device) :
 
 }
 
-CHitEffect::CHitEffect(LPDIRECT3DDEVICE9 device, const _vec3 & pos, const _float& lifeTime) :
+CHitEffect::CHitEffect(LPDIRECT3DDEVICE9 device, const _vec4 & color, const _tchar * texName, const _int & uCnt, const _int & vCnt, const _bool & isRandRot, const _int & passIndex, const _float & lifeTime) :
 	Engine::CGameObject(device),
-	m_pos(pos),
+	m_color(color),
+	m_textureName(texName),
+	m_uCnt(uCnt), m_vCnt(vCnt),
+	m_isRandomRotation(isRandRot),
+	m_passIndex(passIndex),
 	m_lifeTime(lifeTime),
 	m_accTime(0.f),
 	m_isActive(false)
@@ -27,9 +31,12 @@ HRESULT Client::CHitEffect::Ready()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_offset = 1 / 3.f;
-	m_size = 1.f;
+	m_uOffset = 1.f / m_uCnt;
+	m_vOffset = 1.f / m_vCnt;
+
 	m_step = 0;
+
+	RandRotMatrix();
 
 	return S_OK;
 }
@@ -42,7 +49,10 @@ Client::_int Client::CHitEffect::Update(const _float& deltaTime)
 
 		m_accTime += deltaTime;
 
-		m_step = (m_accTime / m_lifeTime) * 9.f;
+		m_step = (m_accTime / m_lifeTime) * m_uCnt * m_vCnt;
+
+		m_uStep = m_step % m_uCnt;
+		m_vStep = m_step / m_uCnt;
 
 		if (m_accTime > m_lifeTime)
 		{
@@ -68,7 +78,7 @@ void Client::CHitEffect::Render()
 		FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
 
 		effect->Begin(nullptr, 0);
-		effect->BeginPass(0);
+		effect->BeginPass(m_passIndex);
 
 		m_bufferCom->Render();
 
@@ -79,12 +89,18 @@ void Client::CHitEffect::Render()
 	}
 }
 
-void CHitEffect::SetActive(const _vec3 & pos, const _float& size, const _float & lifeTime)
+void CHitEffect::SetActive(const _vec3 & pos, const _float& xSize, const _float& ySize, const _float & lifeTime)
 {
 	m_pos = pos;
-	m_size = size;
+	m_size[0] = xSize;
+	m_size[1] = ySize;
+
+	m_accTime = 0.f;
+	m_step = 0;
 	m_lifeTime = lifeTime;
 	m_isActive = true;
+
+	RandRotMatrix();
 }
 
 HRESULT Client::CHitEffect::AddComponent()
@@ -97,7 +113,7 @@ HRESULT Client::CHitEffect::AddComponent()
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Buffer", component);
 
 	// texture
-	component = m_textureCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Texture_HitEffect"));
+	component = m_textureCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_STAGE, m_textureName));
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Texture", component);
 
@@ -141,7 +157,7 @@ HRESULT CHitEffect::SetUpConstantTable(LPD3DXEFFECT & effect)
 	{
 		for (_int j = 0; j < 4; ++j)
 		{
-			matWorld.m[i][j] *= m_size;
+			matWorld.m[i][j] *= m_size[i];
 		}
 	}
 
@@ -149,21 +165,42 @@ HRESULT CHitEffect::SetUpConstantTable(LPD3DXEFFECT & effect)
 	matWorld._42 = m_pos.y;
 	matWorld._43 = m_pos.z;
 
+	if (m_isRandomRotation)
+	{
+		matWorld = m_rotMat * matWorld;
+	}
+
 	effect->SetMatrix("g_matWorld", &matWorld);
 	effect->SetMatrix("g_matView", &matView);
 	effect->SetMatrix("g_matProj", &matProj);
 
 	m_textureCom->SetTexture(effect, "g_BaseTexture");
 
-	effect->SetInt("g_Step", m_step);
-	effect->SetFloat("g_Offset", m_offset);
+	effect->SetInt("g_uStep", m_uStep);
+	effect->SetInt("g_vStep", m_vStep);
+	effect->SetFloat("g_uOffset", m_uOffset);
+	effect->SetFloat("g_vOffset", m_vOffset);
+
+	effect->SetVector("g_Color", &m_color);
+
+	effect->CommitChanges();
 
 	return S_OK;
 }
 
-CHitEffect * CHitEffect::Create(LPDIRECT3DDEVICE9 device, const _vec3 & pos, const _float& lifeTime)
+void CHitEffect::RandRotMatrix()
 {
-	CHitEffect* instance = new CHitEffect(device, pos, lifeTime);
+	if (m_isRandomRotation)
+	{
+		_int degree = rand() % 360;
+
+		D3DXMatrixRotationZ(&m_rotMat, D3DXToRadian(90));
+	}
+}
+
+CHitEffect * CHitEffect::Create(LPDIRECT3DDEVICE9 device, const _vec4 & color, const _tchar * texName, const _int & uCnt, const _int & vCnt, const _bool & isRandRot, const _int & passIndex, const _float & lifeTime)
+{
+	CHitEffect* instance = new CHitEffect(device, color, texName, uCnt, vCnt, isRandRot, passIndex, lifeTime);
 
 	if (FAILED(instance->Ready()))
 		Client::SafeRelease(instance);

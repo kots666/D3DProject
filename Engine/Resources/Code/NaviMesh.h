@@ -17,6 +17,7 @@ private:
 public:
 	HRESULT Ready();
 	HRESULT LoadNaviMesh();
+	_bool UpdateCurrentIndex(const _vec3* pos);
 	void Render();
 
 public:

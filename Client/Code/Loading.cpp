@@ -163,6 +163,13 @@ _uint CLoading::LoadingForStage()
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(
 		m_device,
 		Engine::RESOURCE_STAGE,
+		L"Texture_HitSlash",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/Effect/HitSlash3.png"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
 		L"Texture_Ilust",
 		Engine::TEX_NORMAL,
 		L"../Resource/Texture/Quest/Ilust%d.tga", 2), E_FAIL);
@@ -174,7 +181,21 @@ _uint CLoading::LoadingForStage()
 		Engine::TEX_NORMAL,
 		L"../Resource/Texture/Quest/%d.png", 5), E_FAIL);
 
-	_int textureCnt = 13;
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Texture_Interaction",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/Quest/Interaction.png"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Texture_TerrainFlat",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/Terrain/LV_B2_Prototype_Floor02_D.tga"), E_FAIL);
+
+	_int textureCnt = 14;
 	m_nowLoad += textureCnt;
 
 	LoadingForDynamicMeshNormalTextures();

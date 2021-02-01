@@ -100,14 +100,14 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../Reference/Header;.;../../Base;../Code;../Header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Reference/Header;.;../../Base;../Code;../Header;./FMOD/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d9.lib;d3dx9.lib;dxguid.lib;System.lib;Resources.lib;Utility.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;dxguid.lib;System.lib;Resources.lib;Utility.lib;fmodex_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
-      <AdditionalLibraryDirectories>../../Reference/Library;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../Reference/Library;./FMOD/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -188,6 +188,7 @@
     <ClInclude Include="..\Code\HitManager.h" />
     <ClInclude Include="..\Code\HPUI.h" />
     <ClInclude Include="..\Code\HPUIManager.h" />
+    <ClInclude Include="..\Code\InteractionUI.h" />
     <ClInclude Include="..\Code\Loading.h" />
     <ClInclude Include="..\Code\Logo.h" />
     <ClInclude Include="..\Code\MainApp.h" />
@@ -197,6 +198,7 @@
     <ClInclude Include="..\Code\PlayTimeManager.h" />
     <ClInclude Include="..\Code\QuestManager.h" />
     <ClInclude Include="..\Code\SkyBox.h" />
+    <ClInclude Include="..\Code\SoundManager.h" />
     <ClInclude Include="..\Code\Spawner.h" />
     <ClInclude Include="..\Code\SpawnManager.h" />
     <ClInclude Include="..\Code\Stage.h" />
@@ -237,6 +239,7 @@
     <ClCompile Include="..\Code\HitManager.cpp" />
     <ClCompile Include="..\Code\HPUI.cpp" />
     <ClCompile Include="..\Code\HPUIManager.cpp" />
+    <ClCompile Include="..\Code\InteractionUI.cpp" />
     <ClCompile Include="..\Code\Loading.cpp" />
     <ClCompile Include="..\Code\Logo.cpp" />
     <ClCompile Include="..\Code\MainApp.cpp" />
@@ -246,6 +249,7 @@
     <ClCompile Include="..\Code\PlayTimeManager.cpp" />
     <ClCompile Include="..\Code\QuestManager.cpp" />
     <ClCompile Include="..\Code\SkyBox.cpp" />
+    <ClCompile Include="..\Code\SoundManager.cpp" />
     <ClCompile Include="..\Code\Spawner.cpp" />
     <ClCompile Include="..\Code\SpawnManager.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />

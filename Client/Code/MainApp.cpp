@@ -24,6 +24,10 @@ HRESULT CMainApp::Ready()
 
 	Engine::ReadyDirectInput(g_hInst, g_hWnd);
 
+	CSoundManager::GetInstance()->Initialize();
+
+	CSoundManager::PlayBGM(L"MainTitle.OGG");
+
 	CSpawnManager::GetInstance()->Ready(m_device);
 
 	return S_OK;
@@ -151,6 +155,7 @@ void CMainApp::Free()
 	CFontManager::DestroyInstance();
 	CHitManager::DestroyInstance();
 	CQuestManager::DestroyInstance();
+	CSoundManager::Destroy();
 
 	Client::SafeRelease(m_device);
 

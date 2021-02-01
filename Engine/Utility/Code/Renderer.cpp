@@ -220,7 +220,7 @@ void CRenderer::RenderBlend(LPDIRECT3DDEVICE9 & device)
 	LPD3DXEFFECT effect = shader->GetEffectHandle();
 	SafeAddRef(effect);
 
-	_vec4 fogColor = { 0.3f, 0.3f, 0.3f, 0.1f };
+	_vec4 fogColor = { 0.8627f, 0.8588f, 0.8745f, 1.f };
 
 	Engine::ThrowRenderTargetTexture(effect, L"Target_Albedo", "g_AlbedoTexture");
 	Engine::ThrowRenderTargetTexture(effect, L"Target_Shade", "g_ShadeTexture");

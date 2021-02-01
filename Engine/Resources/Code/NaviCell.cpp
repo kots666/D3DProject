@@ -82,6 +82,17 @@ void CNaviCell::Render()
 #endif
 }
 
+_bool CNaviCell::IsInCell(const _vec3 * pos)
+{
+	for (_ulong i = 0; i < LINE_END; ++i)
+	{
+		if (CNaviLine::COMPARE_LEFT == m_line[i]->Compare(&_vec2(pos->x, pos->z)))
+			return false;
+	}
+
+	return true;
+}
+
 _bool CNaviCell::ComparePoint(const _vec3* firstPoint, const _vec3* secondPoint, CNaviCell* cell)
 {
 	if (*firstPoint == m_point[POINT_A])

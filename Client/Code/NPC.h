@@ -15,6 +15,7 @@ class CTexture;
 END
 
 BEGIN(Client)
+class CInteractionUI;
 
 class CTerrain;
 
@@ -45,6 +46,8 @@ private:
 	Engine::CRenderer* m_rendererCom = nullptr;
 	Engine::CShader* m_shaderCom = nullptr;
 	Engine::CTexture* m_normalCom = nullptr;
+
+	CInteractionUI* m_interactionUI = nullptr;
 
 	_float m_angle;
 	_vec3 m_startPosition;
