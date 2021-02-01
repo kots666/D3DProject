@@ -1,15 +1,15 @@
 #include "stdafx.h"
-#include "HitEffect.h"
-#include "RCTex.h"
+#include "CrossEffect.h"
+#include "CrossTex.h"
 #include "Texture.h"
 
-CHitEffect::CHitEffect(LPDIRECT3DDEVICE9 device) :
+CCrossEffect::CCrossEffect(LPDIRECT3DDEVICE9 device) :
 	Engine::CGameObject(device)
 {
 
 }
 
-CHitEffect::CHitEffect(LPDIRECT3DDEVICE9 device, const _vec4 & color, const _tchar * texName, const _int & uCnt, const _int & vCnt, const _bool & isRandRot, const _int & passIndex, const _float & lifeTime) :
+CCrossEffect::CCrossEffect(LPDIRECT3DDEVICE9 device, const _vec4 & color, const _tchar * texName, const _int & uCnt, const _int & vCnt, const _bool & isRandRot, const _int & passIndex, const _float & lifeTime) :
 	Engine::CGameObject(device),
 	m_color(color),
 	m_textureName(texName),
@@ -23,12 +23,12 @@ CHitEffect::CHitEffect(LPDIRECT3DDEVICE9 device, const _vec4 & color, const _tch
 {
 }
 
-CHitEffect::~CHitEffect()
+CCrossEffect::~CCrossEffect()
 {
 
 }
 
-HRESULT Client::CHitEffect::Ready()
+HRESULT Client::CCrossEffect::Ready()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
@@ -42,7 +42,7 @@ HRESULT Client::CHitEffect::Ready()
 	return S_OK;
 }
 
-Client::_int Client::CHitEffect::Update(const _float& deltaTime)
+Client::_int Client::CCrossEffect::Update(const _float& deltaTime)
 {
 	if (m_isActive)
 	{
@@ -67,7 +67,7 @@ Client::_int Client::CHitEffect::Update(const _float& deltaTime)
 	return 0;
 }
 
-void Client::CHitEffect::Render()
+void Client::CCrossEffect::Render()
 {
 	if (m_isActive)
 	{
@@ -90,7 +90,7 @@ void Client::CHitEffect::Render()
 	}
 }
 
-void CHitEffect::SetActive(const _vec3 & pos, const _float& xSize, const _float& ySize, const _float & lifeTime)
+void CCrossEffect::SetActive(const _vec3 & pos, const _float& xSize, const _float& ySize, const _float & lifeTime)
 {
 	m_pos = pos;
 	m_transformCom->SetPos(pos);
@@ -107,12 +107,12 @@ void CHitEffect::SetActive(const _vec3 & pos, const _float& xSize, const _float&
 	RandRotMatrix();
 }
 
-HRESULT Client::CHitEffect::AddComponent()
+HRESULT Client::CCrossEffect::AddComponent()
 {
 	Engine::CComponent* component = nullptr;
 
 	// buffer
-	component = m_bufferCom = dynamic_cast<Engine::CRCTex*>(Engine::CloneResource(Engine::RESOURCE_STATIC, L"Buffer_RCTex"));
+	component = m_bufferCom = dynamic_cast<Engine::CCrossTex*>(Engine::CloneResource(Engine::RESOURCE_STATIC, L"Buffer_CrossTex"));
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Buffer", component);
 
@@ -140,7 +140,7 @@ HRESULT Client::CHitEffect::AddComponent()
 	return S_OK;
 }
 
-HRESULT CHitEffect::SetUpConstantTable(LPD3DXEFFECT & effect)
+HRESULT CCrossEffect::SetUpConstantTable(LPD3DXEFFECT & effect)
 {
 	_matrix matWorld, matBill, matView, matProj;
 	D3DXMatrixIdentity(&matBill);
@@ -156,6 +156,8 @@ HRESULT CHitEffect::SetUpConstantTable(LPD3DXEFFECT & effect)
 	D3DXMatrixInverse(&matBill, nullptr, &matBill);
 
 	matWorld = matBill * *m_transformCom->GetWorldMatrix();
+
+	matWorld = *m_transformCom->GetWorldMatrix();
 
 	effect->SetMatrix("g_matWorld", &matWorld);
 	effect->SetMatrix("g_matView", &matView);
@@ -175,7 +177,7 @@ HRESULT CHitEffect::SetUpConstantTable(LPD3DXEFFECT & effect)
 	return S_OK;
 }
 
-void CHitEffect::RandRotMatrix()
+void CCrossEffect::RandRotMatrix()
 {
 	if (m_isRandomRotation)
 	{
@@ -185,9 +187,9 @@ void CHitEffect::RandRotMatrix()
 	}
 }
 
-CHitEffect * CHitEffect::Create(LPDIRECT3DDEVICE9 device, const _vec4 & color, const _tchar * texName, const _int & uCnt, const _int & vCnt, const _bool & isRandRot, const _int & passIndex, const _float & lifeTime)
+CCrossEffect * CCrossEffect::Create(LPDIRECT3DDEVICE9 device, const _vec4 & color, const _tchar * texName, const _int & uCnt, const _int & vCnt, const _bool & isRandRot, const _int & passIndex, const _float & lifeTime)
 {
-	CHitEffect* instance = new CHitEffect(device, color, texName, uCnt, vCnt, isRandRot, passIndex, lifeTime);
+	CCrossEffect* instance = new CCrossEffect(device, color, texName, uCnt, vCnt, isRandRot, passIndex, lifeTime);
 
 	if (FAILED(instance->Ready()))
 		Client::SafeRelease(instance);
@@ -195,7 +197,7 @@ CHitEffect * CHitEffect::Create(LPDIRECT3DDEVICE9 device, const _vec4 & color, c
 	return instance;
 }
 
-void CHitEffect::Free()
+void CCrossEffect::Free()
 {
 	Engine::CGameObject::Free();
 }

@@ -55,6 +55,9 @@
     <Filter Include="00. Resources\00. VIBuffer\04. TrailRect">
       <UniqueIdentifier>{46dd8628-953f-463e-951e-ba8266fbbd63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00. Resources\00. VIBuffer\05. CrossTex">
+      <UniqueIdentifier>{ebbc80f9-db50-4ee6-9550-30b22592c45e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Resources.cpp">
@@ -107,6 +110,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\TrailRect.cpp">
       <Filter>00. Resources\00. VIBuffer\04. TrailRect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CrossTex.cpp">
+      <Filter>00. Resources\00. VIBuffer\05. CrossTex</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\TrailRect.h">
       <Filter>00. Resources\00. VIBuffer\04. TrailRect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\CrossTex.h">
+      <Filter>00. Resources\00. VIBuffer\05. CrossTex</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

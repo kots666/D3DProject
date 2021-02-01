@@ -294,6 +294,9 @@
     <ClInclude Include="..\Code\SoundManager.h">
       <Filter>02. GameObject\02. Public\09. SoundManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\CrossEffect.h">
+      <Filter>02. GameObject\01. Stage\08. HitEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -418,6 +421,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\SoundManager.cpp">
       <Filter>02. GameObject\02. Public\09. SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CrossEffect.cpp">
+      <Filter>02. GameObject\01. Stage\08. HitEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

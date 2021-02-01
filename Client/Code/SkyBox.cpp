@@ -83,7 +83,7 @@ HRESULT CSkyBox::AddComponent()
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Shader", component);
 
-	m_rendererCom->SetFogDensity(0.01f);
+	m_rendererCom->SetFogDensity(0.05f);
 
 	return S_OK;
 }

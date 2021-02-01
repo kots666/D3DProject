@@ -68,6 +68,7 @@ typedef enum
     FMOD_DSP_TYPE_TREMOLO,            /* This unit produces a tremolo / chopper effect on the sound. */
     FMOD_DSP_TYPE_LADSPAPLUGIN,       /* This unit allows the use of LADSPA standard plugins. */
     FMOD_DSP_TYPE_HIGHPASS_SIMPLE,    /* This unit filters sound using a simple highpass with no resonance, but has flexible cutoff and is fast. */
+    FMOD_DSP_TYPE_HARDWARE = 1000,    /* Offset that platform specific FMOD_HARDWARE DSPs will start at. */
     FMOD_DSP_TYPE_FORCEINT = 65536    /* Makes sure this enum is signed 32bit. */
 } FMOD_DSP_TYPE;
 
@@ -81,13 +82,6 @@ typedef enum
     [REMARKS]
     Members marked with [r] mean the variable is modified by FMOD and is for reading purposes only.  Do not change this value.
     Members marked with [w] mean the variable can be written to.  The user can set the value.
-    
-    The step parameter tells the gui or application that the parameter has a certain granularity.
-    For example in the example of cutoff frequency with a range from 100.0 to 22050.0 you might only want the selection to be in 10hz increments.  For this you would simply use 10.0 as the step value.
-    For a boolean, you can use min = 0.0, max = 1.0, step = 1.0.  This way the only possible values are 0.0 and 1.0.
-    Some applications may detect min = 0.0, max = 1.0, step = 1.0 and replace a graphical slider bar with a checkbox instead.
-    A step value of 1.0 would simulate integer values only.
-    A step value of 0.0 would mean the full floating point range is accessable.
 
     [PLATFORMS]
     Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation Portable, PlayStation 3, Wii, iPhone, 3GS, NGP, Android
@@ -391,7 +385,7 @@ typedef enum
 {
     FMOD_DSP_FLANGE_DRYMIX,      /* Volume of original signal to pass to output.  0.0 to 1.0. Default = 0.45. */
     FMOD_DSP_FLANGE_WETMIX,      /* Volume of flange signal to pass to output.  0.0 to 1.0. Default = 0.55. */
-    FMOD_DSP_FLANGE_DEPTH,       /* Flange depth.  0.01 to 1.0.  Default = 1.0. */
+    FMOD_DSP_FLANGE_DEPTH,       /* Flange depth (percentage of 40ms delay).  0.01 to 1.0.  Default = 1.0. */
     FMOD_DSP_FLANGE_RATE         /* Flange speed in hz.  0.0 to 20.0.  Default = 0.1. */
 } FMOD_DSP_FLANGE;
 
@@ -566,8 +560,6 @@ typedef enum
 
     [REMARKS]
     Chrous is an effect where the sound is more 'spacious' due to 1 to 3 versions of the sound being played along side the original signal but with the pitch of each copy modulating on a sine wave.
-    This is a highly configurable chorus unit.  It supports 3 taps, small and large delay times and also feedback.
-    This unit also could be used to do a simple echo, or a flange effect. 
 
     [PLATFORMS]
     Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation Portable, PlayStation 3, Wii, iPhone, 3GS, NGP, Android
@@ -586,8 +578,7 @@ typedef enum
     FMOD_DSP_CHORUS_WETMIX3,  /* Volume of 3rd chorus tap. This tap is 90 degrees out of phase of the second tap.  0.0 to 1.0.  Default = 0.5. */
     FMOD_DSP_CHORUS_DELAY,    /* Chorus delay in ms.  0.1 to 100.0.  Default = 40.0 ms. */
     FMOD_DSP_CHORUS_RATE,     /* Chorus modulation rate in hz.  0.0 to 20.0.  Default = 0.8 hz. */
-    FMOD_DSP_CHORUS_DEPTH,    /* Chorus modulation depth.  0.0 to 1.0.  Default = 0.03. */
-    FMOD_DSP_CHORUS_FEEDBACK  /* Chorus feedback.  Controls how much of the wet signal gets fed back into the chorus buffer.  0.0 to 1.0.  Default = 0.0. */
+    FMOD_DSP_CHORUS_DEPTH     /* Chorus modulation depth.  0.0 to 1.0.  Default = 0.03. */
 } FMOD_DSP_CHORUS;
 
 

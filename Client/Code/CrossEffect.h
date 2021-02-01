@@ -1,12 +1,12 @@
-#ifndef HitEffect_h__
-#define HitEffect_h__
+#ifndef CrossEffect_h__
+#define CrossEffect_h__
 
 #include "GameObject.h"
 #include "Define.h"
 
 BEGIN(Engine)
 
-class CRCTex;
+class CCrossTex;
 class CTexture;
 class CRenderer;
 class CTransform;
@@ -14,11 +14,11 @@ class CTransform;
 END
 
 BEGIN(Client)
-class CHitEffect : public Engine::CGameObject
+class CCrossEffect : public Engine::CGameObject
 {
 private:
-	explicit CHitEffect(LPDIRECT3DDEVICE9 device);
-	explicit CHitEffect(LPDIRECT3DDEVICE9 device,
+	explicit CCrossEffect(LPDIRECT3DDEVICE9 device);
+	explicit CCrossEffect(LPDIRECT3DDEVICE9 device,
 		const _vec4& color,
 		const _tchar* texName,
 		const _int& uCnt,
@@ -26,8 +26,8 @@ private:
 		const _bool& isRandRot,
 		const _int& passIndex,
 		const _float& lifeTime);
-	explicit CHitEffect(LPDIRECT3DDEVICE9 device, const _vec3& pos, const _float& lifeTime);
-	virtual ~CHitEffect();
+	explicit CCrossEffect(LPDIRECT3DDEVICE9 device, const _vec3& pos, const _float& lifeTime);
+	virtual ~CCrossEffect();
 
 public:
 	virtual HRESULT Ready() override;
@@ -45,7 +45,7 @@ private:
 	void RandRotMatrix();
 
 private:
-	Engine::CRCTex* m_bufferCom = nullptr;
+	Engine::CCrossTex* m_bufferCom = nullptr;
 	Engine::CTexture* m_textureCom = nullptr;
 	Engine::CRenderer* m_rendererCom = nullptr;
 	Engine::CTransform* m_transformCom = nullptr;
@@ -78,7 +78,7 @@ private:
 	_bool m_isRandomRotation;
 
 public:
-	static CHitEffect* Create(LPDIRECT3DDEVICE9 device,
+	static CCrossEffect* Create(LPDIRECT3DDEVICE9 device,
 		const _vec4& color,
 		const _tchar* texName,
 		const _int& uCnt,
@@ -93,4 +93,4 @@ private:
 };
 
 END
-#endif // HitEffect_h__
+#endif // CrossEffect_h__

@@ -180,7 +180,7 @@ void CDog::HitColliderOverlapped(Engine::CGameObject * causer)
 	spawnPos += myPos;
 
 	CHitManager::GetInstance()->SpawnHitEffect(spawnPos);
-	CHitManager::GetInstance()->SpawnHitSlash(spawnPos, 1.6f, 8.f);
+	CHitManager::GetInstance()->SpawnHitSlash(spawnPos);
 }
 
 HRESULT CDog::AddComponent()

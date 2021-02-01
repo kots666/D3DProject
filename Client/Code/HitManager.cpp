@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "HitManager.h"
 #include "HitEffect.h"
+#include "CrossEffect.h"
 
 USING(Client)
 IMPLEMENT_SINGLETON(CHitManager)
@@ -66,8 +67,8 @@ void CHitManager::ReadyEffect()
 	m_hitEffectList.reserve(readyCount);
 	m_hitSlashList.reserve(readyCount);
 
-	_vec4 hitEffectColor = { 3.f, 3.f, 0.83f, 1.f };
-	_vec4 hitSlashColor = { 3.f, 0.f, 0.f, 1.f };
+	_vec4 hitEffectColor = { 3.f, 3.f, 0.83f, 0.5f };
+	_vec4 hitSlashColor = { 3.f, 0.f, 0.f, 0.5f };
 
 	for (_int i = 0; i < readyCount; ++i)
 	{
@@ -87,13 +88,14 @@ void CHitManager::ReadyEffect()
 
 		Engine::GetCurScene()->GetLayer(L"Environment")->AddGameObject(effectName, hitEffect);
 
-		CHitEffect* hitSlash = CHitEffect::Create(
+		CCrossEffect* hitSlash = CCrossEffect::Create(
 			Engine::CGraphicDevice::GetInstance()->GetDevice(),
 			hitSlashColor,
 			L"Texture_HitSlash",
 			5,
 			1,
-			true);
+			true,
+			1);
 		Engine::SafeAddRef(hitSlash);
 
 		m_hitSlashList.emplace_back(hitSlash);

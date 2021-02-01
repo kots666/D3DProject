@@ -18,6 +18,7 @@ public:
 	HRESULT Ready(const _tchar* filePath, const _tchar* fileName);
 	void Render();
 	void Render(LPD3DXEFFECT& effect);
+	void EffectMeshRender();
 
 public:
 	void AddNormalTexture(CTexture* tex) { m_normalTex = tex; }

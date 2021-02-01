@@ -7,6 +7,7 @@
 BEGIN(Client)
 
 class CHitEffect;
+class CCrossEffect;
 
 class CHitManager
 {
@@ -25,7 +26,7 @@ private:
 
 private:
 	vector<CHitEffect*> m_hitEffectList;
-	vector<CHitEffect*> m_hitSlashList;
+	vector<CCrossEffect*> m_hitSlashList;
 	list<_tchar*> m_nameList;
 };
 

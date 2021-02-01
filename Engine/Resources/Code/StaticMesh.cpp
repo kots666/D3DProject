@@ -170,6 +170,14 @@ void CStaticMesh::Render(LPD3DXEFFECT & effect)
 	}
 }
 
+void CStaticMesh::EffectMeshRender()
+{
+	for (_ulong i = 0; i < m_subsetCnt; ++i)
+	{
+		m_mesh->DrawSubset(i);
+	}
+}
+
 
 CStaticMesh* CStaticMesh::Create(LPDIRECT3DDEVICE9 device, const _tchar* filePath, const _tchar* fileName)
 {

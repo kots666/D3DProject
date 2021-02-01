@@ -63,6 +63,11 @@ _uint CLoading::LoadingForStage()
 
 	FAILED_CHECK_RETURN(Engine::ReadyBuffer(m_device, Engine::RESOURCE_STAGE, L"Buffer_CubeTex", Engine::BUFFER_CUBETEX, VTXCNTX, VTXCNTZ, VTXITV), E_FAIL);
 
+	FAILED_CHECK_RETURN(Engine::ReadyBuffer(m_device,
+		Engine::RESOURCE_STATIC,
+		L"Buffer_CrossTex",
+		Engine::BUFFER_CROSSTEX), E_FAIL);
+
 	// buffer
 	/*FAILED_CHECK_RETURN(Engine::ReadyBuffer(m_device,
 												Engine::RESOURCE_STATIC,

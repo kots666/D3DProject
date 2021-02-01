@@ -7,6 +7,7 @@
 #include "StaticMesh.h"
 #include "DynamicMesh.h"
 #include "NaviMesh.h"
+#include "CrossTex.h"
 
 USING(Engine)
 IMPLEMENT_SINGLETON(CResourcesMgr)
@@ -53,6 +54,10 @@ HRESULT CResourcesMgr::ReadyBuffer(LPDIRECT3DDEVICE9 device, const _ushort& cont
 
 	case BUFFER_RCTEX:
 		resources = CRCTex::Create(device);
+		break;
+
+	case BUFFER_CROSSTEX:
+		resources = CCrossTex::Create(device);
 		break;
 
 	case BUFFER_TERRAINTEX:

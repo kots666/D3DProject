@@ -123,11 +123,17 @@ technique Default_Device
 
 	pass	
 	{
+		cullmode = none;
+
 		alphatestenable = true;
-		alpharef = 100;
+		alpharef = 10;
 		alphafunc = greater;
 
-		vertexshader = compile vs_3_0 VS_TEST();
-		pixelshader = compile ps_3_0 PS_TEST();
+		alphablendenable = true;
+		srcblend = srcalpha;
+		destblend = invsrcalpha;
+
+		vertexshader = compile vs_3_0 VS_MAIN();
+		pixelshader = compile ps_3_0 PS_MAIN();
 	}
 };
