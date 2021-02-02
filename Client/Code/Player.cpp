@@ -546,10 +546,10 @@ void CPlayer::CalcComboTime(const _float& deltaTime)
 		{
 			m_isStartAttack = true;
 
+			ClearCollideList();
+
 			for (auto& elem : m_attackCollider)
 				elem->SetCanCollide(true);
-
-			ClearCollideList();
 		}
 		else if (!m_isEndAttack && m_accTime > m_attackEndTime)
 		{
@@ -656,7 +656,7 @@ void CPlayer::DoAttack()
 			m_animationSpeed = 1.5f;
 			m_accTime = 0.f;
 			m_comboTime = (22.f / 30.f) / m_animationSpeed;
-			m_attackStartTime = (2.f / 30.f) / m_animationSpeed;
+			m_attackStartTime = (1.f / 30.f) / m_animationSpeed;
 			m_attackEndTime = m_comboTime + 0.06f;
 			break;
 
@@ -667,7 +667,7 @@ void CPlayer::DoAttack()
 			m_animationSpeed = 1.5f;
 			m_accTime = 0.f;
 			m_comboTime = (22.f / 30.f) / m_animationSpeed;
-			m_attackStartTime = (2.f / 30.f) / m_animationSpeed;
+			m_attackStartTime = (1.f / 30.f) / m_animationSpeed;
 			m_attackEndTime = m_comboTime + 0.06f;
 			break;
 
@@ -716,39 +716,39 @@ void CPlayer::DoSkill01()
 		_float frameTiming;
 
 		// 1번째 공격
-		CalcFrameTime(frameTiming, 3.f);
+		CalcFrameTime(frameTiming, 2.f);
 		m_skillStartTimeList.emplace_back(frameTiming);
 		CalcFrameTime(frameTiming, 6.f);
 		m_skillEndTimeList.emplace_back(frameTiming);
 
 		// 2번째 공격
-		CalcFrameTime(frameTiming, 8.f);
+		CalcFrameTime(frameTiming, 7.5f);
 		m_skillStartTimeList.emplace_back(frameTiming);
 		CalcFrameTime(frameTiming, 11.f);
 		m_skillEndTimeList.emplace_back(frameTiming);
 
 		// 3번째 공격
-		CalcFrameTime(frameTiming, 17.f);
+		CalcFrameTime(frameTiming, 16.f);
 		m_skillStartTimeList.emplace_back(frameTiming);
-		CalcFrameTime(frameTiming, 21.f);
+		CalcFrameTime(frameTiming, 20.f);
 		m_skillEndTimeList.emplace_back(frameTiming);
 
 		// 4번째 공격
 		CalcFrameTime(frameTiming, 32.f);
 		m_skillStartTimeList.emplace_back(frameTiming);
-		CalcFrameTime(frameTiming, 39.f);
+		CalcFrameTime(frameTiming, 38.f);
 		m_skillEndTimeList.emplace_back(frameTiming);
 
 		// 5번째 공격
-		CalcFrameTime(frameTiming, 59.f);
+		CalcFrameTime(frameTiming, 58.f);
 		m_skillStartTimeList.emplace_back(frameTiming);
-		CalcFrameTime(frameTiming, 65.f);
+		CalcFrameTime(frameTiming, 70.f);
 		m_skillEndTimeList.emplace_back(frameTiming);
 
 		// 6번째 공격
-		CalcFrameTime(frameTiming, 103.f);
+		CalcFrameTime(frameTiming, 102.f);
 		m_skillStartTimeList.emplace_back(frameTiming);
-		CalcFrameTime(frameTiming, 109.f);
+		CalcFrameTime(frameTiming, 114.f);
 		m_skillEndTimeList.emplace_back(frameTiming);
 
 		m_meshCom->SetAnimation(11, 0.01f, 0.05f, true);
@@ -764,9 +764,9 @@ void CPlayer::DoSkill02()
 		m_state |= STATE_ATTACK;
 		m_isSkill = true;
 
-		m_animationSpeed = 1.5f;
+		m_animationSpeed = 1.f;
 
-		m_meshCom->SetAnimation(17, 0.01f, 0.04f, true);
+		m_meshCom->SetAnimation(12, 0.01f, 0.04f, true);
 
 		LookAtMouseDirection();
 	}

@@ -203,7 +203,7 @@ void CColliderPage::OnSelChangeColliderList()
 	if (0 > selected || selected >= m_colliderVec.size()) return;
 
 	m_position = m_colliderVec[selected]->GetOffset();
-	m_radius = m_colliderVec[selected]->GetRadius();
+	m_radius = m_colliderVec[selected]->GetLocalRadius();
 
 	StringSetByValue();
 }
@@ -406,7 +406,7 @@ void CColliderPage::OnClickedSave()
 		for (auto& coll : m_colliderVec)
 		{
 			_vec3 offset = coll->GetOffset();
-			_float radius = coll->GetRadius();
+			_float radius = coll->GetLocalRadius();
 
 			WriteFile(hFile, m_colliderBoneNameVec[cnt], sizeof(_tchar) * 50, &dwByte, nullptr);
 			WriteFile(hFile, &offset, sizeof(_vec3), &dwByte, nullptr);
@@ -486,7 +486,7 @@ void CColliderPage::TargetSetByValue()
 	if (0 > sel || sel >= m_colliderVec.size()) return;
 
 	m_colliderVec[sel]->SetOffset(m_position);
-	m_colliderVec[sel]->SetRadius(m_radius);
+	m_colliderVec[sel]->SetLocalRadius(m_radius);
 
 	UpdateData(FALSE);
 }

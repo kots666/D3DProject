@@ -32,6 +32,7 @@ private:
 
 private:
 	Engine::CTexture* m_texCom = nullptr;
+	Engine::CTexture* m_normalTexCom = nullptr;
 	Engine::CTransform* m_transCom = nullptr;
 	Engine::CRenderer* m_rendererCom = nullptr;
 	Engine::CTerrainTex* m_bufferCom = nullptr;

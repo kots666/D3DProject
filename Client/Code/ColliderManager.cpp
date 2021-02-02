@@ -107,8 +107,8 @@ _bool CColliderManager::SphereCollision(Engine::CSphereCollider * lhs, Engine::C
 	memcpy(&lhsPos, &lhsWorldMat.m[3], sizeof(_vec3));
 	memcpy(&rhsPos, &rhsWorldMat.m[3], sizeof(_vec3));
 
-	_float lhsRadius = lhs->GetRadius();
-	_float rhsRadius = rhs->GetRadius();
+	_float lhsRadius = lhs->GetWorldRadius();
+	_float rhsRadius = rhs->GetWorldRadius();
 
 	/*_vec3 radiusVec = { lhsRadius, lhsRadius, lhsRadius };
 	_vec3 radiusVec2 = { rhsRadius, rhsRadius, rhsRadius };

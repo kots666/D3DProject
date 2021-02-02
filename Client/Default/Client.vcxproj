@@ -198,6 +198,7 @@
     <ClInclude Include="..\Code\Player.h" />
     <ClInclude Include="..\Code\PlayTimeManager.h" />
     <ClInclude Include="..\Code\QuestManager.h" />
+    <ClInclude Include="..\Code\SkillRock.h" />
     <ClInclude Include="..\Code\SkyBox.h" />
     <ClInclude Include="..\Code\SoundManager.h" />
     <ClInclude Include="..\Code\Spawner.h" />
@@ -250,6 +251,7 @@
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\PlayTimeManager.cpp" />
     <ClCompile Include="..\Code\QuestManager.cpp" />
+    <ClCompile Include="..\Code\SkillRock.cpp" />
     <ClCompile Include="..\Code\SkyBox.cpp" />
     <ClCompile Include="..\Code\SoundManager.cpp" />
     <ClCompile Include="..\Code\Spawner.cpp" />

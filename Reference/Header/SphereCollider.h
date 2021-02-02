@@ -18,14 +18,15 @@ public:
 	_bool GetCanCollide() const { return m_canCollide; }
 	_bool GetIsCollide() const { return m_isCollide; }
 	_vec3 GetOffset() const { return m_offset; }
-	_float GetRadius() const { return m_realRadius; }
+	_float GetWorldRadius() const { return m_worldRadius; }
+	_float GetLocalRadius() const { return m_localRadius; }
 	_matrix GetWorldMat() const { return m_worldMat; }
 
 	void SetCanCollide(const _bool& can) { m_canCollide = can; }
 	void SetIsCollide(const _bool& collide) { m_isCollide = collide; }
 	void SetOffset(const _vec3& offset) { m_offset = offset; }
-	void SetRadius(const _float& radius) { m_radius = radius; }
-	void SetScale(const _float& scale) { m_scale = scale; m_realRadius = m_radius * m_scale; }
+	void SetLocalRadius(const _float& radius) { m_localRadius = radius; m_worldRadius = m_localRadius * m_scale; }
+	void SetScale(const _float& scale) { m_scale = scale; m_worldRadius = m_localRadius * m_scale; }
 
 public:
 	HRESULT Ready();
@@ -41,10 +42,10 @@ private:
 	_matrix m_worldMat;
 	_vec3 m_offset;
 	_vec3 m_worldPos;
-	_float m_radius;
+	_float m_localRadius;
 
 	_float m_scale;
-	_float m_realRadius;
+	_float m_worldRadius;
 
 	_float m_accTime;
 

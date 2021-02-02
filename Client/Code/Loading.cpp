@@ -170,7 +170,7 @@ _uint CLoading::LoadingForStage()
 		Engine::RESOURCE_STAGE,
 		L"Texture_HitSlash",
 		Engine::TEX_NORMAL,
-		L"../Resource/Texture/Effect/HitSlash3.png"), E_FAIL);
+		L"../Resource/Texture/Effect/HitSlash2.tga"), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(
 		m_device,
@@ -200,7 +200,14 @@ _uint CLoading::LoadingForStage()
 		Engine::TEX_NORMAL,
 		L"../Resource/Texture/Terrain/LV_B2_Prototype_Floor02_D.tga"), E_FAIL);
 
-	_int textureCnt = 14;
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Texture_TerrainFlat",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/Terrain/LV_B2_Prototype_Floor02_N.tga"), E_FAIL);
+
+	_int textureCnt = 15;
 	m_nowLoad += textureCnt;
 
 	LoadingForDynamicMeshNormalTextures();
@@ -768,6 +775,13 @@ HRESULT CLoading::LoadingForStaticMeshNormalTextures()
 		Engine::TEX_NORMAL,
 		L"../Resource/Mesh/StaticMesh/Props2/FieldVillage_Props02_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
+	// Sign02
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Mesh_SkillRock",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/StaticMesh/SkillRock/BG_DevilBossFoor_N_KHJ.tga", 1, singleYellow), E_FAIL);
+
 	// Table01
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
 		Engine::RESOURCE_NORMAL,
@@ -1332,6 +1346,14 @@ HRESULT CLoading::LoadingForStaticMeshes()
 		Engine::TYPE_STATIC,
 		L"../Resource/Mesh/StaticMesh/Props2/",
 		L"Sign02.X"), E_FAIL);
+
+	// SkillRock
+	FAILED_CHECK_RETURN(Engine::ReadyMesh(m_device,
+		Engine::RESOURCE_STAGE,
+		L"Mesh_SkillRock",
+		Engine::TYPE_STATIC,
+		L"../Resource/Mesh/StaticMesh/SkillRock/",
+		L"SkillRock.X"), E_FAIL);
 
 	// SkyBox
 	FAILED_CHECK_RETURN(Engine::ReadyMesh(m_device,

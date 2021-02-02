@@ -19,7 +19,7 @@ private:
 
 public:
 	void SpawnHitEffect(const _vec3& pos, const _float& xSize = 2.f, const _float& ySize = 2.f, const _float& lifeTime = 0.2f);
-	void SpawnHitSlash(const _vec3& pos, const _float& xSize = 0.8f, const _float& ySize = 4.f, const _float& lifeTime = 0.2f);
+	void SpawnHitSlash(const _vec3& pos, const _float& xSize = 8.f, const _float& ySize = 1.f, const _float& lifeTime = 0.2f);
 
 private:
 	void ReadyEffect();

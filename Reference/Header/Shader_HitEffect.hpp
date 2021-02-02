@@ -75,6 +75,11 @@ PS_OUT		PS_MAIN(PS_IN In)
 
 	Out.vColor = tex2D(BaseSampler, In.vTexUV);	// 2차원 텍스처로부터 uv좌표에 해당하는 색을 얻어오는 함수, 반환 타입이 vector 타입
 
+	/*if (0.9f < Out.vColor.a)
+		Out.vColor.rgb *= 10.f;
+	else
+		Out.vColor.r *= 1.5f;*/
+
 	Out.vColor *= g_Color;
 
 	return Out;
@@ -126,7 +131,7 @@ technique Default_Device
 		cullmode = none;
 
 		alphatestenable = true;
-		alpharef = 10;
+		alpharef = 30;
 		alphafunc = greater;
 
 		alphablendenable = true;

@@ -86,6 +86,11 @@ HRESULT CTerrain::AddComponent()
 	NULL_CHECK_RETURN(comp, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Shader", comp);
 
+	// texture
+	comp = m_normalTexCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_NORMAL, L"Texture_TerrainFlat"));
+	NULL_CHECK_RETURN(comp, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_NormalTexture", comp);
+
 	return S_OK;
 }
 
@@ -104,6 +109,7 @@ HRESULT CTerrain::SetUpConstantTable(LPD3DXEFFECT & effect)
 	effect->SetFloat("g_detail", 16.f);
 
 	m_texCom->SetTexture(effect, "g_BaseTexture");
+	m_normalTexCom->SetTexture(effect, "g_NormalTexture");
 
 	effect->CommitChanges();
 

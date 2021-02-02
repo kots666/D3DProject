@@ -145,6 +145,9 @@
     <Filter Include="02. GameObject\02. Public\09. SoundManager">
       <UniqueIdentifier>{0d396df9-3c89-4ba4-8506-36de7a2d8b7a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. Stage\10. SkillRock">
+      <UniqueIdentifier>{28cb7c01-36d3-4101-8167-33394ca5c606}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -297,6 +300,9 @@
     <ClInclude Include="..\Code\CrossEffect.h">
       <Filter>02. GameObject\01. Stage\08. HitEffect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\SkillRock.h">
+      <Filter>02. GameObject\01. Stage\10. SkillRock</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -424,6 +430,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\CrossEffect.cpp">
       <Filter>02. GameObject\01. Stage\08. HitEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SkillRock.cpp">
+      <Filter>02. GameObject\01. Stage\10. SkillRock</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

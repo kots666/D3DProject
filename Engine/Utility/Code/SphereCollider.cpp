@@ -7,7 +7,7 @@ CSphereCollider::CSphereCollider(LPDIRECT3DDEVICE9 device, _tchar* name, _matrix
 	m_attachBone(boneMat),
 	m_name(name),
 	m_offset(offset),
-	m_radius(radius),
+	m_localRadius(radius),
 	m_canCollide(false),
 	m_isCollide(false),
 	m_accTime(0.f)
@@ -20,7 +20,7 @@ CSphereCollider::CSphereCollider(LPDIRECT3DDEVICE9 device, const _vec3 & pos, co
 	m_attachBone(nullptr),
 	m_name(nullptr),
 	m_offset(pos),
-	m_radius(radius),
+	m_localRadius(radius),
 	m_canCollide(true),
 	m_isCollide(false),
 	m_accTime(0.f)
@@ -32,7 +32,7 @@ CSphereCollider::CSphereCollider(const CSphereCollider& rhs) :
 	m_device(rhs.m_device),
 	m_attachBone(rhs.m_attachBone),
 	m_offset(rhs.m_offset),
-	m_radius(rhs.m_radius),
+	m_localRadius(rhs.m_localRadius),
 	m_canCollide(rhs.m_canCollide),
 	m_isCollide(rhs.m_isCollide),
 	m_accTime(rhs.m_accTime)
@@ -74,7 +74,7 @@ HRESULT CSphereCollider::Ready()
 	D3DXMatrixIdentity(&m_worldMat);
 
 	m_scale = 0.01f;
-	m_realRadius = m_scale * m_radius;
+	m_worldRadius = m_scale * m_localRadius;
 	
 	return S_OK;
 }
@@ -121,7 +121,7 @@ void CSphereCollider::Render()
 
 	LPD3DXMESH tmpMesh;
 
-	D3DXCreateSphere(m_device, m_radius, 10, 10, &tmpMesh, nullptr);
+	D3DXCreateSphere(m_device, m_localRadius, 10, 10, &tmpMesh, nullptr);
 
 	if (nullptr == tmpMesh) return;
 

@@ -67,8 +67,8 @@ void CHitManager::ReadyEffect()
 	m_hitEffectList.reserve(readyCount);
 	m_hitSlashList.reserve(readyCount);
 
-	_vec4 hitEffectColor = { 3.f, 3.f, 0.83f, 0.5f };
-	_vec4 hitSlashColor = { 3.f, 0.f, 0.f, 0.5f };
+	_vec4 hitEffectColor = { 3.f, 3.f, 0.83f, 0.8f };
+	_vec4 hitSlashColor = { 10000.f, 10000.f, 10000.f, 1.f };
 
 	for (_int i = 0; i < readyCount; ++i)
 	{
@@ -92,8 +92,8 @@ void CHitManager::ReadyEffect()
 			Engine::CGraphicDevice::GetInstance()->GetDevice(),
 			hitSlashColor,
 			L"Texture_HitSlash",
-			5,
 			1,
+			8,
 			true,
 			1);
 		Engine::SafeAddRef(hitSlash);

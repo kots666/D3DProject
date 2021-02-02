@@ -17,6 +17,18 @@ sampler BaseSampler = sampler_state
 	AddressV = Wrap;
 };
 
+texture			g_NormalTexture;
+
+sampler NormalSampler = sampler_state
+{
+	texture = g_NormalTexture;
+
+minfilter = linear;
+magfilter = linear;
+AddressU = wrap;
+AddressV = wrap;
+};
+
 struct	VS_IN
 {
 	vector		vPosition : POSITION;
@@ -30,6 +42,9 @@ struct	VS_OUT
 	vector		vNormal : NORMAL;
 	float2		vTexUV : TEXCOORD0;
 	vector		vProjPos : TEXCOORD1;
+	float3 N : TEXCOORD2;
+	float3 T : TEXCOORD3;
+	float3 B : TEXCOORD4;
 };
 
 // 버텍스 쉐이더
@@ -48,6 +63,17 @@ VS_OUT VS_MAIN(VS_IN In)
 	Out.vTexUV = In.vTexUV;
 	Out.vProjPos = Out.vPosition;
 
+	float3 worldNormal = mul(In.vNormal, (float3x3)g_matWorld);
+	Out.N = normalize(worldNormal);
+
+	float3 Tangent = cross(float3(0.f, 1.f, 0.f), (float3)(In.vNormal));
+	float3 worldTangent = mul(Tangent, (float3x3)g_matWorld);
+	Out.T = normalize(worldTangent);
+
+	float3 binormal = cross((float3)(In.vNormal), Tangent);
+	float3 worldBinormal = mul(binormal, (float3x3)g_matWorld);
+	Out.B = normalize(worldBinormal);
+
 	return Out;
 }
 
@@ -57,6 +83,9 @@ struct	PS_IN
 	vector		vNormal : NORMAL;
 	float2		vTexUV : TEXCOORD0;
 	vector		vProjPos : TEXCOORD1;
+	float3 N : TEXCOORD2;
+	float3 T : TEXCOORD3;
+	float3 B : TEXCOORD4;
 };
 
 struct	PS_OUT
@@ -74,7 +103,12 @@ PS_OUT		PS_MAIN(PS_IN In)
 
 	Out.vColor = vColor;
 	Out.vColor.a = 1.f;
-	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+
+	float4 texNormal = tex2D(NormalSampler, In.vTexUV);
+	texNormal = (texNormal * 2.0f) - 1.0f;
+	float3 normal = (texNormal.x * In.T) + (texNormal.y * In.B) + (texNormal.z * In.N);
+
+	Out.vNormal = vector(normal.xyz * 0.5f + 0.5f, 1.f);
 
 	// vector타입의 멤버 변수 중, Z값과 W값은 사용하지 않을 예정
 	// vDepth라는 자료형의 멤버 변수들은 데이터를 저장하는 구조체 용도일 뿐
