@@ -65,6 +65,7 @@ _int CMainApp::Update(const _float & deltaTime)
 	CColliderManager::GetInstance()->CheckEventCollision();
 	CSpawnManager::GetInstance()->CheckSpawnCondition();
 	CSpawnManager::GetInstance()->CheckQuestComplete();
+	CSoundManager::Update(deltaTime);
 
 	return 0;
 }

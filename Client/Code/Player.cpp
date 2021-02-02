@@ -645,6 +645,8 @@ void CPlayer::DoAttack()
 		m_isStartAttack = false;
 		m_isEndAttack = false;
 
+		CSoundManager::PlayOverlapSound(L"DogDie.ogg", SoundChannel::PLAYER);
+
 		switch (m_comboIndex)
 		{
 		case 1:
