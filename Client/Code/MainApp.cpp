@@ -26,7 +26,7 @@ HRESULT CMainApp::Ready()
 
 	CSoundManager::GetInstance()->Initialize();
 
-	CSoundManager::PlayBGM(L"MainTitle.OGG");
+	CSoundManager::PlayBGM(L"MainTitle.ogg");
 
 	CSpawnManager::GetInstance()->Ready(m_device);
 
@@ -86,7 +86,10 @@ void CMainApp::Render()
 	Engine::RenderBegin(D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.f));
 	m_managementClass->RenderScene(m_device);
 
+#ifdef _DEBUG
 	Engine::RenderFont(L"Font_Square", m_fps, &_vec2(WINCX - 300, 10.f), D3DXCOLOR(1.f, 1.f, 0.f, 1.f));
+#endif
+
 	/*
 	Engine::RenderFont(L"Font_Jinji", m_fps, &_vec2(WINCX - 300, 10.f), D3DXCOLOR(1.f, 1.f, 0.f, 1.f));
 

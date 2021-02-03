@@ -26,7 +26,7 @@ HRESULT CManagement::ReadyShader(LPDIRECT3DDEVICE9 & device)
 		D3DXCOLOR(0.f, 0.f, 0.f, 0.f)),
 		E_FAIL);
 
-	FAILED_CHECK_RETURN(ReadyDebugBuffer(L"Target_Albedo", 0.f, 0.f, 100.f, 100.f), E_FAIL);
+	FAILED_CHECK_RETURN(ReadyDebugBuffer(L"Target_Albedo", 0.f, 0.f, 200.f, 180.f), E_FAIL);
 
 	FAILED_CHECK_RETURN(ReadyRenderTarget(device,
 		L"Target_Normal",
@@ -35,16 +35,7 @@ HRESULT CManagement::ReadyShader(LPDIRECT3DDEVICE9 & device)
 		D3DFMT_A16B16G16R16F,
 		D3DXCOLOR(0.f, 0.f, 0.f, 1.f)),
 		E_FAIL);
-	FAILED_CHECK_RETURN(ReadyDebugBuffer(L"Target_Normal", 0.f, 100.f, 100.f, 100.f), E_FAIL);
-
-	FAILED_CHECK_RETURN(ReadyRenderTarget(device,
-		L"Target_Shade",
-		viewPort.Width,
-		viewPort.Height,
-		D3DFMT_A16B16G16R16F,
-		D3DXCOLOR(0.f, 0.f, 0.f, 1.f)),
-		E_FAIL);
-	FAILED_CHECK_RETURN(ReadyDebugBuffer(L"Target_Shade", 0.f, 200.f, 100.f, 100.f), E_FAIL);
+	FAILED_CHECK_RETURN(ReadyDebugBuffer(L"Target_Normal", 0.f, 180.f, 200.f, 180.f), E_FAIL);
 
 	FAILED_CHECK_RETURN(ReadyRenderTarget(device,
 		L"Target_Depth",
@@ -53,7 +44,16 @@ HRESULT CManagement::ReadyShader(LPDIRECT3DDEVICE9 & device)
 		D3DFMT_A32B32G32R32F,
 		D3DXCOLOR(1.f, 1.f, 1.f, 1.f)),
 		E_FAIL);
-	FAILED_CHECK_RETURN(ReadyDebugBuffer(L"Target_Depth", 100.f, 0.f, 100.f, 100.f), E_FAIL);
+	FAILED_CHECK_RETURN(ReadyDebugBuffer(L"Target_Depth", 0.f, 360.f, 200.f, 180.f), E_FAIL);
+
+	FAILED_CHECK_RETURN(ReadyRenderTarget(device,
+		L"Target_Shade",
+		viewPort.Width,
+		viewPort.Height,
+		D3DFMT_A16B16G16R16F,
+		D3DXCOLOR(0.f, 0.f, 0.f, 1.f)),
+		E_FAIL);
+	FAILED_CHECK_RETURN(ReadyDebugBuffer(L"Target_Shade", 200.f, 0.f, 200.f, 180.f), E_FAIL);
 
 	FAILED_CHECK_RETURN(ReadyRenderTarget(device,
 		L"Target_Distortion",
@@ -62,7 +62,7 @@ HRESULT CManagement::ReadyShader(LPDIRECT3DDEVICE9 & device)
 		D3DFMT_A32B32G32R32F,
 		D3DXCOLOR(0.f, 0.f, 0.f, 0.f)),
 		E_FAIL);
-	FAILED_CHECK_RETURN(ReadyDebugBuffer(L"Target_Distortion", 200.f, 0.f, 100.f, 100.f), E_FAIL);
+	FAILED_CHECK_RETURN(ReadyDebugBuffer(L"Target_Distortion", 400.f, 0.f, 200.f, 180.f), E_FAIL);
 
 	FAILED_CHECK_RETURN(ReadyMRT(L"MRT_Deferred", L"Target_Albedo"), E_FAIL);
 	FAILED_CHECK_RETURN(ReadyMRT(L"MRT_Deferred", L"Target_Normal"), E_FAIL);

@@ -42,6 +42,7 @@ private:
 
 	void CalcState(const _float& deltaTime);
 	void MonsterAI(const _float& deltaTime);
+	void CalcAttack(const _float& deltaTime);
 	void DoChase(const _vec3& target, const _vec3& myPos, const _float& deltaTime);
 	void DoAttack(const _vec3& target, const _vec3& myPos);
 	void DoIdle();
@@ -57,6 +58,7 @@ private:
 	Engine::CRenderer* m_rendererCom = nullptr;
 	Engine::CShader* m_shaderCom = nullptr;
 	Engine::CTexture* m_normalTexCom = nullptr;
+	Engine::CTexture* m_dissolveTex = nullptr;
 
 	_float m_angle;
 	_vec3 m_startPosition;
@@ -67,8 +69,14 @@ private:
 	_bool m_isHit;
 	_bool m_isAttack;
 	_bool m_isDeadAnim;
+	_bool m_isDissolve;
 
 	_float m_intervalTime;
+	_float m_dissolveAmount = 0;
+
+	_float m_accTime = 0;
+	_float m_attackStartTime = 0;
+	_float m_attackEndTime = 0;
 
 public:
 	static CGoblinSword* Create(LPDIRECT3DDEVICE9 device, const _vec3& pos, const _float& angle = 0.f);

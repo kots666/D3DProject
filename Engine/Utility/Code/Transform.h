@@ -36,6 +36,7 @@ public:
 public:
 	void SetPos(const _vec3& pos);
 	void SetPos(const _float& x, const _float& y, const _float& z);
+	void SetPosAfterUpdate(const _vec3* pos);
 	void SetMovePosAtWorldMatrix(const _vec3* const dir);
 	void SetScale(const _float& xScale, const _float& yScale, const _float& zScale);
 	void SetRotation(const _float& xRot, const _float& yRot, const _float& zRot);

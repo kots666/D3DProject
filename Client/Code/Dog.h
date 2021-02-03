@@ -48,7 +48,11 @@ private:
 	void DoIdle();
 	void DoHit();
 	void DoDeadAnim();
+	void DoKnockBack(const _vec3& targetPos, const _vec3& myPos);
 	void LookAtTarget(const _vec3& targetPos);
+
+	void CalcFrameTime(_float& outTime, const _float& frame);
+	void CalcAttack(const _float& deltaTime);
 
 private:
 	Engine::CDynamicMesh* m_meshCom = nullptr;
@@ -74,6 +78,10 @@ private:
 
 	_float m_intervalTime;
 	_float m_dissolveAmount;
+
+	_float m_accTime = 0.f;
+	_float m_attackStartTime = 0.f;
+	_float m_attackEndTime = 0.f;
 
 public:
 	static CDog* Create(LPDIRECT3DDEVICE9 device, const _vec3& pos, const _float& angle = 0);

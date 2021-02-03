@@ -20,13 +20,15 @@ private:
 public:
 	void SpawnHitEffect(const _vec3& pos, const _float& xSize = 2.f, const _float& ySize = 2.f, const _float& lifeTime = 0.2f);
 	void SpawnHitSlash(const _vec3& pos, const _float& xSize = 8.f, const _float& ySize = 1.f, const _float& lifeTime = 0.2f);
+	void SpawnFlashHitEffect(const _vec3& pos, const _float& xSize = 2.f, const _float& ySize = 2.f, const _float& lifeTime = 0.2f);
 
 private:
 	void ReadyEffect();
 
 private:
 	vector<CHitEffect*> m_hitEffectList;
-	vector<CCrossEffect*> m_hitSlashList;
+	vector<CHitEffect*> m_hitSlashList;
+	vector<CHitEffect*> m_flashHitEffectList;
 	list<_tchar*> m_nameList;
 };
 

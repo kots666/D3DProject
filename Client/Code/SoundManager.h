@@ -18,7 +18,7 @@ public:
 	static void Release();
 public:
 	static void PlaySound(TCHAR* pSoundKey, SoundChannel eID);
-	static void PlayOverlapSound(TCHAR* pSoundKey, SoundChannel eID, float offsetVolume = 1.f, float duration = 0.2f);
+	static void PlayOverlapSound(TCHAR* pSoundKey, SoundChannel eID, float offsetVolume = 0.1f, float duration = 0.1f);
 	static void PlayOverlapSoundWithAmp(TCHAR* pSoundKey, SoundChannel eID);
 	static void PlayBGM(TCHAR* pSoundKey);
 	static void StopSound(SoundChannel eID);

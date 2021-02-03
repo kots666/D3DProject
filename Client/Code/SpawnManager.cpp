@@ -133,8 +133,8 @@ _bool CSpawnManager::StartEvent()
 	{
 		if (0 == m_eventCount)
 		{
-			Spawn(SPAWNTYPE::DOG, { 4.f, 0.f, 16.f }, 150.f);
-			Spawn(SPAWNTYPE::DOG, { 12.f, 0.f, 23.f }, -150.f);
+			Spawn(SPAWNTYPE::DOG, { 4.f, 0.2f, 16.f }, 150.f);
+			Spawn(SPAWNTYPE::BOSS, { 12.f, 0.2f, 23.f }, -150.f);
 
 			++m_eventCount;
 
@@ -148,19 +148,19 @@ _bool CSpawnManager::StartEvent()
 		switch (m_eventCount)
 		{
 		case 1:
-			Spawn(SPAWNTYPE::DOG, { 23.f, 0.f, 57.f }, -90.f);
-			Spawn(SPAWNTYPE::DOG, { 14.f, 0.f, 36.f }, -150.f);
-			Spawn(SPAWNTYPE::MINOTAUROS, { 35.f, 0.f, 64.f }, -90.f);
+			Spawn(SPAWNTYPE::DOG, { 23.f, 0.1f, 57.f }, -90.f);
+			Spawn(SPAWNTYPE::DOG, { 14.f, 0.1f, 36.f }, -150.f);
+			Spawn(SPAWNTYPE::DOG, { 35.f, 0.1f, 64.f }, -90.f);
 			break;
 
 		case 2:
-			Spawn(SPAWNTYPE::GOBLIN_MAGICIAN, { 67.f, 0.f, 62.f }, -75.f);
-			Spawn(SPAWNTYPE::GOBLIN_MAGICIAN, { 70.f, 0.f, 73.f }, -90.f);
-			Spawn(SPAWNTYPE::GOBLIN_MAGICIAN, { 60.f, 0.f, 83.f }, -130.f);
+			Spawn(SPAWNTYPE::GOBLIN_MAGICIAN, { 67.f, 0.2f, 62.f }, -75.f);
+			Spawn(SPAWNTYPE::GOBLIN_MAGICIAN, { 70.f, 0.2f, 73.f }, -90.f);
+			Spawn(SPAWNTYPE::GOBLIN_MAGICIAN, { 60.f, 0.2f, 83.f }, -130.f);
 			break;
 
 		case 3:
-			Spawn(SPAWNTYPE::BOSS, { 65.f, 0.f, 77.f }, -90.f);
+			Spawn(SPAWNTYPE::BOSS, { 65.f, 0.2f, 77.f }, -90.f);
 			break;
 		}
 

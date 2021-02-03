@@ -32,7 +32,7 @@ CFontManager::~CFontManager()
 	m_fontNameList.clear();
 }
 
-void CFontManager::ActiveNumber(const _int & inputNumber, const _vec3 & pos, const _float & lifeTime, const _float & xSize, const _float & ySize)
+void CFontManager::ActiveNumber(const _int & inputNumber, const _vec3 & pos, const _vec4& color, const _float & lifeTime, const _float & xSize, const _float & ySize)
 {
 	_int num = inputNumber;
 	list<_int> numList;
@@ -60,7 +60,7 @@ void CFontManager::ActiveNumber(const _int & inputNumber, const _vec3 & pos, con
 		{
 			if (!elem->GetActive())
 			{
-				elem->Active(pos, offset, xSize, ySize, lifeTime);
+				elem->Active(pos, offset, color, xSize, ySize, lifeTime);
 				break;
 			}
 		}

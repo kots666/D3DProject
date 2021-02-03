@@ -68,7 +68,7 @@ void CNPC::Render()
 	LPD3DXEFFECT effect = m_shaderCom->GetEffectHandle();
 	if (nullptr == effect) return;
 
-	_int passIndex[3] = { 1, 3, 1 };
+	_int passIndex[3] = { 1, 5, 1 };
 
 	Engine::SafeAddRef(effect);
 
@@ -86,6 +86,7 @@ void CNPC::HitColliderOverlapped(Engine::CGameObject * causer)
 {
 	if (Engine::GetDIKeyDownState('F'))
 	{
+		CSoundManager::PlayOverlapSound(L"Talk.ogg", SoundChannel::EFFECT, 0.1f);
 		CQuestManager::GetInstance()->QuestProgress();
 	}
 

@@ -18,7 +18,7 @@ class CHPUI : public Engine::CGameObject
 {
 private:
 	explicit CHPUI(LPDIRECT3DDEVICE9 device);
-	explicit CHPUI(LPDIRECT3DDEVICE9 device, Engine::CGameObject* target, const _tchar* texName, const _float& x, const _float& y, const _float& sizeX, const _float& sizeY, const _bool& isFixed, const _bool& isFloat);
+	explicit CHPUI(LPDIRECT3DDEVICE9 device, Engine::CGameObject* target, const _tchar* texName, const _float& x, const _float& y, const _float& sizeX, const _float& sizeY, const _float& yOffset, const _bool& isFixed, const _bool& isFloat);
 	virtual ~CHPUI();
 
 public:
@@ -44,6 +44,7 @@ private:
 	_float m_left, m_top;
 	_float m_sizeX, m_sizeY;
 	_float m_percent = 0.f;
+	_float m_yOffset;
 
 	Engine::CGameObject* m_target;
 
@@ -54,7 +55,7 @@ private:
 	_float m_maxHp;
 
 public:
-	static CHPUI* Create(LPDIRECT3DDEVICE9 device, Engine::CGameObject* target, const _tchar* texName, const _float& x, const _float& y, const _float& sizeX, const _float& sizeY, const _bool& isFixed = true, const _bool& isFloat = false);
+	static CHPUI* Create(LPDIRECT3DDEVICE9 device, Engine::CGameObject* target, const _tchar* texName, const _float& x, const _float& y, const _float& sizeX, const _float& sizeY, const _float& yOffset = 2.f, const _bool& isFixed = true, const _bool& isFloat = false);
 
 private:
 	virtual void Free() override;

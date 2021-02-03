@@ -84,13 +84,14 @@ void Client::CFontUI::Render()
 	}
 }
 
-void CFontUI::Active(const _vec3 & pos, const _vec3 & offset, const _float & xSize, const _float & ySize, const _float & lifeTime)
+void CFontUI::Active(const _vec3 & pos, const _vec3 & offset, const _vec4& color, const _float & xSize, const _float & ySize, const _float & lifeTime)
 {
 	if (!m_isActive)
 	{
 		m_startPos = pos;
 		m_offset = offset;
 		m_lifeTime = lifeTime;
+		m_color = color;
 		m_sizeX = xSize;
 		m_sizeY = ySize;
 		m_isActive = true;
@@ -174,6 +175,7 @@ HRESULT CFontUI::SetUpConstantTable(LPD3DXEFFECT & effect)
 	effect->SetMatrix("g_matView", &originViewMat);
 	effect->SetMatrix("g_matProj", &originProjMat);
 	effect->SetFloat("g_percent", m_percent);
+	effect->SetVector("g_color", &m_color);
 
 	m_textureCom->SetTexture(effect, "g_BaseTexture", m_index);
 

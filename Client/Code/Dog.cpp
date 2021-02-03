@@ -61,6 +61,7 @@ _int CDog::Update(const _float& deltaTime)
 	{
 		CalcState(deltaTime);
 		MonsterAI(deltaTime);
+		CalcAttack(deltaTime);
 
 		m_meshCom->PlayAnimation(deltaTime);
 		m_meshCom->UpdateFrameMatrices(deltaTime, &m_reviseMat);
@@ -145,13 +146,26 @@ _bool CDog::AttackColliderOverlapped(Engine::CGameObject * target)
 
 void CDog::HitColliderOverlapped(Engine::CGameObject * causer)
 {
-	m_hp -= 20;
+	_float randNum = ((rand() % 5) + 8) * 0.1f;
+	_int fixDamage = causer->GetATK() * randNum;
+	m_hp -= fixDamage;
+
+	Engine::CTransform* causerTrans = dynamic_cast<Engine::CTransform*>(causer->GetComponent(L"Com_Transform", Engine::ID_DYNAMIC));
+	if (nullptr == causerTrans) return;
+
+	_vec3 targetPos;
+	causerTrans->GetInfo(Engine::INFO_POS, &targetPos);
+
+	LookAtTarget(targetPos);
+
+	_vec3 myPos;
+	m_transCom->GetInfo(Engine::INFO_POS, &myPos);
+
+	CFontManager::GetInstance()->ActiveNumber(fixDamage, myPos);
 
 	if (m_hp > 0)
 	{
-		for (auto& elem : m_hitCollider)
-			elem->SetIsCollide(true);
-
+		DoKnockBack(targetPos, myPos);
 		DoHit();
 	}
 	else
@@ -159,20 +173,7 @@ void CDog::HitColliderOverlapped(Engine::CGameObject * causer)
 		DoDeadAnim();
 	}
 
-	Engine::CTransform* causerTrans = dynamic_cast<Engine::CTransform*>(causer->GetComponent(L"Com_Transform", Engine::ID_DYNAMIC));
-	if (nullptr == causerTrans) return;
-
-	_vec3 pos;
-	causerTrans->GetInfo(Engine::INFO_POS, &pos);
-
-	LookAtTarget(pos);
-
-	CFontManager::GetInstance()->ActiveNumber(2000, pos, 2.f, 0.3f, 0.3f);
-
-	_vec3 myPos;
-	m_transCom->GetInfo(Engine::INFO_POS, &myPos);
-
-	_vec3 spawnPos = pos - myPos;
+	_vec3 spawnPos = targetPos - myPos;
 	spawnPos *= 0.6f;
 
 	spawnPos.y += 1.f;
@@ -372,7 +373,7 @@ void CDog::MonsterAI(const _float& deltaTime)
 
 	_float distance = D3DXVec3Length(&(targetPos - pos));
 
-	if (2.f >= distance)
+	if (4.f >= distance)
 	{
 		DoAttack(targetPos, pos);
 	}
@@ -401,8 +402,6 @@ void CDog::DoChase(const _vec3 & target, const _vec3 & myPos, const _float & del
 
 		m_transCom->SetPos(finalPos);
 
-		cout << finalPos.x << "\t" << finalPos.y << "\t" << finalPos.z << endl;
-
 		m_meshCom->SetAnimation(4, 0.15f, 0.01f, false);
 	}
 }
@@ -411,9 +410,14 @@ void CDog::DoAttack(const _vec3 & target, const _vec3 & myPos)
 {
 	if (!m_isHit && !m_isAttack && !m_isDeadAnim)
 	{
-		EnableAttackCollider();
+		CSoundManager::PlayOverlapSound(L"Dog_Attack.ogg", SoundChannel::MONSTER, 0.1f, 0.1f);
+		
+		m_accTime = 0.f;
+		CalcFrameTime(m_attackStartTime, 10.f);
+		CalcFrameTime(m_attackEndTime, 26.f);
+
 		LookAtTarget(target);
-		m_meshCom->SetAnimation(1, 0.001f, 0.01f, true);
+		m_meshCom->SetAnimation(1, 0.001f, 0.03f, true);
 		m_isAttack = true;
 	}
 }
@@ -430,6 +434,8 @@ void CDog::DoHit()
 {
 	if (!m_isDeadAnim)
 	{
+		CSoundManager::PlayOverlapSound(L"Dog_Damage.ogg", SoundChannel::MONSTER, 0.1f, 0.1f);
+
 		m_meshCom->ResetAnimation();
 
 		m_isAttack = false;
@@ -443,6 +449,8 @@ void CDog::DoDeadAnim()
 {
 	if (!m_isDeadAnim)
 	{
+		CSoundManager::PlayOverlapSound(L"Dog_Die.ogg", SoundChannel::MONSTER, 0.1f, 0.1f);
+
 		DisableHitCollider();
 		m_isDeadAnim = true;
 		m_isHit = false;
@@ -450,6 +458,16 @@ void CDog::DoDeadAnim()
 
 		m_meshCom->SetAnimation(2, 0.015f, 0.1f, false);
 	}
+}
+
+void CDog::DoKnockBack(const _vec3 & targetPos, const _vec3 & myPos)
+{
+	_vec3 backDir = myPos - targetPos;
+	backDir.y = 0.f;
+	D3DXVec3Normalize(&backDir, &backDir);
+
+	_vec3 finalPos = m_naviMeshCom->MoveOnNaviMesh(&myPos, &(backDir * 1.f));
+	m_transCom->SetPosAfterUpdate(&finalPos);
 }
 
 void CDog::LookAtTarget(const _vec3& targetPos)
@@ -470,6 +488,29 @@ void CDog::LookAtTarget(const _vec3& targetPos)
 	_float degree = D3DXToDegree(angle);
 
 	m_transCom->SetRotation(Engine::ROT_Y, D3DXToRadian(-degree));
+}
+
+void CDog::CalcFrameTime(_float & outTime, const _float & frame)
+{
+	outTime = (frame / 30.f);
+}
+
+void CDog::CalcAttack(const _float& deltaTime)
+{
+	if (m_isAttack)
+	{
+		m_accTime += deltaTime;
+
+		if (m_accTime > m_attackStartTime)
+		{
+			EnableAttackCollider();
+		}
+		
+		if (m_accTime > m_attackEndTime)
+		{
+			DisableAttackCollider();
+		}
+	}
 }
 
 CDog* CDog::Create(LPDIRECT3DDEVICE9 device, const _vec3& pos, const _float& angle)

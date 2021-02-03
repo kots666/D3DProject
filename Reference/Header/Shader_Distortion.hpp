@@ -72,7 +72,7 @@ PS_OUT	PS_MAIN(PS_IN In)
 	vector noiseColor = tex2D(NoiseSampler, texUV);
 	vector maskColor = tex2D(MaskSampler, In.vTexUV);
 
-	Out.vColor = noiseColor * maskColor;
+	Out.vColor = noiseColor;
 
 	return Out;
 }

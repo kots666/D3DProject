@@ -40,7 +40,7 @@ private:
 	_bool m_isFinish;
 
 	_uint m_nowLoad = 0;
-	_uint m_maxLoad = 185;
+	_uint m_maxLoad = 186;
 
 public:
 	static CLoading* Create(LPDIRECT3DDEVICE9 device, LOADINGID loadID);

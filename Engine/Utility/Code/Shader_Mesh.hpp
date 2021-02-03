@@ -218,7 +218,7 @@ PS_NORMAL_OUT PS_NORMALMAIN2(PS_NORMAL_IN In)
 
 // ============================================= 디졸브 =============================================
 
-PS_OUT PS_DISSOLVEMAIN(PS_IN disIn)
+PS_NORMAL_OUT PS_DISSOLVEMAIN(PS_NORMAL_IN disIn)
 {
 	PS_OUT disOut = (PS_OUT)0;
 
@@ -230,7 +230,37 @@ PS_OUT PS_DISSOLVEMAIN(PS_IN disIn)
 	else
 		disOut.vColor.a = 1.f;
 
-	disOut.vNormal = vector(disIn.vNormal.xyz * 0.5f + 0.5f, 0.f);
+	float4 texNormal = tex2D(NormalSampler, disIn.vTexUV);
+	texNormal = (texNormal * 2.0f) - 1.0f;
+	float3 normal = (texNormal.x * disIn.T) + (texNormal.y * disIn.B) + (texNormal.z * disIn.N);
+
+	disOut.vNormal = vector(normal.xyz * 0.5f + 0.5f, 1.f);
+	disOut.vDepth = vector(disIn.vProjPos.z / disIn.vProjPos.w, disIn.vProjPos.w * 0.001f, 0.f, 0.f);
+
+	return disOut;
+}
+
+PS_NORMAL_OUT PS_DISSOLVEMAIN2(PS_NORMAL_IN disIn)
+{
+	PS_OUT disOut = (PS_OUT)0;
+
+	disOut.vColor = tex2D(BaseSampler, disIn.vTexUV);	// 2차원 텍스처로부터 uv좌표에 해당하는 색을 얻어오는 함수, 반환 타입이 vector 타입
+	vector vDissolveColor = tex2D(DissolveSampler, disIn.vTexUV);
+
+	if (g_DissolveAmount > vDissolveColor.r)
+		disOut.vColor.a = 0.f;
+	else
+		disOut.vColor.a = 1.f;
+
+	float4 texNormal = tex2D(NormalSampler, disIn.vTexUV);
+
+	float3 unpackedNormal;
+	unpackedNormal.xy = texNormal.xy * 2 - 1;
+	unpackedNormal.z = sqrt(1 - saturate(dot(unpackedNormal.xy, unpackedNormal.xy)));
+
+	float3 normal = (unpackedNormal.x * disIn.T) + (unpackedNormal.y * disIn.B) + (unpackedNormal.z * disIn.N);
+
+	disOut.vNormal = vector(normal.xyz * 0.5f + 0.5f, 1.f);
 	disOut.vDepth = vector(disIn.vProjPos.z / disIn.vProjPos.w, disIn.vProjPos.w * 0.001f, 0.f, 0.f);
 
 	return disOut;
@@ -241,23 +271,31 @@ technique Default_Device
 	// 기능의 캡슐화
 	pass
 	{
-		// 기본 디퍼드
+		// 0. 기본 디퍼드
 		vertexshader = compile vs_3_0 VS_MAIN();
 		pixelshader = compile ps_3_0 PS_MAIN();
 	}
 
 	pass
 	{
-		// 평범한 노말맵 노말맵핑
+		// 1. 평범한 노말맵 노말맵핑
 		vertexshader = compile vs_3_0 VS_NORMALMAIN();
 		pixelshader = compile ps_3_0 PS_NORMALMAIN();
 	}
 
 	pass
 	{
-		// 기본 디퍼드 + 디졸브
+		// 2. 2채널 노말맵 노말맵핑
+		vertexshader = compile vs_3_0 VS_NORMALMAIN();
+		pixelshader = compile ps_3_0 PS_NORMALMAIN2();
+	}
+
+	pass
+	{
+		// 3. 평범한 노말맵 노말맵핑 + 디졸브
+
 		alphatestenable = true;
-		alpharef = 10;
+		alpharef = 0;
 		alphafunc = greater;
 
 		vertexshader = compile vs_3_0 VS_MAIN();
@@ -266,20 +304,33 @@ technique Default_Device
 
 	pass
 	{
-		// 알파테스트 + 기본 디퍼드
+		// 4. 2채널 노말맵 노말맵핑 + 디졸브
+
 		alphatestenable = true;
 		alpharef = 0;
 		alphafunc = greater;
-
-		vertexshader = compile vs_3_0 VS_MAIN();
-		pixelshader = compile ps_3_0 PS_MAIN();
+		
+		vertexshader = compile vs_3_0 VS_NORMALMAIN();
+		pixelshader = compile ps_3_0 PS_DISSOLVEMAIN2();
 	}
 
 	pass
 	{
-		// 모델 스페이스 노말맵 노말맵핑
-		// + 디졸브 이펙트
-		
+		// 5. 평범한 노말맵 노말맵핑 + 알파테스트
+		alphatestenable = true;
+		alpharef = 0;
+		alphafunc = greater;
+
+		vertexshader = compile vs_3_0 VS_NORMALMAIN();
+		pixelshader = compile ps_3_0 PS_NORMALMAIN();
+	}
+
+	pass
+	{
+		// 6. 2채널 노말맵 노말맵핑 + 알파테스트
+		alphatestenable = true;
+		alpharef = 0;
+		alphafunc = greater;
 
 		vertexshader = compile vs_3_0 VS_NORMALMAIN();
 		pixelshader = compile ps_3_0 PS_NORMALMAIN2();

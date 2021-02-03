@@ -207,7 +207,14 @@ _uint CLoading::LoadingForStage()
 		Engine::TEX_NORMAL,
 		L"../Resource/Texture/Terrain/LV_B2_Prototype_Floor02_N.tga"), E_FAIL);
 
-	_int textureCnt = 15;
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Texture_FlashEffect",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/Effect/FlashEffect.tga"), E_FAIL);
+
+	_int textureCnt = 16;
 	m_nowLoad += textureCnt;
 
 	LoadingForDynamicMeshNormalTextures();

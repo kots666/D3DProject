@@ -34,6 +34,9 @@ HRESULT CStage::Ready()
 	FAILED_CHECK_RETURN(ReadyUILayer(L"UI"), E_FAIL);
 	FAILED_CHECK_RETURN(ReadyLightInfo(), E_FAIL);
 
+	CSoundManager::StopAll();
+	CSoundManager::PlayBGM(L"StageBGM.ogg");
+
 	return S_OK;
 }
 

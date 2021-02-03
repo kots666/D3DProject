@@ -49,6 +49,7 @@ private:
 	_vec3 PickUpOnTerrain();
 
 	void UpdateAnimMatrices();
+	void CalcState(const _float& deltaTime);
 	void CalcComboTime(const _float& deltaTime);
 	void CalcSkillTime(const _float& deltaTime);
 
@@ -61,6 +62,7 @@ public:
 	void DoAttack();
 	void DoSkill01();
 	void DoSkill02(); // ¿ø°Å¸®
+	void DoHit();
 
 private:
 	Engine::CDynamicMesh* m_meshCom = nullptr;
@@ -87,8 +89,11 @@ private:
 	_bool m_isSkill = false;
 	_bool m_isAttack = false;
 	_bool m_isCombo = false;
+	_bool m_isHit = false;
+	_bool m_isInvincible = false;
 	_int m_comboIndex = 0;
-	_float m_accTime = 0.f;
+	_float m_attackAccTime = 0.f;
+	_float m_skillAccTime = 0.f;
 	_float m_comboTime = 0.f;
 	_float m_attackStartTime = 0.f;
 	_float m_attackEndTime = 0.f;

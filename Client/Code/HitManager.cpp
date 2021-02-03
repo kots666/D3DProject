@@ -25,6 +25,12 @@ CHitManager::~CHitManager()
 	}
 	m_hitSlashList.clear();
 
+	for (auto& elem : m_flashHitEffectList)
+	{
+		Engine::SafeRelease(elem);
+	}
+	m_flashHitEffectList.clear();
+
 	for (auto elem : m_nameList)
 	{
 		if (nullptr != elem)
@@ -60,15 +66,29 @@ void CHitManager::SpawnHitSlash(const _vec3 & pos, const _float & xSize, const _
 	}
 }
 
+void CHitManager::SpawnFlashHitEffect(const _vec3 & pos, const _float & xSize, const _float & ySize, const _float & lifeTime)
+{
+	for (auto& elem : m_flashHitEffectList)
+	{
+		if (!elem->GetActive())
+		{
+			elem->SetActive(pos, xSize, ySize, lifeTime);
+			break;
+		}
+	}
+}
+
 void CHitManager::ReadyEffect()
 {
 	_int readyCount = 20;
 
 	m_hitEffectList.reserve(readyCount);
 	m_hitSlashList.reserve(readyCount);
+	m_flashHitEffectList.reserve(readyCount);
 
 	_vec4 hitEffectColor = { 3.f, 3.f, 0.83f, 0.8f };
 	_vec4 hitSlashColor = { 10000.f, 10000.f, 10000.f, 1.f };
+	_vec4 playerHitEffectColor = { 3.f, 0.f, 0.f, 1.f };
 
 	for (_int i = 0; i < readyCount; ++i)
 	{
@@ -88,7 +108,7 @@ void CHitManager::ReadyEffect()
 
 		Engine::GetCurScene()->GetLayer(L"Environment")->AddGameObject(effectName, hitEffect);
 
-		CCrossEffect* hitSlash = CCrossEffect::Create(
+		CHitEffect* hitSlash = CHitEffect::Create(
 			Engine::CGraphicDevice::GetInstance()->GetDevice(),
 			hitSlashColor,
 			L"Texture_HitSlash",
@@ -105,5 +125,21 @@ void CHitManager::ReadyEffect()
 		m_nameList.emplace_back(effectName);
 
 		Engine::GetCurScene()->GetLayer(L"Environment")->AddGameObject(effectName, hitSlash);
+
+		CHitEffect* playerHitEffect = CHitEffect::Create(
+			Engine::CGraphicDevice::GetInstance()->GetDevice(),
+			playerHitEffectColor,
+			L"Texture_HitEffect",
+			3,
+			3);
+		Engine::SafeAddRef(playerHitEffect);
+
+		m_flashHitEffectList.emplace_back(playerHitEffect);
+
+		effectName = new _tchar[20];
+		wsprintf(effectName, L"PlayerHitEffect_%d", i);
+		m_nameList.emplace_back(effectName);
+
+		Engine::GetCurScene()->GetLayer(L"Environment")->AddGameObject(effectName, playerHitEffect);
 	}
 }

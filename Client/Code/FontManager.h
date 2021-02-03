@@ -17,7 +17,7 @@ private:
 	virtual ~CFontManager();
 
 public:
-	void ActiveNumber(const _int& inputNumber, const _vec3& pos, const _float& lifeTime = 2.f, const _float& xSize = 1.f, const _float& ySize = 1.f);
+	void ActiveNumber(const _int& inputNumber, const _vec3& pos, const _vec4& color = { 1.f, 1.f, 1.f, 1.f }, const _float& lifeTime = 2.f, const _float& xSize = 0.3f, const _float& ySize = 0.3f);
 
 private:
 	void ReadyFontUI();

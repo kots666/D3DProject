@@ -19,9 +19,9 @@ CHPUIManager::~CHPUIManager()
 	m_nameList.clear();
 }
 
-void CHPUIManager::Create(LPDIRECT3DDEVICE9 device, Engine::CGameObject * target, const _float & sizeX, const _float & sizeY, const _tchar * texName)
+void CHPUIManager::Create(LPDIRECT3DDEVICE9 device, Engine::CGameObject * target, const _float& yOffset, const _float & sizeX, const _float & sizeY, const _tchar * texName)
 {
-	Engine::CGameObject* newHPUI = CHPUI::Create(device, target, texName, 0, 0, sizeX, sizeY, false);
+	Engine::CGameObject* newHPUI = CHPUI::Create(device, target, texName, 0, 0, sizeX, sizeY, yOffset, false);
 	if (nullptr == newHPUI) return;
 
 	_tchar* newName = new _tchar[20];

@@ -4,13 +4,10 @@
 #include "Transform.h"
 #include "Texture.h"
 
-CSkillRock::CSkillRock(LPDIRECT3DDEVICE9 device, _tchar * key, _tchar * name, const _vec3 & pos, const _vec3 & scale, const _vec3 & rot) :
+CSkillRock::CSkillRock(LPDIRECT3DDEVICE9 device, _tchar * name, const _vec3 & pos) :
 	CGameObject(device),
-	m_key(key),
 	m_name(name),
-	m_pos(pos),
-	m_scale(scale),
-	m_rotation(rot)
+	m_pos(pos)
 {
 }
 
@@ -27,9 +24,7 @@ HRESULT CSkillRock::Ready()
 {
 	FAILED_CHECK_RETURN(AddComponent(), E_FAIL);
 
-	m_transCom->SetScale(m_scale.x, m_scale.y, m_scale.z);
 	m_transCom->SetPos(m_pos);
-	m_transCom->SetRotation(m_rotation.x, m_rotation.y, m_rotation.z);
 
 	return S_OK;
 }
@@ -59,6 +54,11 @@ void CSkillRock::Render()
 	effect->End();
 
 	Engine::SafeRelease(effect);
+
+	for (auto& elem : m_attackCollider)
+	{
+		elem->Render();
+	}
 }
 
 HRESULT CSkillRock::AddComponent()
@@ -66,7 +66,7 @@ HRESULT CSkillRock::AddComponent()
 	Engine::CComponent* component = nullptr;
 	
 	// Mesh
-	component = m_meshCom = dynamic_cast<Engine::CStaticMesh*>(Engine::CloneResource(Engine::RESOURCE_STAGE, m_key));
+	component = m_meshCom = dynamic_cast<Engine::CStaticMesh*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Mesh_SkillRock"));
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Mesh", component);
 
@@ -87,7 +87,7 @@ HRESULT CSkillRock::AddComponent()
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Shader", component);
 
 	// Texture
-	component = m_normalTexCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_NORMAL, m_key));
+	component = m_normalTexCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_NORMAL, L"Mesh_SkillRock"));
 	if (nullptr == component) return S_OK;
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_NormalTexture", component);
 
@@ -111,9 +111,9 @@ HRESULT CSkillRock::SetUpConstantTable(LPD3DXEFFECT & effect)
 	return S_OK;
 }
 
-CSkillRock * CSkillRock::Create(LPDIRECT3DDEVICE9 device, _tchar * key, _tchar * name, const _vec3 & pos, const _vec3 & scale, const _vec3 & rot)
+CSkillRock * CSkillRock::Create(LPDIRECT3DDEVICE9 device, _tchar * name, const _vec3 & pos)
 {
-	CSkillRock* instance = new CSkillRock(device, key, name, pos, scale, rot);
+	CSkillRock* instance = new CSkillRock(device, name, pos);
 
 	if (FAILED(instance->Ready()))
 		Engine::SafeRelease(instance);

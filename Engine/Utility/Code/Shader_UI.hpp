@@ -13,6 +13,7 @@ sampler BaseSampler = sampler_state
 
 };
 
+vector g_color;
 float g_percent;
 
 struct	VS_IN
@@ -81,6 +82,7 @@ PS_OUT PS_MAIN3(PS_IN In3)
 
 	Out3.vColor = tex2D(BaseSampler, In3.vTexUV);
 
+	Out3.vColor.rgb *= g_color.rgb;
 	Out3.vColor.a *= g_percent;
 
 	return Out3;

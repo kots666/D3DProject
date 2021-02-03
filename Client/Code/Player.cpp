@@ -56,6 +56,7 @@ HRESULT CPlayer::Ready()
 _int CPlayer::Update(const _float& deltaTime)
 {
 	//SetUpOnTerrain();
+	CalcState(deltaTime);
 	CalcComboTime(deltaTime);
 	CalcSkillTime(deltaTime);
 	KeyInput(deltaTime);
@@ -134,22 +135,35 @@ _bool CPlayer::AttackColliderOverlapped(Engine::CGameObject * target)
 	m_collideList.emplace_back(target);
 
 	m_camera->ShakeCamera();
-	CPlayTimeManager::GetInstance()->SetHitSlow();
-
-	//cout << "Player Attack Something" << endl;
+	CPlayTimeManager::GetInstance()->SetHitSlow(0.02f);
 
 	return true;
 }
 
 void CPlayer::HitColliderOverlapped(Engine::CGameObject * causer)
 {
+	_float randNum = ((rand() % 5) + 8) * 0.1f;
+	_int fixDamage = causer->GetATK() * randNum;
+
 	if (m_hp > 0)
 	{
-		m_hp -= 10;
+		m_hp -= fixDamage;
 	}
 
-	for (auto& elem : m_hitCollider)
-		elem->SetIsCollide(true);
+	if (!m_isInvincible)
+	{
+		CSoundManager::PlayOverlapSound(L"Player_Damage.ogg", SoundChannel::PLAYER, 0.1f);
+
+		_vec3 myPos;
+		m_transCom->GetInfo(Engine::INFO_POS, &myPos);
+
+		CFontManager::GetInstance()->ActiveNumber(fixDamage, myPos, { 1.f, 0.f, 0.f, 1.f });
+
+		myPos.y += 1.5f;
+
+		CHitManager::GetInstance()->SpawnFlashHitEffect(myPos);
+		DoHit();
+	}
 }
 
 HRESULT CPlayer::AddComponent()
@@ -323,7 +337,7 @@ void CPlayer::KeyInput(const _float& deltaTime)
 		DoIdle();
 	}
 
-	if ((m_state == STATE_IDLE) && nullptr != m_camera)
+	if ((m_state == STATE_IDLE) && nullptr != m_camera && !m_isHit)
 	{
 		if (GetAsyncKeyState('W') & 0x8000)
 		{
@@ -492,8 +506,8 @@ void CPlayer::KeyInput(const _float& deltaTime)
 
 	if (!isAnyKeyDown && (m_state == STATE_IDLE))
 	{
-		m_meshCom->SetAnimation(0, 0.15f, 0.1f, false);
-		m_comboIndex = 0;
+		if(!m_isHit)
+			DoIdle();
 	}
 }
 
@@ -536,13 +550,25 @@ void CPlayer::UpdateAnimMatrices()
 	m_yScaleRotMat *= m_yRotMat;
 }
 
+void CPlayer::CalcState(const _float & deltaTime)
+{
+	if (m_isHit)
+	{
+		if (m_meshCom->IsAnimationSetEnd())
+		{
+			m_isHit = false;
+			DoIdle();
+		}
+	}
+}
+
 void CPlayer::CalcComboTime(const _float& deltaTime)
 {
 	if (m_isAttack)
 	{
-		m_accTime += deltaTime;
+		m_attackAccTime += deltaTime;
 
-		if (!m_isStartAttack && m_accTime > m_attackStartTime)
+		if (!m_isStartAttack && m_attackAccTime > m_attackStartTime)
 		{
 			m_isStartAttack = true;
 
@@ -550,8 +576,16 @@ void CPlayer::CalcComboTime(const _float& deltaTime)
 
 			for (auto& elem : m_attackCollider)
 				elem->SetCanCollide(true);
+
+			switch (m_comboIndex)
+			{
+			case 1: CSoundManager::PlayOverlapSound(L"Player_Attack01.ogg", SoundChannel::PLAYER, 0.05f); break;
+			case 2: CSoundManager::PlayOverlapSound(L"Player_Attack02.ogg", SoundChannel::PLAYER, 0.05f); break;
+			case 3: CSoundManager::PlayOverlapSound(L"Player_Attack03.ogg", SoundChannel::PLAYER, 0.05f); break;
+			case 4: CSoundManager::PlayOverlapSound(L"Player_Attack04.ogg", SoundChannel::PLAYER, 0.05f); break;
+			}
 		}
-		else if (!m_isEndAttack && m_accTime > m_attackEndTime)
+		else if (!m_isEndAttack && m_attackAccTime > m_attackEndTime)
 		{
 			m_isEndAttack = true;
 
@@ -563,28 +597,36 @@ void CPlayer::CalcComboTime(const _float& deltaTime)
 
 void CPlayer::CalcSkillTime(const _float & deltaTime)
 {
-	if (m_skillStartTimeList.empty() || m_skillEndTimeList.empty())
+	if (m_skillStartTimeList.empty() && m_skillEndTimeList.empty())
 		return;
 	if (m_isSkill)
 	{
-		m_accTime += deltaTime;
+		m_skillAccTime += deltaTime;
 
-		_float skillStartTime = m_skillStartTimeList.front();
-		_float skillEndTime = m_skillEndTimeList.front();
+		_float skillStartTime = 10.f;
+		_float skillEndTime = 10.f;
 
-		if (!m_isStartSkill && m_isEndSkill && m_accTime > skillStartTime)
+		if (!m_skillStartTimeList.empty())
+			skillStartTime = m_skillStartTimeList.front();
+
+		if (!m_skillEndTimeList.empty())
+			skillEndTime = m_skillEndTimeList.front();
+
+		if (!m_isStartSkill && m_isEndSkill && m_skillAccTime > skillStartTime)
 		{
 			m_isStartSkill = true;
 			m_isEndSkill = false;
 
 			m_skillStartTimeList.pop_front();
 
+			CSoundManager::PlayOverlapSound(L"Player_Attack01.ogg", SoundChannel::PLAYER, 0.05f, 0.1f);
+
 			for (auto& elem : m_attackCollider)
 				elem->SetCanCollide(true);
 
 			ClearCollideList();
 		}
-		else if (m_isStartSkill && !m_isEndSkill && m_accTime > skillEndTime)
+		else if (m_isStartSkill && !m_isEndSkill && m_skillAccTime > skillEndTime)
 		{
 			m_isStartSkill = false;
 			m_isEndSkill = true;
@@ -623,9 +665,10 @@ void CPlayer::DoIdle()
 	m_meshCom->SetAnimation(0, 0.15f, 0.1f, false);
 	m_animationSpeed = 1.f;
 	m_comboIndex = 0;
+	m_isHit = false;
 	m_isCombo = false;
 	m_isSkill = false;
-	m_accTime = 0.f;
+	m_attackAccTime = 0.f;
 	m_comboTime = 0.f;
 
 	m_state = STATE_IDLE;
@@ -636,7 +679,7 @@ void CPlayer::DoIdle()
 
 void CPlayer::DoAttack()
 {
-	if (m_comboTime <= m_accTime)
+	if (m_comboTime <= m_attackAccTime && !m_isHit)
 	{
 		m_state |= STATE_ATTACK;
 
@@ -645,7 +688,7 @@ void CPlayer::DoAttack()
 		m_isStartAttack = false;
 		m_isEndAttack = false;
 
-		CSoundManager::PlayOverlapSound(L"DogDie.ogg", SoundChannel::PLAYER);
+		//CSoundManager::PlayOverlapSound(L"Player_Attack_Voice.ogg", SoundChannel::PLAYER, 0.1f);
 
 		switch (m_comboIndex)
 		{
@@ -654,7 +697,7 @@ void CPlayer::DoAttack()
 			m_isAttack = true;
 			m_isCombo = true;
 			m_animationSpeed = 1.5f;
-			m_accTime = 0.f;
+			m_attackAccTime = 0.f;
 			m_comboTime = (22.f / 30.f) / m_animationSpeed;
 			m_attackStartTime = (1.f / 30.f) / m_animationSpeed;
 			m_attackEndTime = m_comboTime + 0.06f;
@@ -665,7 +708,7 @@ void CPlayer::DoAttack()
 			m_isAttack = true;
 			m_isCombo = true;
 			m_animationSpeed = 1.5f;
-			m_accTime = 0.f;
+			m_attackAccTime = 0.f;
 			m_comboTime = (22.f / 30.f) / m_animationSpeed;
 			m_attackStartTime = (1.f / 30.f) / m_animationSpeed;
 			m_attackEndTime = m_comboTime + 0.06f;
@@ -676,7 +719,7 @@ void CPlayer::DoAttack()
 			m_isAttack = true;
 			m_isCombo = true;
 			m_animationSpeed = 1.5f;
-			m_accTime = 0.f;
+			m_attackAccTime = 0.f;
 			m_comboTime = (44.f / 30.f) / m_animationSpeed;
 			m_attackStartTime = (15.f / 30.f) / m_animationSpeed;
 			m_attackEndTime = m_comboTime + 0.06f;
@@ -687,7 +730,7 @@ void CPlayer::DoAttack()
 			m_isAttack = true;
 			m_isCombo = true;
 			m_animationSpeed = 1.5f;
-			m_accTime = 0.f;
+			m_attackAccTime = 0.f;
 			m_comboTime = (34.f / 30.f) / m_animationSpeed;
 			m_attackStartTime = (12.f / 30.f) / m_animationSpeed;
 			m_attackEndTime = m_comboTime + 0.03f;
@@ -699,7 +742,7 @@ void CPlayer::DoAttack()
 
 void CPlayer::DoSkill01()
 {
-	if (!m_isSkill || !m_isDead)
+	if (!m_isSkill && !m_isDead && !m_isHit)
 	{
 		m_state |= STATE_ATTACK;
 
@@ -707,7 +750,13 @@ void CPlayer::DoSkill01()
 		m_isStartSkill = false;
 		m_isEndSkill = true;
 
-		m_accTime = 0.f;
+		m_isStartAttack = false;
+		m_isEndAttack = false;
+		m_isAttack = false;
+		m_isCombo = false;
+		m_attackAccTime = 0.f;
+
+		m_skillAccTime = 0.f;
 		m_skillStartTimeList.clear();
 		m_skillEndTimeList.clear();
 
@@ -746,7 +795,7 @@ void CPlayer::DoSkill01()
 		m_skillEndTimeList.emplace_back(frameTiming);
 
 		// 6번째 공격
-		CalcFrameTime(frameTiming, 102.f);
+		CalcFrameTime(frameTiming, 100.f);
 		m_skillStartTimeList.emplace_back(frameTiming);
 		CalcFrameTime(frameTiming, 114.f);
 		m_skillEndTimeList.emplace_back(frameTiming);
@@ -769,6 +818,17 @@ void CPlayer::DoSkill02()
 		m_meshCom->SetAnimation(12, 0.01f, 0.04f, true);
 
 		LookAtMouseDirection();
+	}
+}
+
+void CPlayer::DoHit()
+{
+	if (!m_isSkill && !m_isHit)
+	{
+		m_isHit = true;
+		m_animationSpeed = 1.f;
+
+		m_meshCom->SetAnimation(8, 0.01f, 0.05f, true);
 	}
 }
 

@@ -18,7 +18,7 @@ BEGIN(Client)
 class CSkillRock : public Engine::CGameObject
 {
 private:
-	explicit CSkillRock(LPDIRECT3DDEVICE9 device, _tchar* key, _tchar* name, const _vec3& pos, const _vec3& scale, const _vec3& rot);
+	explicit CSkillRock(LPDIRECT3DDEVICE9 device, _tchar* name, const _vec3& pos);
 	virtual ~CSkillRock();
 
 public:
@@ -42,7 +42,7 @@ private:
 	_vec3 m_pos;
 
 public:
-	static CSkillRock* Create(LPDIRECT3DDEVICE9 device, _tchar* key, _tchar* name, const _vec3& pos, const _vec3& scale, const _vec3& rot);
+	static CSkillRock* Create(LPDIRECT3DDEVICE9 device, _tchar* name, const _vec3& pos);
 
 private:
 	virtual void Free() override;

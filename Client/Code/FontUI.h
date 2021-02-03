@@ -27,7 +27,7 @@ public:
 	virtual void Render() override;
 
 public:
-	void Active(const _vec3& pos, const _vec3& offset, const _float& xSize = 1.f, const _float& ySize = 1.f, const _float& lifeTime = 2.f);
+	void Active(const _vec3& pos, const _vec3& offset, const _vec4& color = { 1.f, 1.f, 1.f, 1.f }, const _float& xSize = 1.f, const _float& ySize = 1.f, const _float& lifeTime = 2.f);
 
 	// Getter
 	_bool GetActive() const { return m_isActive; }
@@ -52,6 +52,7 @@ private:
 	const _tchar* m_texName;
 	_vec3 m_startPos;
 	_vec3 m_offset;
+	_vec4 m_color;
 	_float m_sizeX, m_sizeY;
 	_float m_percent = 0.f;
 

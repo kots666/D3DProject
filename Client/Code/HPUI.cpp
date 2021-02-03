@@ -9,14 +9,15 @@ CHPUI::CHPUI(LPDIRECT3DDEVICE9 device) :
 
 }
 
-CHPUI::CHPUI(LPDIRECT3DDEVICE9 device, Engine::CGameObject * target, const _tchar * texName, const _float & x, const _float & y, const _float & sizeX, const _float & sizeY, const _bool& isFixed, const _bool& isFloat) :
+CHPUI::CHPUI(LPDIRECT3DDEVICE9 device, Engine::CGameObject * target, const _tchar * texName, const _float & x, const _float & y, const _float & sizeX, const _float & sizeY, const _float& yOffset, const _bool& isFixed, const _bool& isFloat) :
 	Engine::CGameObject(device),
 	m_target(target),
 	m_texName(texName),
 	m_wantedX(x), m_wantedY(y),
 	m_sizeX(sizeX), m_sizeY(sizeY),
 	m_isFixed(isFixed),
-	m_isFloat(isFloat)
+	m_isFloat(isFloat),
+	m_yOffset(yOffset)
 {
 	Engine::SafeAddRef(m_target);
 }
@@ -185,7 +186,7 @@ HRESULT CHPUI::SetUpConstantTable(LPD3DXEFFECT & effect)
 		D3DXMatrixInverse(&viewMat, 0, &viewMat);
 
 		viewMat._41 = targetPos.x;
-		viewMat._42 = targetPos.y + 2.f;
+		viewMat._42 = targetPos.y + m_yOffset;
 		viewMat._43 = targetPos.z;
 
 		viewMat._11 *= m_sizeX;
@@ -215,9 +216,9 @@ HRESULT CHPUI::SetUpConstantTable(LPD3DXEFFECT & effect)
 	return S_OK;
 }
 
-CHPUI * CHPUI::Create(LPDIRECT3DDEVICE9 device, Engine::CGameObject * target, const _tchar * texName, const _float & x, const _float & y, const _float & sizeX, const _float & sizeY, const _bool & isFixed, const _bool & isFloat)
+CHPUI * CHPUI::Create(LPDIRECT3DDEVICE9 device, Engine::CGameObject * target, const _tchar * texName, const _float & x, const _float & y, const _float & sizeX, const _float & sizeY, const _float& yOffset, const _bool & isFixed, const _bool & isFloat)
 {
-	CHPUI* instance = new CHPUI(device, target, texName, x, y, sizeX, sizeY, isFixed, isFloat);
+	CHPUI* instance = new CHPUI(device, target, texName, x, y, sizeX, sizeY, yOffset, isFixed, isFloat);
 
 	if (FAILED(instance->Ready()))
 		Client::SafeRelease(instance);

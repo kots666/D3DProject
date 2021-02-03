@@ -15,7 +15,7 @@ private:
 	virtual ~CHPUIManager();
 
 public:
-	void Create(LPDIRECT3DDEVICE9 device, Engine::CGameObject* target, const _float& sizeX = 1.5f, const _float& sizeY = 0.15f, const _tchar* texName = L"Texture_HPBar2");
+	void Create(LPDIRECT3DDEVICE9 device, Engine::CGameObject* target, const _float& yOffset = 2.f, const _float& sizeX = 1.5f, const _float& sizeY = 0.15f, const _tchar* texName = L"Texture_HPBar2");
 
 private:
 	_int m_hpCnt;

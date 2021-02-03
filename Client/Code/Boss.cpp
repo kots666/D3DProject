@@ -51,50 +51,64 @@ HRESULT CBoss::Ready()
 
 _int CBoss::Update(const _float& deltaTime)
 {
-	CalcState(deltaTime);
-	MonsterAI(deltaTime);
-
-	m_meshCom->PlayAnimation(deltaTime);
-	m_meshCom->UpdateFrameMatrices(deltaTime, &m_reviseMat);
-
-	_vec3 movePos;
-
-	if (m_meshCom->CanCalcMovePos("Bip001", movePos))
+	if (!m_isDissolve)
 	{
-		//D3DXVec3TransformNormal(&movePos, &movePos, &m_yScaleRotMat);
-		movePos.y = 0;
-		movePos.z = 0;
+		CalcState(deltaTime);
+		MonsterAI(deltaTime);
 
-		_vec3 nowPos;
-		_vec3 nowDir;
-		m_transCom->GetInfo(Engine::INFO_POS, &nowPos);
-		m_transCom->GetInfo(Engine::INFO_LOOK, &nowDir);
+		m_meshCom->PlayAnimation(deltaTime);
+		m_meshCom->UpdateFrameMatrices(deltaTime, &m_reviseMat);
 
-		nowDir *= movePos.x;
+		_vec3 movePos;
 
-		//_vec3 moveDist = m_naviMeshCom->MoveOnNaviMesh(&nowPos, &(movePos));
-		_vec3 moveDist = nowPos + nowDir;
+		if (m_meshCom->CanCalcMovePos("Bip001", movePos))
+		{
+			//D3DXVec3TransformNormal(&movePos, &movePos, &m_yScaleRotMat);
+			movePos.y = 0;
+			movePos.z = 0;
 
-		m_transCom->SetPos(moveDist);
+			_vec3 nowPos;
+			_vec3 nowDir;
+			m_transCom->GetInfo(Engine::INFO_POS, &nowPos);
+			m_transCom->GetInfo(Engine::INFO_LOOK, &nowDir);
 
-		//cout << movePos.x << endl;
+			nowDir *= movePos.x;
+
+			//_vec3 moveDist = m_naviMeshCom->MoveOnNaviMesh(&nowPos, &(movePos));
+			_vec3 moveDist = nowPos + nowDir;
+
+			m_transCom->SetPos(moveDist);
+
+			//cout << movePos.x << endl;
+		}
+
+		for (auto& elem : m_hitCollider)
+		{
+			elem->Update(deltaTime);
+			elem->UpdateByBone(m_transCom->GetWorldMatrix());
+		}
+
+		for (auto& elem : m_attackCollider)
+		{
+			elem->Update(deltaTime);
+			elem->UpdateByBone(m_transCom->GetWorldMatrix());
+		}
+	}
+	else if (m_isDissolve)
+	{
+		m_dissolveAmount += deltaTime;
+		if (1.f < m_dissolveAmount)
+			m_isDead = true;
 	}
 
 	Engine::CGameObject::Update(deltaTime);
 
 	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
 
-	for (auto& elem : m_hitCollider)
-	{
-		elem->Update(deltaTime);
-		elem->UpdateByBone(m_transCom->GetWorldMatrix());
-	}
+	_vec3 pos;
+	m_transCom->GetInfo(Engine::INFO_POS, &pos);
 
-	for (auto& elem : m_attackCollider)
-	{
-		elem->Update(deltaTime);
-		elem->UpdateByBone(m_transCom->GetWorldMatrix());
-	}
+	m_naviMeshCom->UpdateCurrentIndex(&pos);
 
 	return 0;
 }
@@ -104,7 +118,7 @@ void CBoss::Render()
 	LPD3DXEFFECT effect = m_shaderCom->GetEffectHandle();
 	if (nullptr == effect) return;
 
-	_int passIndex[3] = { 4, 4, 4 };
+	_int passIndex[3] = { 4, 4, 5 };
 
 	Engine::SafeAddRef(effect);
 
@@ -129,13 +143,17 @@ _bool CBoss::AttackColliderOverlapped(Engine::CGameObject * target)
 
 void CBoss::HitColliderOverlapped(Engine::CGameObject * causer)
 {
-	m_hp -= 20;
+	_float randNum = ((rand() % 5) + 8) * 0.1f;
+	_int fixDamage = causer->GetATK() * randNum;
+	m_hp -= fixDamage;
+
+	_vec3 myPos;
+	m_transCom->GetInfo(Engine::INFO_POS, &myPos);
+
+	CFontManager::GetInstance()->ActiveNumber(fixDamage, myPos);
 
 	if (m_hp > 0)
 	{
-		for (auto& elem : m_hitCollider)
-			elem->SetIsCollide(true);
-
 		DisableAttackCollider();
 		DoKnockUp();
 	}
@@ -145,16 +163,26 @@ void CBoss::HitColliderOverlapped(Engine::CGameObject * causer)
 		DoDeadAnim();
 	}
 
+	Engine::CTransform* causerTrans = dynamic_cast<Engine::CTransform*>(causer->GetComponent(L"Com_Transform", Engine::ID_DYNAMIC));
+	if (nullptr == causerTrans) return;
+
+	_vec3 targetPos;
+	causerTrans->GetInfo(Engine::INFO_POS, &targetPos);
+
+	_vec3 spawnPos = targetPos - myPos;
+	spawnPos *= 0.6f;
+
+	spawnPos.y += 1.f;
+
+	spawnPos += myPos;
+
+	CHitManager::GetInstance()->SpawnHitEffect(spawnPos);
+	CHitManager::GetInstance()->SpawnHitSlash(spawnPos);
+
 	if (!m_isHit && !m_isAttack && !m_isDeadAnim)
 	{
 
-		Engine::CTransform* causerTrans = dynamic_cast<Engine::CTransform*>(causer->GetComponent(L"Com_Transform", Engine::ID_DYNAMIC));
-		if (nullptr == causerTrans) return;
-
-		_vec3 pos;
-		causerTrans->GetInfo(Engine::INFO_POS, &pos);
-
-		LookAtTarget(pos);
+		LookAtTarget(targetPos);
 	}
 }
 
@@ -206,6 +234,11 @@ HRESULT CBoss::AddComponent()
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_HairNormal", component);
 	m_meshCom->AddNormalTexture(m_normalCom);
+
+	// DissolveTexture
+	component = m_dissolveTex = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Texture_Dissolve"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_DissolveTexture", component);
 
 	return S_OK;
 }
@@ -291,6 +324,10 @@ HRESULT CBoss::SetUpConstantTable(LPD3DXEFFECT & effect)
 	effect->SetMatrix("g_matView", &matView);
 	effect->SetMatrix("g_matProj", &matProj);
 
+	m_dissolveTex->SetTexture(effect, "g_DissolveTexture");
+
+	effect->SetFloat("g_DissolveAmount", m_dissolveAmount);
+
 	return S_OK;
 }
 
@@ -341,7 +378,7 @@ void CBoss::CalcState(const _float & deltaTime)
 	if (m_isDeadAnim)
 	{
 		if (m_meshCom->IsAnimationSetEnd())
-			m_isDead = true;
+			m_isDissolve = true;
 	}
 
 	if (m_isInterval)

@@ -44,55 +44,79 @@ HRESULT CGoblinMagician::Ready()
 
 	m_intervalTime = 0.f;
 
+	CHPUIManager::GetInstance()->Create(m_device, this, 2.4f);
+
+	_vec3 pos;
+	m_transCom->GetInfo(Engine::INFO_POS, &pos);
+
+	m_naviMeshCom->UpdateCurrentIndex(&pos);
+
 	return S_OK;
 }
 
 _int CGoblinMagician::Update(const _float& deltaTime)
 {
-	CalcState(deltaTime);
-	MonsterAI(deltaTime);
-
-	m_meshCom->PlayAnimation(deltaTime);
-	m_meshCom->UpdateFrameMatrices(deltaTime, &m_reviseMat);
-
-	_vec3 movePos;
-
-	if (m_meshCom->CanCalcMovePos("RootBone", movePos))
+	if (!m_isDissolve)
 	{
-		//D3DXVec3TransformNormal(&movePos, &movePos, &m_yScaleRotMat);
-		movePos.y = 0;
-		movePos.z = 0;
+		CalcState(deltaTime);
+		MonsterAI(deltaTime);
+		CalcAttack(deltaTime);
 
-		_vec3 nowPos;
-		_vec3 nowDir;
-		m_transCom->GetInfo(Engine::INFO_POS, &nowPos);
-		m_transCom->GetInfo(Engine::INFO_LOOK, &nowDir);
+		m_meshCom->PlayAnimation(deltaTime);
+		m_meshCom->UpdateFrameMatrices(deltaTime, &m_reviseMat);
 
-		nowDir *= movePos.x;
+		_vec3 movePos;
 
-		//_vec3 moveDist = m_naviMeshCom->MoveOnNaviMesh(&nowPos, &(movePos));
-		_vec3 moveDist = nowPos + nowDir;
+		if (m_meshCom->CanCalcMovePos("RootBone", movePos))
+		{
+			//D3DXVec3TransformNormal(&movePos, &movePos, &m_yScaleRotMat);
+			movePos.y = 0;
+			movePos.z = 0;
 
-		m_transCom->SetPos(moveDist);
+			_vec3 nowPos;
+			_vec3 nowDir;
+			m_transCom->GetInfo(Engine::INFO_POS, &nowPos);
+			m_transCom->GetInfo(Engine::INFO_LOOK, &nowDir);
 
-		//cout << movePos.x << endl;
+			nowDir *= movePos.x;
+
+			//_vec3 moveDist = m_naviMeshCom->MoveOnNaviMesh(&nowPos, &(movePos));
+			_vec3 moveDist = nowPos + nowDir;
+
+			m_transCom->SetPos(moveDist);
+
+			//cout << movePos.x << endl;
+		}
+
+		
+
+		for (auto& elem : m_hitCollider)
+		{
+			elem->Update(deltaTime);
+			elem->UpdateByBone(m_transCom->GetWorldMatrix());
+		}
+
+		for (auto& elem : m_attackCollider)
+		{
+			elem->Update(deltaTime);
+			elem->UpdateByBone(m_transCom->GetWorldMatrix());
+		}
+	}
+	else if (m_isDissolve)
+	{
+		m_dissolveAmount += deltaTime;
+		if (1.f < m_dissolveAmount)
+			m_isDead = true;
 	}
 
 	Engine::CGameObject::Update(deltaTime);
 
 	m_rendererCom->AddObject(Engine::RENDER_NONALPHA, this);
 
-	for (auto& elem : m_hitCollider)
-	{
-		elem->Update(deltaTime);
-		elem->UpdateByBone(m_transCom->GetWorldMatrix());
-	}
+	_vec3 pos;
+	m_transCom->GetInfo(Engine::INFO_POS, &pos);
 
-	for (auto& elem : m_attackCollider)
-	{
-		elem->Update(deltaTime);
-		elem->UpdateByBone(m_transCom->GetWorldMatrix());
-	}
+	m_naviMeshCom->UpdateCurrentIndex(&pos);
 
 	return 0;
 }
@@ -107,7 +131,7 @@ void CGoblinMagician::Render()
 	effect->Begin(nullptr, 0);
 
 	FAILED_CHECK_RETURN(SetUpConstantTable(effect), );
-	m_meshCom->Render(effect, 1);
+	m_meshCom->Render(effect, 4);
 
 	effect->End();
 
@@ -125,12 +149,25 @@ _bool CGoblinMagician::AttackColliderOverlapped(Engine::CGameObject * target)
 
 void CGoblinMagician::HitColliderOverlapped(Engine::CGameObject * causer)
 {
-	m_hp -= 20;
+	_float randNum = ((rand() % 5) + 8) * 0.1f;
+	_int fixDamage = causer->GetATK() * randNum;
+	m_hp -= fixDamage;
+
+	Engine::CTransform* causerTrans = dynamic_cast<Engine::CTransform*>(causer->GetComponent(L"Com_Transform", Engine::ID_DYNAMIC));
+	if (nullptr == causerTrans) return;
+
+	_vec3 targetPos;
+	causerTrans->GetInfo(Engine::INFO_POS, &targetPos);
+
+	LookAtTarget(targetPos);
+
+	_vec3 myPos;
+	m_transCom->GetInfo(Engine::INFO_POS, &myPos);
+
+	CFontManager::GetInstance()->ActiveNumber(fixDamage, myPos);
 
 	if (m_hp > 0)
 	{
-		for (auto& elem : m_hitCollider)
-			elem->SetIsCollide(true);
 		DoHit();
 	}
 	else
@@ -138,13 +175,15 @@ void CGoblinMagician::HitColliderOverlapped(Engine::CGameObject * causer)
 		DoDeadAnim();
 	}
 
-	Engine::CTransform* causerTrans = dynamic_cast<Engine::CTransform*>(causer->GetComponent(L"Com_Transform", Engine::ID_DYNAMIC));
-	if (nullptr == causerTrans) return;
+	_vec3 spawnPos = targetPos - myPos;
+	spawnPos *= 0.6f;
 
-	_vec3 pos;
-	causerTrans->GetInfo(Engine::INFO_POS, &pos);
+	spawnPos.y += 1.f;
 
-	LookAtTarget(pos);
+	spawnPos += myPos;
+
+	CHitManager::GetInstance()->SpawnHitEffect(spawnPos);
+	CHitManager::GetInstance()->SpawnHitSlash(spawnPos);
 }
 
 HRESULT CGoblinMagician::AddComponent()
@@ -182,6 +221,11 @@ HRESULT CGoblinMagician::AddComponent()
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_meshCom->AddNormalTexture(m_normalTexCom);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_NormalTexture", component);
+
+	// DissolveTexture
+	component = m_dissolveTex = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Texture_Dissolve"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_DissolveTexture", component);
 
 	return S_OK;
 }
@@ -261,6 +305,10 @@ HRESULT CGoblinMagician::SetUpConstantTable(LPD3DXEFFECT & effect)
 	effect->SetMatrix("g_matView", &matView);
 	effect->SetMatrix("g_matProj", &matProj);
 
+	m_dissolveTex->SetTexture(effect, "g_DissolveTexture");
+
+	effect->SetFloat("g_DissolveAmount", m_dissolveAmount);
+
 	return S_OK;
 }
 
@@ -305,7 +353,7 @@ void CGoblinMagician::CalcState(const _float & deltaTime)
 	if (m_isDeadAnim)
 	{
 		if (m_meshCom->IsAnimationSetEnd())
-			m_isDead = true;
+			m_isDissolve = true;
 	}
 
 	if (m_isInterval)
@@ -336,23 +384,49 @@ void CGoblinMagician::MonsterAI(const _float& deltaTime)
 	if (!m_isSpawned)
 	{
 		if (30.f >= distance)
+		{
+			LookAtTarget(targetPos);
 			DoSpawn(targetPos, pos);
+		}
 		else if (!m_isSpawn)
 			DoIdle();
 	}
 	else
 	{
-		if (20.f >= distance)
+		if (10.f >= distance)
 		{
 			DoAttack(targetPos, pos);
 		}
-		else if (30.f >= distance)
+		else if (20.f >= distance)
 		{
 			DoChase(targetPos, pos, deltaTime);
 		}
 		else
 		{
 			DoIdle();
+		}
+	}
+}
+
+void CGoblinMagician::CalcAttack(const _float & deltaTime)
+{
+	if (m_isAttack)
+	{
+		m_accTime += deltaTime;
+
+		if (m_accTime > m_spawnTime && m_canSpawnFireBall)
+		{
+			Engine::CTransform* playerTrans = dynamic_cast<Engine::CTransform*>(Engine::GetComponent(L"GameLogic", L"Player", L"Com_Transform", Engine::ID_DYNAMIC));
+			if (nullptr == playerTrans) return;
+
+			_vec3 targetPos, myPos;
+			playerTrans->GetInfo(Engine::INFO_POS, &targetPos);
+			m_transCom->GetInfo(Engine::INFO_POS, &myPos);
+
+			SpawnFireBall((targetPos + _vec3(0.f, 1.f, 0.f)), myPos);
+			LookAtTarget(targetPos);
+
+			m_canSpawnFireBall = false;
 		}
 	}
 }
@@ -378,9 +452,13 @@ void CGoblinMagician::DoAttack(const _vec3 & target, const _vec3 & myPos)
 {
 	if (!m_isHit && !m_isAttack && !m_isDeadAnim)
 	{
+		CSoundManager::PlayOverlapSound(L"Goblin_Magician_Attack.ogg", SoundChannel::MONSTER);
+
 		// 24ÇÁ·¹ÀÓ
-		SpawnFireBall((target + _vec3(0.f, 1.f, 0.f)), myPos);
-		LookAtTarget(target);
+		m_accTime = 0.f;
+		m_spawnTime = 24.f / 30.f;
+		m_canSpawnFireBall = true;
+
 		m_meshCom->SetAnimation(0, 0.01f, 0.1f, true);
 		m_isAttack = true;
 	}
@@ -390,8 +468,10 @@ void CGoblinMagician::DoSpawn(const _vec3 & target, const _vec3 & myPos)
 {
 	if (!m_isSpawn)
 	{
+		CSoundManager::PlayOverlapSound(L"Goblin_Magician_Spawn.ogg", SoundChannel::MONSTER);
+
 		LookAtTarget(target);
-		m_meshCom->SetAnimation(1, 0.01f, 0.01f, true);
+		m_meshCom->SetAnimation(1, 0.01f, 0.1f, true);
 
 		m_isSpawn = true;
 	}
@@ -409,6 +489,8 @@ void CGoblinMagician::DoHit()
 {
 	if (!m_isDeadAnim && !m_isSpawn)
 	{
+		CSoundManager::PlayOverlapSound(L"Goblin_Magician_Damage.ogg", SoundChannel::MONSTER);
+
 		if (m_isHit)
 			m_meshCom->ResetAnimation();
 
@@ -423,6 +505,8 @@ void CGoblinMagician::DoDeadAnim()
 {
 	if (!m_isDeadAnim)
 	{
+		CSoundManager::PlayOverlapSound(L"Goblin_Magician_Die.ogg", SoundChannel::MONSTER);
+
 		m_isDeadAnim = true;
 		m_isHit = false;
 		m_isAttack = false;
@@ -466,19 +550,16 @@ void CGoblinMagician::SpawnGoblinSword()
 
 		_vec3 targetPos, myPos, myRight;
 		playerTrans->GetInfo(Engine::INFO_POS, &targetPos);
+
 		m_transCom->GetInfo(Engine::INFO_POS, &myPos);
 		m_transCom->GetInfo(Engine::INFO_RIGHT, &myRight);
 
 		_vec3 tarDir = targetPos - myPos;
 		D3DXVec3Normalize(&tarDir, &tarDir);
 
-		_vec3 pos = myPos + (5.f * tarDir);
-		_vec3 pos2 = myPos + (5.f * myRight);
-		_vec3 pos3 = myPos - (5.f * myRight);
+		_vec3 pos = myPos + tarDir;
 
 		CSpawnManager::GetInstance()->Spawn(SPAWNTYPE::GOBLIN_SWORD, pos, m_angle);
-		CSpawnManager::GetInstance()->Spawn(SPAWNTYPE::GOBLIN_SWORD, pos2, m_angle);
-		CSpawnManager::GetInstance()->Spawn(SPAWNTYPE::GOBLIN_SWORD, pos3, m_angle);
 
 		m_isSpawned = true;
 	}

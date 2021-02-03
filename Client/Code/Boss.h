@@ -77,6 +77,7 @@ private:
 	Engine::CRenderer* m_rendererCom = nullptr;
 	Engine::CShader* m_shaderCom = nullptr;
 	Engine::CTexture* m_normalCom = nullptr;
+	Engine::CTexture* m_dissolveTex = nullptr;
 
 	_float m_angle;
 	_vec3 m_startPosition;
@@ -91,6 +92,13 @@ private:
 	_int m_phase;
 
 	_float m_intervalTime;
+
+	_bool m_isDissolve = false;
+	_float m_dissolveAmount = 0.f;
+
+	_float m_acc = 0.f;
+	_float m_attackStartTime = 0.f;
+	_float m_attackEndTime = 0.f;
 
 public:
 	static CBoss* Create(LPDIRECT3DDEVICE9 device, const _vec3& pos, const _float& angle = 0.f);

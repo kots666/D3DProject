@@ -161,7 +161,7 @@ void CStaticMesh::Render(LPD3DXEFFECT & effect)
 			if (m_normalTex->IsBlue(i))
 				effect->BeginPass(1);
 			else
-				effect->BeginPass(4);
+				effect->BeginPass(2);
 		}
 
 		m_mesh->DrawSubset(i);

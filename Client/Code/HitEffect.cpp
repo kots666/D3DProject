@@ -155,7 +155,24 @@ HRESULT CHitEffect::SetUpConstantTable(LPD3DXEFFECT & effect)
 
 	D3DXMatrixInverse(&matBill, nullptr, &matBill);
 
-	matWorld = matBill * *m_transformCom->GetWorldMatrix();
+	if (m_isRandomRotation)
+	{
+		matWorld = matBill * *m_transformCom->GetWorldMatrix();
+	}
+	else
+	{
+		memcpy(&matBill.m[3], &m_pos, sizeof(_vec3));
+
+		for (_int i = 0; i < 3; ++i)
+		{
+			for (_int j = 0; j < 4; ++j)
+			{
+				matBill.m[i][j] *= m_size[i];
+			}
+		}
+
+		matWorld = matBill;
+	}
 
 	effect->SetMatrix("g_matWorld", &matWorld);
 	effect->SetMatrix("g_matView", &matView);

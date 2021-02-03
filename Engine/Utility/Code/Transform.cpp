@@ -166,6 +166,13 @@ void CTransform::SetPos(const _float& x, const _float& y, const _float& z)
 	m_info[INFO_POS].z = z;
 }
 
+void CTransform::SetPosAfterUpdate(const _vec3 * pos)
+{
+	memcpy(&m_info[INFO_POS], pos, sizeof(_vec3));
+
+	memcpy(&(m_matWorld.m[3]), pos, sizeof(_vec3));
+}
+
 void CTransform::SetMovePosAtWorldMatrix(const _vec3 * const dir)
 {
 	_vec3 curPos;
