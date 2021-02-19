@@ -21,7 +21,7 @@ public:
 	virtual _int LateUpdate(const _float& deltaTime) override;
 
 public:
-	void ShakeCamera(const _float& duration = 0.2f, const _float& magnitude = 0.1f, const _bool& isForced = false);
+	void ShakeCamera(const _float& duration = 0.2f, const _float& magnitude = 0.2f, const _bool& isForced = false);
 	void UpdateShake(const _float& deltaTime);
 
 public:

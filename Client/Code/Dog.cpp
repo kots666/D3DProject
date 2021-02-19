@@ -41,6 +41,9 @@ HRESULT CDog::Ready()
 	m_isDeadAnim = false;
 	m_isDissolve = false;
 
+	m_hp = 30;
+	m_maxHp = 30;
+
 	m_dissolveAmount = 0.f;
 
 	m_intervalTime = 0.f;

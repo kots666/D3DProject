@@ -148,6 +148,9 @@
     <Filter Include="02. GameObject\01. Stage\10. SkillRock">
       <UniqueIdentifier>{28cb7c01-36d3-4101-8167-33394ca5c606}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. Stage\05. UI\04. BossUI">
+      <UniqueIdentifier>{2259ada1-d8be-44d4-806c-fe457e61a8f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -303,6 +306,9 @@
     <ClInclude Include="..\Code\SkillRock.h">
       <Filter>02. GameObject\01. Stage\10. SkillRock</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\BossUI.h">
+      <Filter>02. GameObject\01. Stage\05. UI\04. BossUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -433,6 +439,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\SkillRock.cpp">
       <Filter>02. GameObject\01. Stage\10. SkillRock</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\BossUI.cpp">
+      <Filter>02. GameObject\01. Stage\05. UI\04. BossUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

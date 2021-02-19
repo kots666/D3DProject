@@ -162,6 +162,9 @@ void CPlayer::HitColliderOverlapped(Engine::CGameObject * causer)
 		myPos.y += 1.5f;
 
 		CHitManager::GetInstance()->SpawnFlashHitEffect(myPos);
+
+		m_camera->ShakeCamera(0.2f, 0.3f);
+
 		DoHit();
 	}
 }

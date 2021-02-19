@@ -18,6 +18,8 @@ END
 
 BEGIN(Client)
 
+class CUI;
+class CBossUI;
 class CTerrain;
 
 class CBoss : public Engine::CGameObject
@@ -40,8 +42,11 @@ private:
 	HRESULT LoadCollider();
 	HRESULT SetUpConstantTable(LPD3DXEFFECT& effect);
 
+	void CalcFrameTime(_float& outTime, const _float& frameTime);
+
 	void CalcState(const _float& deltaTime);
 	void MonsterAI(const _float& deltaTime);
+	void CalcAttack(const _float& deltaTime);
 
 	void DoPhase1(const _float& deltaTime);
 	void DoPhase2(const _float& deltaTime);
@@ -79,6 +84,9 @@ private:
 	Engine::CTexture* m_normalCom = nullptr;
 	Engine::CTexture* m_dissolveTex = nullptr;
 
+	CUI* m_bossFrame = nullptr;
+	CBossUI* m_bossHP = nullptr;
+
 	_float m_angle;
 	_vec3 m_startPosition;
 
@@ -99,6 +107,12 @@ private:
 	_float m_acc = 0.f;
 	_float m_attackStartTime = 0.f;
 	_float m_attackEndTime = 0.f;
+
+	list<_float> m_attackStartTimeList;
+	list<_float> m_attackEndTimeList;
+
+	_bool m_isStartSkill = false;
+	_bool m_isEndSkill = false;
 
 public:
 	static CBoss* Create(LPDIRECT3DDEVICE9 device, const _vec3& pos, const _float& angle = 0.f);

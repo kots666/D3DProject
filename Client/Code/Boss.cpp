@@ -5,6 +5,8 @@
 #include "Transform.h"
 #include "Calculator.h"
 #include "Texture.h"
+#include "UI.h"
+#include "BossUI.h"
 
 CBoss::CBoss(LPDIRECT3DDEVICE9 device, const _vec3& pos, const _float& angle) :
 	Engine::CGameObject(device),
@@ -46,6 +48,16 @@ HRESULT CBoss::Ready()
 
 	DoIdle();
 
+	m_bossFrame = CUI::Create(m_device, L"Texture_BossFrame", (WINCX / 2) - 250, 50, 500, 35);
+	Engine::GetCurScene()->GetLayer(L"UI")->AddGameObject(L"BossFrame", m_bossFrame);
+
+	m_bossHP = CBossUI::Create(m_device, L"Texture_BossHP", (WINCX / 2) - 250 + 2, 50 + 2, 496, 17);
+	Engine::GetCurScene()->GetLayer(L"UI")->AddGameObject(L"BossHP", m_bossHP);
+	m_bossHP->SetTarget(this, &m_hp, &m_maxHp);
+
+	CSoundManager::StopSound(SoundChannel::BGM);
+	CSoundManager::PlayBGM(L"BossBGM.ogg");
+
 	return S_OK;
 }
 
@@ -55,6 +67,7 @@ _int CBoss::Update(const _float& deltaTime)
 	{
 		CalcState(deltaTime);
 		MonsterAI(deltaTime);
+		CalcAttack(deltaTime);
 
 		m_meshCom->PlayAnimation(deltaTime);
 		m_meshCom->UpdateFrameMatrices(deltaTime, &m_reviseMat);
@@ -74,8 +87,8 @@ _int CBoss::Update(const _float& deltaTime)
 
 			nowDir *= movePos.x;
 
-			//_vec3 moveDist = m_naviMeshCom->MoveOnNaviMesh(&nowPos, &(movePos));
-			_vec3 moveDist = nowPos + nowDir;
+			_vec3 moveDist = m_naviMeshCom->MoveOnNaviMesh(&nowPos, &nowDir);
+			//_vec3 moveDist = nowPos + nowDir;
 
 			m_transCom->SetPos(moveDist);
 
@@ -98,7 +111,11 @@ _int CBoss::Update(const _float& deltaTime)
 	{
 		m_dissolveAmount += deltaTime;
 		if (1.f < m_dissolveAmount)
+		{
+			CSoundManager::PlayOverlapSound(L"Player_Win.ogg", SoundChannel::PLAYER);
+			CSoundManager::PlayOverlapSound(L"Victory.ogg", SoundChannel::EFFECT);
 			m_isDead = true;
+		}
 	}
 
 	Engine::CGameObject::Update(deltaTime);
@@ -118,7 +135,7 @@ void CBoss::Render()
 	LPD3DXEFFECT effect = m_shaderCom->GetEffectHandle();
 	if (nullptr == effect) return;
 
-	_int passIndex[3] = { 4, 4, 5 };
+	_int passIndex[3] = { 4, 4, 6 };
 
 	Engine::SafeAddRef(effect);
 
@@ -172,7 +189,7 @@ void CBoss::HitColliderOverlapped(Engine::CGameObject * causer)
 	_vec3 spawnPos = targetPos - myPos;
 	spawnPos *= 0.6f;
 
-	spawnPos.y += 1.f;
+	spawnPos.y += 2.f;
 
 	spawnPos += myPos;
 
@@ -181,7 +198,6 @@ void CBoss::HitColliderOverlapped(Engine::CGameObject * causer)
 
 	if (!m_isHit && !m_isAttack && !m_isDeadAnim)
 	{
-
 		LookAtTarget(targetPos);
 	}
 }
@@ -331,6 +347,11 @@ HRESULT CBoss::SetUpConstantTable(LPD3DXEFFECT & effect)
 	return S_OK;
 }
 
+void CBoss::CalcFrameTime(_float & outTime, const _float & frameTime)
+{
+	outTime = frameTime / 30.f;
+}
+
 void CBoss::CalcState(const _float & deltaTime)
 {
 	_bool isIdle = false;
@@ -400,7 +421,51 @@ void CBoss::MonsterAI(const _float& deltaTime)
 	switch (m_phase)
 	{
 	case 1: DoPhase1(deltaTime); break;
-	case 2: DoPhase2(deltaTime); break;
+	case 2: DoPhase1(deltaTime); break;
+	}
+}
+
+void CBoss::CalcAttack(const _float & deltaTime)
+{
+	if (m_attackStartTimeList.empty() && m_attackEndTimeList.empty())
+		return;
+	if (m_isAttack)
+	{
+		m_acc += deltaTime;
+
+		_float skillStartTime = 10.f;
+		_float skillEndTime = 10.f;
+
+		if (!m_attackStartTimeList.empty())
+			skillStartTime = m_attackStartTimeList.front();
+
+		if (!m_attackEndTimeList.empty())
+			skillEndTime = m_attackEndTimeList.front();
+
+		if (!m_isStartSkill && m_isEndSkill && m_acc > skillStartTime)
+		{
+			m_isStartSkill = true;
+			m_isEndSkill = false;
+
+			m_attackStartTimeList.pop_front();
+
+			CSoundManager::PlayOverlapSound(L"Player_Attack01.ogg", SoundChannel::PLAYER, 0.05f, 0.1f);
+
+			for (auto& elem : m_attackCollider)
+				elem->SetCanCollide(true);
+
+			ClearCollideList();
+		}
+		else if (m_isStartSkill && !m_isEndSkill && m_acc > skillEndTime)
+		{
+			m_isStartSkill = false;
+			m_isEndSkill = true;
+
+			m_attackEndTimeList.pop_front();
+
+			for (auto& elem : m_attackCollider)
+				elem->SetCanCollide(false);
+		}
 	}
 }
 
@@ -419,11 +484,11 @@ void CBoss::DoPhase1(const _float & deltaTime)
 	{
 		DoAttack5(targetPos, pos);
 	}
-	else if (2.f >= distance)
+	/*else if (2.f >= distance)
 	{
-		DoAttack2(targetPos, pos);
-	}
-	else if (8.f <= distance && distance <= 10.f)
+		DoChase(targetPos, pos, deltaTime);
+	}*/
+	else if (7.f <= distance && distance <= 10.f)
 	{
 		_int randNum = rand() % 2;
 
@@ -453,9 +518,9 @@ void CBoss::DoPhase2(const _float & deltaTime)
 
 	_float distance = D3DXVec3Length(&(targetPos - pos));
 
-	if (5.f >= distance)
+	if (1.f >= distance)
 	{
-		DoRageAttack1(targetPos, pos);
+		DoAttack5(targetPos, pos);
 	}
 	/*else if (2.f >= distance)
 	{
@@ -466,7 +531,7 @@ void CBoss::DoPhase2(const _float & deltaTime)
 		_int randNum = rand() % 2;
 
 		if (randNum)
-			DoRageAttack2(targetPos, pos);
+			DoAttack1(targetPos, pos);
 		else
 			DoRageAttack3(targetPos, pos);
 	}
@@ -501,11 +566,38 @@ void CBoss::DoAttack1(const _vec3 & target, const _vec3 & myPos)
 {
 	if (!m_isHit && !m_isAttack && !m_isDeadAnim)
 	{
-		EnableAttackCollider();
+		m_acc = 0.f;
+		m_isStartSkill = false;
+		m_isEndSkill = true;
+		m_isAttack = true;
 
 		LookAtTarget(target);
+		CSoundManager::PlayOverlapSound(L"Boss_Attack01.ogg", SoundChannel::MONSTER);
+
+		m_attackStartTimeList.clear();
+		m_attackEndTimeList.clear();
+
+		_float frameTime;
+
+		// 1번째 공격
+		CalcFrameTime(frameTime, 7.f);
+		m_attackStartTimeList.emplace_back(frameTime);
+		CalcFrameTime(frameTime, 13.f);
+		m_attackEndTimeList.emplace_back(frameTime);
+
+		// 2번째 공격
+		CalcFrameTime(frameTime, 14.f);
+		m_attackStartTimeList.emplace_back(frameTime);
+		CalcFrameTime(frameTime, 19.f);
+		m_attackEndTimeList.emplace_back(frameTime);
+
+		// 3번째 공격
+		CalcFrameTime(frameTime, 37.f);
+		m_attackStartTimeList.emplace_back(frameTime);
+		CalcFrameTime(frameTime, 46.f);
+		m_attackEndTimeList.emplace_back(frameTime);
+
 		m_meshCom->SetAnimation(0, 0.01f, 0.05f, true);
-		m_isAttack = true;
 	}
 }
 
@@ -513,6 +605,8 @@ void CBoss::DoAttack2(const _vec3 & target, const _vec3 & myPos)
 {
 	if (!m_isHit && !m_isAttack && !m_isDeadAnim)
 	{
+		CSoundManager::PlayOverlapSound(L"Boss_Attack02.ogg", SoundChannel::MONSTER);
+
 		EnableAttackCollider();
 
 		LookAtTarget(target);
@@ -525,11 +619,56 @@ void CBoss::DoAttack3(const _vec3 & target, const _vec3 & myPos)
 {
 	if (!m_isHit && !m_isAttack && !m_isDeadAnim)
 	{
-		EnableAttackCollider();
+		CSoundManager::PlayOverlapSound(L"Boss_Attack03.ogg", SoundChannel::MONSTER);
+
+		m_acc = 0.f;
+		m_isStartSkill = false;
+		m_isEndSkill = true;
+		m_isAttack = true;
+
+		m_attackStartTimeList.clear();
+		m_attackEndTimeList.clear();
+
+		_float frameTime;
+
+		// 1번째 공격
+		CalcFrameTime(frameTime, 22.f);
+		m_attackStartTimeList.emplace_back(frameTime);
+		CalcFrameTime(frameTime, 27.f);
+		m_attackEndTimeList.emplace_back(frameTime);
+
+		// 2번째 공격
+		CalcFrameTime(frameTime, 30.f);
+		m_attackStartTimeList.emplace_back(frameTime);
+		CalcFrameTime(frameTime, 35.f);
+		m_attackEndTimeList.emplace_back(frameTime);
+
+		// 3번째 공격
+		CalcFrameTime(frameTime, 38.f);
+		m_attackStartTimeList.emplace_back(frameTime);
+		CalcFrameTime(frameTime, 43.f);
+		m_attackEndTimeList.emplace_back(frameTime);
+
+		// 4번째 공격
+		CalcFrameTime(frameTime, 45.f);
+		m_attackStartTimeList.emplace_back(frameTime);
+		CalcFrameTime(frameTime, 50.f);
+		m_attackEndTimeList.emplace_back(frameTime);
+
+		// 5번째 공격
+		CalcFrameTime(frameTime, 52.f);
+		m_attackStartTimeList.emplace_back(frameTime);
+		CalcFrameTime(frameTime, 55.f);
+		m_attackEndTimeList.emplace_back(frameTime);
+
+		// 6번째 공격
+		CalcFrameTime(frameTime, 56.f);
+		m_attackStartTimeList.emplace_back(frameTime);
+		CalcFrameTime(frameTime, 60.f);
+		m_attackEndTimeList.emplace_back(frameTime);
 
 		LookAtTarget(target);
 		m_meshCom->SetAnimation(2, 0.01f, 0.05f, true);
-		m_isAttack = true;
 	}
 }
 
@@ -537,6 +676,8 @@ void CBoss::DoAttack4(const _vec3 & target, const _vec3 & myPos)
 {
 	if (!m_isHit && !m_isAttack && !m_isDeadAnim)
 	{
+		CSoundManager::PlayOverlapSound(L"Boss_Attack04.ogg", SoundChannel::MONSTER);
+
 		EnableAttackCollider();
 
 		LookAtTarget(target);
@@ -549,6 +690,8 @@ void CBoss::DoAttack5(const _vec3 & target, const _vec3 & myPos)
 {
 	if (!m_isHit && !m_isAttack && !m_isDeadAnim)
 	{
+		CSoundManager::PlayOverlapSound(L"Boss_Attack05.ogg", SoundChannel::MONSTER);
+
 		EnableAttackCollider();
 
 		LookAtTarget(target);
@@ -561,6 +704,8 @@ void CBoss::DoRageAttack1(const _vec3 & target, const _vec3 & myPos)
 {
 	if (!m_isHit && !m_isAttack && !m_isDeadAnim)
 	{
+		CSoundManager::PlayOverlapSound(L"Boss_RageAttack01.ogg", SoundChannel::MONSTER);
+
 		EnableAttackCollider();
 
 		LookAtTarget(target);
@@ -573,6 +718,8 @@ void CBoss::DoRageAttack2(const _vec3 & target, const _vec3 & myPos)
 {
 	if (!m_isHit && !m_isAttack && !m_isDeadAnim)
 	{
+		CSoundManager::PlayOverlapSound(L"Boss_RageAttack02.ogg", SoundChannel::MONSTER);
+
 		EnableAttackCollider();
 
 		LookAtTarget(target);
@@ -585,6 +732,8 @@ void CBoss::DoRageAttack3(const _vec3 & target, const _vec3 & myPos)
 {
 	if (!m_isHit && !m_isAttack && !m_isDeadAnim)
 	{
+		CSoundManager::PlayOverlapSound(L"Boss_RageAttack03.ogg", SoundChannel::MONSTER);
+
 		EnableAttackCollider();
 
 		LookAtTarget(target);
@@ -609,6 +758,8 @@ void CBoss::DoRageAttack5(const _vec3 & target, const _vec3 & myPos)
 {
 	if (!m_isHit && !m_isAttack && !m_isDeadAnim)
 	{
+		CSoundManager::PlayOverlapSound(L"Boss_RageAttack05.ogg", SoundChannel::MONSTER);
+
 		EnableAttackCollider();
 
 		LookAtTarget(target);
@@ -651,6 +802,8 @@ void CBoss::DoKnockUp()
 {
 	if (!m_isDeadAnim && !m_isAttack)
 	{
+		CSoundManager::PlayOverlapSound(L"Boss_Damage.ogg", SoundChannel::MONSTER);
+
 		if (m_isHit)
 			m_meshCom->ResetAnimation();
 
@@ -665,6 +818,12 @@ void CBoss::DoDeadAnim()
 {
 	if (!m_isDeadAnim)
 	{
+		CSoundManager::StopSound(SoundChannel::BGM);
+		CSoundManager::PlayOverlapSound(L"Boss_Die.ogg", SoundChannel::MONSTER);
+
+		m_bossFrame->SetIsDead(true);
+		m_bossHP->SetIsDead(true);
+
 		m_isDeadAnim = true;
 		m_isHit = false;
 		m_isAttack = false;

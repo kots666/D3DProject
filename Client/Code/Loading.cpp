@@ -214,7 +214,35 @@ _uint CLoading::LoadingForStage()
 		Engine::TEX_NORMAL,
 		L"../Resource/Texture/Effect/FlashEffect.tga"), E_FAIL);
 
-	_int textureCnt = 16;
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Texture_Explosive",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/Effect/Explosive2.png"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Texture_BossFrame",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/UI/BossFrame.tga"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Texture_BossHP",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/UI/BossHP.tga"), E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(
+		m_device,
+		Engine::RESOURCE_STAGE,
+		L"Texture_BossHP2",
+		Engine::TEX_NORMAL,
+		L"../Resource/Texture/UI/BossHP2.tga"), E_FAIL);
+
+	_int textureCnt = 20;
 	m_nowLoad += textureCnt;
 
 	LoadingForDynamicMeshNormalTextures();
@@ -795,6 +823,13 @@ HRESULT CLoading::LoadingForStaticMeshNormalTextures()
 		L"Mesh_Table01",
 		Engine::TEX_NORMAL,
 		L"../Resource/Mesh/StaticMesh/Props/FieldVillage_Props_N_KHJ.tga", 1, singleYellow), E_FAIL);
+
+	// ThrowRock
+	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
+		Engine::RESOURCE_NORMAL,
+		L"Mesh_ThrowRock",
+		Engine::TEX_NORMAL,
+		L"../Resource/Mesh/StaticMesh/ThrowRock/BG_Rock02_N_KHJ.tga", 1, singleYellow), E_FAIL);
 
 	// Tree01 KHJ
 	FAILED_CHECK_RETURN(Engine::ReadyTexture(m_device,
@@ -1385,6 +1420,14 @@ HRESULT CLoading::LoadingForStaticMeshes()
 		Engine::TYPE_STATIC,
 		L"../Resource/Mesh/StaticMesh/Props/",
 		L"Table01.X"), E_FAIL);
+
+	// ThrowRock
+	FAILED_CHECK_RETURN(Engine::ReadyMesh(m_device,
+		Engine::RESOURCE_STAGE,
+		L"Mesh_ThrowRock",
+		Engine::TYPE_STATIC,
+		L"../Resource/Mesh/StaticMesh/ThrowRock/",
+		L"ThrowRock.X"), E_FAIL);
 
 	// Tree01 KHJ
 	FAILED_CHECK_RETURN(Engine::ReadyMesh(m_device,

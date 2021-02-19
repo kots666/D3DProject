@@ -115,7 +115,7 @@ void CMainApp::Render()
 
 HRESULT CMainApp::SetUpDefaultSetting(LPDIRECT3DDEVICE9 * outerDevice)
 {
-	FAILED_CHECK_RETURN(Engine::ReadyGraphicDevice(g_hWnd, Engine::MODE_WIN, WINCX, WINCY, &m_deviceClass), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::ReadyGraphicDevice(g_hWnd, Engine::MODE_FULL, WINCX, WINCY, &m_deviceClass), E_FAIL);
 	Engine::SafeAddRef(m_deviceClass);
 
 	*outerDevice = m_deviceClass->GetDevice();

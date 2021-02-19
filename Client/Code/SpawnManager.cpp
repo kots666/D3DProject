@@ -51,12 +51,13 @@ void CSpawnManager::CheckQuestComplete()
 {
 	if (CQuestManager::GetInstance()->GetIsProgress())
 	{
-		if (1 == m_eventCount && 0 == CQuestManager::GetInstance()->GetStep())
+		/*if (1 == m_eventCount && 0 == CQuestManager::GetInstance()->GetStep())
 		{
 			if(IsDeadAllEnemies())
 				CQuestManager::GetInstance()->CompleteQuest();
 		}
-		else if (3 < m_eventCount && 1 == CQuestManager::GetInstance()->GetStep())
+		else*/
+		if (3 < m_eventCount && 0 == CQuestManager::GetInstance()->GetStep())
 		{
 			if (IsDeadAllEnemies())
 				CQuestManager::GetInstance()->CompleteQuest();
@@ -129,11 +130,34 @@ _bool CSpawnManager::StartEvent()
 	if (!CQuestManager::GetInstance()->GetIsProgress())
 		return false;
 
-	if (0 == CQuestManager::GetInstance()->GetStep())
+	switch (m_eventCount)
+	{
+	case 0:
+		Spawn(SPAWNTYPE::DOG, { 4.f, 0.2f, 16.f }, 150.f);
+		Spawn(SPAWNTYPE::DOG, { 12.f, 0.2f, 23.f }, -150.f);
+		break;
+	case 1:
+		Spawn(SPAWNTYPE::DOG, { 23.f, 0.1f, 57.f }, -90.f);
+		Spawn(SPAWNTYPE::DOG, { 14.f, 0.1f, 36.f }, -150.f);
+		Spawn(SPAWNTYPE::DOG, { 35.f, 0.1f, 64.f }, -90.f);
+		break;
+	case 2:
+		Spawn(SPAWNTYPE::GOBLIN_MAGICIAN, { 67.f, 0.2f, 62.f }, -75.f);
+		Spawn(SPAWNTYPE::GOBLIN_MAGICIAN, { 70.f, 0.2f, 73.f }, -90.f);
+		Spawn(SPAWNTYPE::GOBLIN_MAGICIAN, { 60.f, 0.2f, 83.f }, -130.f);
+		break;
+
+	case 3:
+		Spawn(SPAWNTYPE::BOSS, { 65.f, 0.2f, 77.f }, -90.f);
+		break;
+	}
+	++m_eventCount;
+
+	/*if (0 == CQuestManager::GetInstance()->GetStep())
 	{
 		if (0 == m_eventCount)
 		{
-			Spawn(SPAWNTYPE::DOG, { 4.f, 0.2f, 16.f }, 150.f);
+			Spawn(SPAWNTYPE::GOBLIN_MAGICIAN, { 4.f, 0.2f, 16.f }, 150.f);
 			Spawn(SPAWNTYPE::BOSS, { 12.f, 0.2f, 23.f }, -150.f);
 
 			++m_eventCount;
@@ -167,7 +191,7 @@ _bool CSpawnManager::StartEvent()
 		++m_eventCount;
 
 		return true;
-	}
+	}*/
 
 	return true;
 }

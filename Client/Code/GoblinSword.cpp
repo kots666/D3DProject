@@ -35,6 +35,9 @@ HRESULT CGoblinSword::Ready()
 
 	CColliderManager::GetInstance()->AddObject(OBJ_ENEMY, this);
 
+	m_hp = 30;
+	m_maxHp = 30;
+
 	m_isInterval = false;
 	m_isHit = false;
 	m_isAttack = false;
@@ -80,12 +83,9 @@ _int CGoblinSword::Update(const _float& deltaTime)
 
 			nowDir *= movePos.x;
 
-			//_vec3 moveDist = m_naviMeshCom->MoveOnNaviMesh(&nowPos, &(movePos));
-			_vec3 moveDist = nowPos + nowDir;
+			_vec3 moveDist = m_naviMeshCom->MoveOnNaviMesh(&nowPos, &nowDir);
 
 			m_transCom->SetPos(moveDist);
-
-			//cout << movePos.x << endl;
 		}
 
 		

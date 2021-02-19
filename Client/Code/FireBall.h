@@ -10,6 +10,7 @@ class CStaticMesh;
 class CTransform;
 class CRenderer;
 class CShader;
+class CTexture;
 
 END
 
@@ -38,11 +39,11 @@ private:
 	void LookAtTarget();
 
 private:
-	Engine::CStaticMesh* m_headMeshCom = nullptr;
-	Engine::CStaticMesh* m_tailMeshCom = nullptr;
+	Engine::CStaticMesh* m_meshCom = nullptr;
 	Engine::CTransform* m_transCom = nullptr;
 	Engine::CRenderer* m_rendererCom = nullptr;
 	Engine::CShader* m_shaderCom = nullptr;
+	Engine::CTexture* m_normalTexCom = nullptr;
 
 	_vec3 m_pos;
 	_vec3 m_target;

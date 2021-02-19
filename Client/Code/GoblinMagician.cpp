@@ -35,6 +35,9 @@ HRESULT CGoblinMagician::Ready()
 
 	CColliderManager::GetInstance()->AddObject(OBJ_ENEMY, this);
 
+	m_hp = 50;
+	m_maxHp = 50;
+
 	m_isInterval = false;
 	m_isHit = false;
 	m_isAttack = false;
@@ -80,12 +83,11 @@ _int CGoblinMagician::Update(const _float& deltaTime)
 
 			nowDir *= movePos.x;
 
-			//_vec3 moveDist = m_naviMeshCom->MoveOnNaviMesh(&nowPos, &(movePos));
 			_vec3 moveDist = nowPos + nowDir;
 
-			m_transCom->SetPos(moveDist);
+			_vec3 movePos = m_naviMeshCom->MoveOnNaviMesh(&nowPos, &nowDir);
 
-			//cout << movePos.x << endl;
+			m_transCom->SetPos(movePos);
 		}
 
 		
@@ -393,7 +395,7 @@ void CGoblinMagician::MonsterAI(const _float& deltaTime)
 	}
 	else
 	{
-		if (10.f >= distance)
+		if (8.f >= distance)
 		{
 			DoAttack(targetPos, pos);
 		}

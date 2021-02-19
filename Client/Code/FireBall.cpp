@@ -2,6 +2,7 @@
 #include "FireBall.h"
 #include "StaticMesh.h"
 #include "Transform.h"
+#include "Texture.h"
 
 CFireBall::CFireBall(LPDIRECT3DDEVICE9 device, const _vec3& pos, const _vec3& target) :
 	Engine::CGameObject(device),
@@ -23,7 +24,8 @@ HRESULT CFireBall::Ready()
 	CColliderManager::GetInstance()->AddObject(OBJ_ENEMY, this);
 
 	m_transCom->SetPos(m_pos);
-	m_transCom->SetScale(0.05f, 0.05f, 0.05f);
+	m_transCom->SetScale(0.001f, 0.001f, 0.001f);
+	m_transCom->SetRotation(Engine::ROT_Y, D3DXToRadian(90.f));
 	
 	LookAtTarget();
 
@@ -66,12 +68,9 @@ void CFireBall::Render()
 	Engine::SafeAddRef(effect);
 
 	effect->Begin(nullptr, 0);
-	effect->BeginPass(0);
 
-	m_headMeshCom->Render(effect);
-	m_tailMeshCom->Render(effect);
+	m_meshCom->Render(effect);
 	
-	effect->EndPass();
 	effect->End();
 
 	Engine::SafeRelease(effect);
@@ -79,6 +78,10 @@ void CFireBall::Render()
 
 _bool CFireBall::AttackColliderOverlapped(Engine::CGameObject * target)
 {
+	_vec3 pos;
+	m_transCom->GetInfo(Engine::INFO_POS, &pos);
+
+	CHitManager::GetInstance()->SpawnExplosiveEffect(pos);
 	m_isDead = true;
 	return true;
 }
@@ -88,14 +91,9 @@ HRESULT CFireBall::AddComponent()
 	Engine::CComponent* component = nullptr;
 
 	// Head Mesh
-	component = m_headMeshCom = dynamic_cast<Engine::CStaticMesh*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Mesh_Projectile_Head"));
+	component = m_meshCom = dynamic_cast<Engine::CStaticMesh*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Mesh_ThrowRock"));
 	NULL_CHECK_RETURN(component, E_FAIL);
-	m_compMap[Engine::ID_DYNAMIC].emplace(L"Com_HeadMesh", component);
-
-	// Tail Mesh
-	component = m_tailMeshCom = dynamic_cast<Engine::CStaticMesh*>(Engine::CloneResource(Engine::RESOURCE_STAGE, L"Mesh_Projectile_Tail"));
-	NULL_CHECK_RETURN(component, E_FAIL);
-	m_compMap[Engine::ID_DYNAMIC].emplace(L"Com_TailMesh", component);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_Mesh", component);
 
 	// Transform
 	component = m_transCom = dynamic_cast<Engine::CTransform*>(Engine::CloneComp(L"Proto_Transform"));
@@ -109,9 +107,16 @@ HRESULT CFireBall::AddComponent()
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Renderer", component);
 
 	// Shader
-	component = m_shaderCom = dynamic_cast<Engine::CShader*>(Engine::CloneComp(L"Proto_Shader_Alpha"));
+	component = m_shaderCom = dynamic_cast<Engine::CShader*>(Engine::CloneComp(L"Proto_Shader_Mesh"));
 	NULL_CHECK_RETURN(component, E_FAIL);
 	m_compMap[Engine::ID_STATIC].emplace(L"Com_Shader", component);
+
+	// Normal Texture
+	component = m_normalTexCom = dynamic_cast<Engine::CTexture*>(Engine::CloneResource(Engine::RESOURCE_NORMAL, L"Mesh_ThrowRock"));
+	NULL_CHECK_RETURN(component, E_FAIL);
+	m_compMap[Engine::ID_STATIC].emplace(L"Com_NormalTexture", component);
+
+	m_meshCom->AddNormalTexture(m_normalTexCom);
 
 	return S_OK;
 }
@@ -158,8 +163,7 @@ void CFireBall::LookAtTarget()
 	_float angle = (curDir.x * targetDir.z - curDir.z * targetDir.x > 0.f) ? cosAngle : -cosAngle;
 	_float degree = D3DXToDegree(angle);
 
-	//m_transCom->SetRotation(Engine::ROT_X, D3DXToRadian(-90.f));
-	m_transCom->SetRotation(Engine::ROT_Y, D3DXToRadian(-degree - 90.f));
+	m_transCom->SetRotation(Engine::ROT_Y, D3DXToRadian(-degree));
 }
 
 CFireBall* CFireBall::Create(LPDIRECT3DDEVICE9 device, const _vec3& pos, const _vec3& target)

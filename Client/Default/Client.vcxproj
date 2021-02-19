@@ -176,6 +176,7 @@
     <ClInclude Include="..\Code\BackGround.h" />
     <ClInclude Include="..\Code\BackMesh.h" />
     <ClInclude Include="..\Code\Boss.h" />
+    <ClInclude Include="..\Code\BossUI.h" />
     <ClInclude Include="..\Code\ColliderManager.h" />
     <ClInclude Include="..\Code\Dog.h" />
     <ClInclude Include="..\Code\DynamicCamera.h" />
@@ -229,6 +230,7 @@
     <ClCompile Include="..\Code\BackGround.cpp" />
     <ClCompile Include="..\Code\BackMesh.cpp" />
     <ClCompile Include="..\Code\Boss.cpp" />
+    <ClCompile Include="..\Code\BossUI.cpp" />
     <ClCompile Include="..\Code\ColliderManager.cpp" />
     <ClCompile Include="..\Code\Dog.cpp" />
     <ClCompile Include="..\Code\DynamicCamera.cpp" />

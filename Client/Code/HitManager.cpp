@@ -31,6 +31,12 @@ CHitManager::~CHitManager()
 	}
 	m_flashHitEffectList.clear();
 
+	for (auto& elem : m_explosiveEffectList)
+	{
+		Engine::SafeRelease(elem);
+	}
+	m_explosiveEffectList.clear();
+
 	for (auto elem : m_nameList)
 	{
 		if (nullptr != elem)
@@ -78,6 +84,18 @@ void CHitManager::SpawnFlashHitEffect(const _vec3 & pos, const _float & xSize, c
 	}
 }
 
+void CHitManager::SpawnExplosiveEffect(const _vec3 & pos, const _float & xSize, const _float & ySize, const _float & lifeTime)
+{
+	for (auto& elem : m_explosiveEffectList)
+	{
+		if (!elem->GetActive())
+		{
+			elem->SetActive(pos, xSize, ySize, lifeTime);
+			break;
+		}
+	}
+}
+
 void CHitManager::ReadyEffect()
 {
 	_int readyCount = 20;
@@ -85,10 +103,12 @@ void CHitManager::ReadyEffect()
 	m_hitEffectList.reserve(readyCount);
 	m_hitSlashList.reserve(readyCount);
 	m_flashHitEffectList.reserve(readyCount);
+	m_explosiveEffectList.reserve(readyCount);
 
 	_vec4 hitEffectColor = { 3.f, 3.f, 0.83f, 0.8f };
 	_vec4 hitSlashColor = { 10000.f, 10000.f, 10000.f, 1.f };
 	_vec4 playerHitEffectColor = { 3.f, 0.f, 0.f, 1.f };
+	_vec4 explosiveEffectColor = { 1.f, 0.9f, 0.6f, 1.f };
 
 	for (_int i = 0; i < readyCount; ++i)
 	{
@@ -141,5 +161,23 @@ void CHitManager::ReadyEffect()
 		m_nameList.emplace_back(effectName);
 
 		Engine::GetCurScene()->GetLayer(L"Environment")->AddGameObject(effectName, playerHitEffect);
+
+		CHitEffect* explosiveEffect = CHitEffect::Create(
+			Engine::CGraphicDevice::GetInstance()->GetDevice(),
+			explosiveEffectColor,
+			L"Texture_Explosive",
+			8,
+			8,
+			false,
+			1);
+		Engine::SafeAddRef(explosiveEffect);
+
+		m_explosiveEffectList.emplace_back(explosiveEffect);
+
+		effectName = new _tchar[20];
+		wsprintf(effectName, L"ExplosiveEffect_%d", i);
+		m_nameList.emplace_back(effectName);
+
+		Engine::GetCurScene()->GetLayer(L"Environment")->AddGameObject(effectName, explosiveEffect);
 	}
 }
